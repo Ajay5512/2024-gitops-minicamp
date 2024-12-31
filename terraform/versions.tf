@@ -9,10 +9,10 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "gitops-tf-backend"
+    bucket         = "topdevs-tf-backend"
     key            = "terraform.tfstate"
     region         = "us-east-1"
-    dynamodb_table = "GitopsTerraformLocks"
+    dynamodb_table = "topdevsTerraformLocks"
   }
 }
 
