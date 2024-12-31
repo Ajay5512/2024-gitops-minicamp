@@ -1,4 +1,3 @@
-aws_region = "us-west-2"
+region = "us-west-1"
 environment = "prod"
 project = "enterprise-data"
-credentials_file = "C:/Users/DHEERA~1/.aws/credentials"
