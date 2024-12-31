@@ -15,7 +15,7 @@ module "iam" {
 module "glue" {
   source = "./modules/glue"
 
-  environment            = var.environment
+  environment           = var.environment
   project               = var.project
   source_bucket_id      = module.s3.source_bucket_id
   target_bucket_id      = module.s3.target_bucket_id
