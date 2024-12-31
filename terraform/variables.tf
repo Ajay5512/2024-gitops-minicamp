@@ -1,23 +1,17 @@
-variable "region" {
+variable "aws_region" {
   description = "AWS region to deploy resources"
   type        = string
-  default     = "us-west-1"
+  default     = "us-east-1"  # Changed to match GitHub Actions configuration
 }
 
 variable "environment" {
-  description = "Environment name for resource tagging"
+  description = "Environment name (e.g., dev, staging, prod)"
   type        = string
-  default     = "prod"
+  default     = "prod"  # Default to prod since your workflow uses production environment
 }
 
 variable "project" {
-  description = "Project name for resource tagging"
+  description = "Project name"
   type        = string
-  default     = "enterprise-data"
-}
-
-variable "credentials_file" {
-  description = "Path to AWS credentials file"
-  type        = string
-  default     = "C:/Users/DHEERA~1/.aws/credentials"
+  default     = "topdevs"
 }

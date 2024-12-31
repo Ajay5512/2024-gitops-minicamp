@@ -1,29 +1,40 @@
-resource "aws_s3_bucket" "enterprise_raw_data" {
-  bucket        = "enterprise-raw-data-${var.aws_region}"
+resource "aws_s3_bucket" "source_data" {
+  bucket = "${var.project}-${var.environment}-source-data"
   force_destroy = true
-  tags          = var.common_tags
+
+  tags = {
+    Environment = var.environment
+    Project     = var.project
+    Managed_by  = "terraform"
+  }
 }
 
-resource "aws_s3_bucket_object" "org_master_data" {
-  bucket = aws_s3_bucket.enterprise_raw_data.bucket
-  key    = "master/organizations.csv"
-  source = "D:/Terraform_Tutorial/glue_job_S3_read_write/data_file/organizations.csv"
-}
-
-resource "aws_s3_bucket" "enterprise_processed_data" {
-  bucket        = "enterprise-processed-data-${var.aws_region}"
+resource "aws_s3_bucket" "target_data" {
+  bucket = "${var.project}-${var.environment}-target-data"
   force_destroy = true
-  tags          = var.common_tags
+
+  tags = {
+    Environment = var.environment
+    Project     = var.project
+    Managed_by  = "terraform"
+  }
 }
 
-resource "aws_s3_bucket" "enterprise_etl_scripts" {
-  bucket        = "enterprise-etl-scripts-${var.aws_region}"
+resource "aws_s3_bucket" "code" {
+  bucket = "${var.project}-${var.environment}-glue-code"
   force_destroy = true
-  tags          = var.common_tags
+
+  tags = {
+    Environment = var.environment
+    Project     = var.project
+    Managed_by  = "terraform"
+  }
 }
 
-resource "aws_s3_bucket_object" "org_etl_script" {
-  bucket = aws_s3_bucket.enterprise_etl_scripts.bucket
-  key    = "glue/org_data_processor.py"
-  source = "D:/Terraform_Tutorial/glue_job_S3_read_write/data_file/script.py"
+resource "aws_s3_object" "glue_script" {
+  bucket = aws_s3_bucket.code.id
+  key    = "scripts/org_data_processor.py"
+  source = "${path.root}/scripts/glue/org_data_processor.py"
+
+  etag = filemd5("${path.root}/scripts/glue/org_data_processor.py")
 }

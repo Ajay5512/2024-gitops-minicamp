@@ -1,14 +1,11 @@
-output "raw_bucket_id" {
-  description = "ID of the raw data bucket"
-  value       = aws_s3_bucket.enterprise_raw_data.id
+output "source_bucket_id" {
+  value = aws_s3_bucket.source_data.id
 }
 
-output "processed_bucket_id" {
-  description = "ID of the processed data bucket"
-  value       = aws_s3_bucket.enterprise_processed_data.id
+output "target_bucket_id" {
+  value = aws_s3_bucket.target_data.id
 }
 
-output "scripts_bucket_id" {
-  description = "ID of the ETL scripts bucket"
-  value       = aws_s3_bucket.enterprise_etl_scripts.id
+output "code_bucket_id" {
+  value = aws_s3_bucket.code.id
 }

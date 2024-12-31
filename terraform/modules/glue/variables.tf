@@ -8,17 +8,17 @@ variable "project" {
   type        = string
 }
 
-variable "raw_bucket_id" {
-  description = "ID of the raw data bucket"
+variable "source_bucket_id" {
+  description = "ID of the source S3 bucket"
   type        = string
 }
 
-variable "glue_role_arn" {
+variable "target_bucket_id" {
+  description = "ID of the target S3 bucket"
+  type        = string
+}
+
+variable "glue_service_role_arn" {
   description = "ARN of the Glue service role"
   type        = string
-}
-
-variable "common_tags" {
-  description = "Common tags for all resources"
-  type        = map(string)
 }
