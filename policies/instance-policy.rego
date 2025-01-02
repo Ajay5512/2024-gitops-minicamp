@@ -69,3 +69,4 @@ valid_iam_policy(policy) if {
 	some resource in statement.Resource
 	not resource == "*"
 } else := false
+
