@@ -1,4 +1,4 @@
-# File terraform/main.tf
+# File: terraform/main.tf
 module "s3" {
   source = "./modules/s3"
 
