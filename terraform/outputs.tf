@@ -1,3 +1,5 @@
+
+# File: terraform/outputs.tf
 output "raw_bucket_name" {
   description = "Name of the raw data bucket"
   value       = module.s3.raw_bucket_id

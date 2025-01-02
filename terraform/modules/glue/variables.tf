@@ -1,3 +1,5 @@
+
+# File: terraform/modules/glue/variables.tf
 variable "environment" {
   description = "Environment name"
   type        = string

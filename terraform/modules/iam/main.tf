@@ -1,7 +1,8 @@
+# File: terraform/modules/iam/main.tf
 resource "aws_iam_role" "glue_service" {
   name = "${var.project}-${var.environment}-glue-service"
 
-  assume_role_policy =           jsonencode({
+  assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
