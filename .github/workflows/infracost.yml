@@ -1,79 +1,49 @@
-name: 'Terraform Plan'
-
+name: 'Run Infracost'
 on:
-  push:
-    branches: [ 'main' ]
   pull_request:
-  workflow_call:
-    secrets:
-      ROLE_TO_ASSUME:
-        required: true
-
-permissions:
-  contents: read
-  id-token: write
-  pull-requests: write
-
+    types: [opened, synchronize, closed]
 jobs:
-  terraform:
-    name: 'Terraform'
+  infracost-pull-request-checks:
+    name: Infracost Pull Request Checks
+    if: github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'synchronize')
     runs-on: ubuntu-latest
     environment: production
-    defaults:
-      run:
-        shell: bash
-        working-directory: ./terraform
-    env:
-      GH_TOKEN: ${{ github.token }}
-
+    permissions:
+      contents: read
+      pull-requests: write # Required to post comments
     steps:
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
-        aws-region: us-east-1
+      - name: Setup Infracost
+        uses: infracost/actions/setup@v3
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
+      # Checkout the base branch of the pull request (e.g. main/master).
+      - name: Checkout base branch
+        uses: actions/checkout@v4
+        with:
+          ref: '${{ github.event.pull_request.base.ref }}'
+      # Generate Infracost JSON file as the baseline.
+      - name: Generate Infracost cost estimate baseline
+        run: |
+          infracost breakdown --path=. \
+                              --format=json \
+                              --out-file=/tmp/infracost-base.json
+      # Checkout the current PR branch so we can create a diff.
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+      # Generate an Infracost diff and save it to a JSON file.
+      - name: Generate Infracost diff
+        run: |
+          infracost diff --path=. \
+                          --format=json \
+                          --compare-to=/tmp/infracost-base.json \
+                          --out-file=/tmp/infracost.json
+      - name: Post Infracost comment
+        run: |
+            infracost comment github --path=/tmp/infracost.json \
+                                     --repo=$GITHUB_REPOSITORY \
+                                     --github-token=${{ github.token }} \
+                                     --pull-request=${{ github.event.pull_request.number }} \
+                                     --behavior=update \
+                                     --policy-path ./policies/cost.rego
 
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v3
-
-    - name: Terraform Init
-      run: terraform init
-
-    - name: Terraform Format
-      run: terraform fmt -check
-
-    - name: Terraform Plan
-      id: plan
-      run: |
-        terraform plan -out=plan.tfplan
-        terraform show -json plan.tfplan > /tmp/plan.json
-
-    - name: Setup OPA
-      uses: open-policy-agent/setup-opa@v2
-      with:
-        version: latest
-
-    - name: Run OPA Tests
-      run: |
-        if ! opa eval --format pretty --data ../policies/instance-policy.rego --input /tmp/plan.json "data.terraform.deny" > /tmp/opa_output; then
-          echo "OPA evaluation failed"
-          exit 1
-        fi
-        
-        if [ -s /tmp/opa_output ]; then
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            echo "Policy violations found:"
-            cat /tmp/opa_output
-            gh pr comment ${{ github.event.pull_request.number }} --body "### Policy Violations Found:\n\n$(cat /tmp/opa_output)"
-            exit 1
-          else
-            echo "Policy violations found:"
-            cat /tmp/opa_output
-            exit 1
-          fi
-        else
-          echo "No policy violations found"
-        fi
+  
