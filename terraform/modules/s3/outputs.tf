@@ -1,14 +1,15 @@
-
-
-# File: terraform/modules/s3/outputs.tf
-output "source_bucket_id" {
-  value = aws_s3_bucket.source_data.id
+# File: terraform/outputs.tf
+output "source_bucket_name" {
+  description = "Name of the source data bucket"
+  value       = module.s3.source_bucket_id
 }
 
-output "target_bucket_id" {
-  value = aws_s3_bucket.target_data.id
+output "target_bucket_name" {
+  description = "Name of the target data bucket"
+  value       = module.s3.target_bucket_id
 }
 
-output "code_bucket_id" {
-  value = aws_s3_bucket.code.id
+output "glue_database_name" {
+  description = "Name of the Glue catalog database"
+  value       = module.glue.database_name
 }
