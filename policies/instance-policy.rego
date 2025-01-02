@@ -2,7 +2,7 @@ package terraform
 import rego.v1
 
 # Define allowed naming patterns for S3 buckets
-valid_bucket_pattern := "^[a-z0-9]+-[a-z0-9]+-[a-z]+-data$"
+valid_bucket_pattern := "^[a-z0-9]+-[a-z0-9]+-[a-z]+$"
 
 # Define required tags
 required_tags := {"Environment", "Project", "Managed_by"}
