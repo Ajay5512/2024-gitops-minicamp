@@ -64,18 +64,5 @@ jobs:
 
     - name: Run OPA Tests
       run: |
-        if opa eval --format pretty --data ../policies/instance-policy.rego --input /tmp/plan.json "data.terraform.deny" > /tmp/opa_output; then
-          violations=$(cat /tmp/opa_output)
-          if [ -z "$violations" ] || [ "$violations" == "[]" ]; then
-            echo "No policy violations found"
-            exit 0
-          else
-            echo "Policy violations found:"
-            echo "$violations"
-            gh pr comment ${{ github.event.pull_request.number }} --body "### Policy Violations Found:\n\n$violations"
-            exit 1
-          fi
-        else
-          echo "Error running OPA evaluation"
-          exit 1
-        fi
+        opaout=$(opa eval --data ../policies/instance-policy.rego --input /tmp/plan.json "data.terraform.deny" | jq -r '.result[].expressions[].value[]')
+        [ -z "$opaout" ] && exit 0 || echo "$opaout" && gh pr comment ${{ github.event.pull_request.number }} --body "### $opaout" && exit 1
