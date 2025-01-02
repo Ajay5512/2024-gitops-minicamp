@@ -1,0 +1,148 @@
+{
+    "format_version": "1.2",
+    "terraform_version": "1.10.3",
+    "variables": {
+      "environment": {
+        "value": "prod"
+      },
+      "project": {
+        "value": "topdevs"
+      }
+    },
+    "planned_values": {
+      "outputs": {
+        "glue_database_name": {
+          "sensitive": false,
+          "type": "string",
+          "value": "topdevs-prod-org-report"
+        },
+        "source_bucket_name": {
+          "sensitive": false
+        },
+        "target_bucket_name": {
+          "sensitive": false
+        }
+      },
+      "root_module": {
+        "child_modules": [
+          {
+            "resources": [
+              {
+                "address": "module.s3.aws_s3_bucket.code",
+                "mode": "managed",
+                "type": "aws_s3_bucket",
+                "name": "code",
+                "provider_name": "registry.terraform.io/hashicorp/aws",
+                "schema_version": 0,
+                "values": {
+                  "bucket": "topdevs-prod-glue-code",
+                  "force_destroy": true,
+                  "tags": {
+                    "Environment": "prod",
+                    "Managed_by": "terraform",
+                    "Project": "topdevs"
+                  }
+                }
+              },
+              {
+                "address": "module.s3.aws_s3_bucket.source_data",
+                "mode": "managed",
+                "type": "aws_s3_bucket",
+                "name": "source_data",
+                "provider_name": "registry.terraform.io/hashicorp/aws",
+                "schema_version": 0,
+                "values": {
+                  "bucket": "topdevs-prod-source-data",
+                  "force_destroy": true,
+                  "tags": {
+                    "Environment": "prod",
+                    "Managed_by": "terraform",
+                    "Project": "topdevs"
+                  }
+                }
+              },
+              {
+                "address": "module.s3.aws_s3_bucket.target_data",
+                "mode": "managed",
+                "type": "aws_s3_bucket",
+                "name": "target_data",
+                "provider_name": "registry.terraform.io/hashicorp/aws",
+                "schema_version": 0,
+                "values": {
+                  "bucket": "topdevs-prod-target-data",
+                  "force_destroy": true,
+                  "tags": {
+                    "Environment": "prod",
+                    "Managed_by": "terraform",
+                    "Project": "topdevs"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "resource_changes": [
+      {
+        "address": "module.s3.aws_s3_bucket.code",
+        "mode": "managed",
+        "type": "aws_s3_bucket",
+        "name": "code",
+        "provider_name": "registry.terraform.io/hashicorp/aws",
+        "change": {
+          "actions": ["create"],
+          "before": null,
+          "after": {
+            "bucket": "topdevs-prod-glue-code",
+            "force_destroy": true,
+            "tags": {
+              "Environment": "prod",
+              "Managed_by": "terraform",
+              "Project": "topdevs"
+            }
+          }
+        }
+      },
+      {
+        "address": "module.s3.aws_s3_bucket.source_data",
+        "mode": "managed",
+        "type": "aws_s3_bucket",
+        "name": "source_data",
+        "provider_name": "registry.terraform.io/hashicorp/aws",
+        "change": {
+          "actions": ["create"],
+          "before": null,
+          "after": {
+            "bucket": "topdevs-prod-source-data",
+            "force_destroy": true,
+            "tags": {
+              "Environment": "prod",
+              "Managed_by": "terraform",
+              "Project": "topdevs"
+            }
+          }
+        }
+      },
+      {
+        "address": "module.s3.aws_s3_bucket.target_data",
+        "mode": "managed", 
+        "type": "aws_s3_bucket",
+        "name": "target_data",
+        "provider_name": "registry.terraform.io/hashicorp/aws",
+        "change": {
+          "actions": ["create"],
+          "before": null,
+          "after": {
+            "bucket": "topdevs-prod-target-data",
+            "force_destroy": true,
+            "tags": {
+              "Environment": "prod",
+              "Managed_by": "terraform",
+              "Project": "topdevs"
+            }
+          }
+        }
+      }
+    ]
+  }
