@@ -44,3 +44,30 @@ resource "aws_glue_trigger" "org_report" {
     Managed_by  = "terraform"
   }
 }
+
+
+
+
+# Update modules/glue/main.tf
+resource "aws_glue_job" "schema_change_job" {
+  name              = "topdevs-${var.environment}-schema-change-job"
+  role_arn          = var.glue_role_arn
+  glue_version      = "4.0"
+  worker_type       = "G.1X"
+  number_of_workers = 2
+  timeout           = 2880
+  max_retries       = 1
+
+  command {
+    name            = "pythonshell"
+    python_version  = "3"
+    script_location = "s3://${var.code_bucket}/schema_change.py"
+  }
+
+  default_arguments = {
+    "--catalog_id" = data.aws_caller_identity.current.account_id
+    "--db_name"    = aws_glue_catalog_database.database.name
+    "--table_name" = "your_table_name"
+    "--topic_arn"  = var.sns_topic_arn
+  }
+} 
