@@ -18,10 +18,10 @@ module "iam" {
 }
 
 module "glue" {
-  source         = "./modules/glue"
-  source_bucket  = module.s3.source_bucket_id
-  target_bucket  = module.s3.target_bucket_id
-  code_bucket    = module.s3.code_bucket_id
-  glue_role_arn  = module.iam.glue_role_arn
-  environment    = var.environment
+  source        = "./modules/glue"
+  source_bucket = module.s3.source_bucket_id
+  target_bucket = module.s3.target_bucket_id
+  code_bucket   = module.s3.code_bucket_id
+  glue_role_arn = module.iam.glue_role_arn
+  environment   = var.environment
 }
