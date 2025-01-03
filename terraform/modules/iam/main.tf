@@ -1,4 +1,3 @@
-# File: terraform/modules/iam/main.tf
 resource "aws_iam_role" "glue_service" {
   name = "${var.project}-${var.environment}-glue-service"
 

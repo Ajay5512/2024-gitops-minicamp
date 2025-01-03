@@ -1,5 +1,3 @@
-
-# File: terraform/modules/glue/main.tf
 resource "aws_glue_catalog_database" "org_report" {
   name         = "${var.project}-${var.environment}-org-report"
   location_uri = "s3://${var.source_bucket_id}/"

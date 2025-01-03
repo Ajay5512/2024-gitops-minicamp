@@ -1,5 +1,3 @@
-
-# File: terraform/modules/s3/main.tf
 resource "aws_s3_bucket" "source_data" {
   bucket        = "${var.project}-${var.environment}-source-data"
   force_destroy = true
