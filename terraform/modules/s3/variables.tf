@@ -28,3 +28,8 @@ variable "schema_change_script_path" {
   description = "Local path to the schema change detection script"
   type        = string
 }
+
+variable "organizations_csv_path" {
+  description = "Path to the organizations CSV file"
+  type        = string
+}

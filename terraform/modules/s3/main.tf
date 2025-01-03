@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "source_bucket" {
 resource "aws_s3_object" "organizations_file" {
   bucket = aws_s3_bucket.source_bucket.id
   key    = "organizations.csv"
-  source = "../data/organizations.csv"
+  source = var.organizations_csv_path
 }
 
 resource "aws_s3_bucket" "target_bucket" {

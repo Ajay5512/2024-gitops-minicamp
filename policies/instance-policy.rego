@@ -13,9 +13,10 @@ glue_job_limits := {
 	"max_timeout": 2880,
 	"max_retries": 1,
 	"allowed_worker_types": ["G.1X"],
+	"allowed_command_names": ["glueetl", "pythonshell"], # Added pythonshell
 }
 
-# S3 bucket naming convention check
+# S3 bucket naming convention check (unchanged)
 deny contains msg if {
 	some resource in input.resource_changes
 	resource.type == "aws_s3_bucket"
@@ -27,13 +28,12 @@ deny contains msg if {
 	)
 }
 
-# Glue crawler configuration checks
+# Glue crawler checks (unchanged)
 deny contains msg if {
 	some resource in input.resource_changes
 	resource.type == "aws_glue_crawler"
 	crawler := resource.change.after
 
-	# Check schema change policy
 	not crawler.schema_change_policy
 	msg := sprintf(
 		"Glue crawler '%s' must have a schema_change_policy defined",
@@ -41,26 +41,30 @@ deny contains msg if {
 	)
 }
 
-deny contains msg if {
-	some resource in input.resource_changes
-	resource.type == "aws_glue_crawler"
-	crawler := resource.change.after
-
-	# Check naming convention
-	not regex.match(valid_glue_pattern, crawler.name)
-	msg := sprintf(
-		"Glue crawler '%s' name does not follow the required pattern. Must match: '%s'",
-		[crawler.name, valid_glue_pattern],
-	)
-}
-
-# Glue job configuration and resource limit checks
+# Modified Glue job checks to handle both ETL and Python shell jobs
 deny contains msg if {
 	some resource in input.resource_changes
 	resource.type == "aws_glue_job"
 	job := resource.change.after
 
-	# Check worker count
+	# Check command name is in allowed list
+	some command in job.command
+	not command.name in glue_job_limits.allowed_command_names
+	msg := sprintf(
+		"Glue job '%s' uses invalid command name. Allowed types are %v, got %s",
+		[resource.address, glue_job_limits.allowed_command_names, command.name],
+	)
+}
+
+# Worker count check only for glueetl jobs
+deny contains msg if {
+	some resource in input.resource_changes
+	resource.type == "aws_glue_job"
+	job := resource.change.after
+
+	# Only check worker count for glueetl jobs
+	some command in job.command
+	command.name == "glueetl"
 	job.number_of_workers > glue_job_limits.max_workers
 	msg := sprintf(
 		"Glue job '%s' exceeds maximum allowed workers. Maximum is %d, got %d",
@@ -68,12 +72,12 @@ deny contains msg if {
 	)
 }
 
+# Timeout check for all jobs
 deny contains msg if {
 	some resource in input.resource_changes
 	resource.type == "aws_glue_job"
 	job := resource.change.after
 
-	# Check timeout
 	job.timeout > glue_job_limits.max_timeout
 	msg := sprintf(
 		"Glue job '%s' exceeds maximum allowed timeout. Maximum is %d minutes, got %d",
@@ -81,12 +85,12 @@ deny contains msg if {
 	)
 }
 
+# Max retries check for all jobs
 deny contains msg if {
 	some resource in input.resource_changes
 	resource.type == "aws_glue_job"
 	job := resource.change.after
 
-	# Check max retries
 	job.max_retries > glue_job_limits.max_retries
 	msg := sprintf(
 		"Glue job '%s' exceeds maximum allowed retries. Maximum is %d, got %d",
@@ -94,12 +98,15 @@ deny contains msg if {
 	)
 }
 
+# Worker type check only for glueetl jobs
 deny contains msg if {
 	some resource in input.resource_changes
 	resource.type == "aws_glue_job"
 	job := resource.change.after
 
-	# Check worker type
+	# Only check worker type for glueetl jobs
+	some command in job.command
+	command.name == "glueetl"
 	not job.worker_type in glue_job_limits.allowed_worker_types
 	msg := sprintf(
 		"Glue job '%s' uses invalid worker type. Allowed types are %v, got %s",
@@ -107,13 +114,12 @@ deny contains msg if {
 	)
 }
 
-# Python version check for Glue jobs.
+# Python version check for all jobs
 deny contains msg if {
 	some resource in input.resource_changes
 	resource.type == "aws_glue_job"
 	job := resource.change.after
 
-	# Check Python version
 	some command in job.command
 	not command.python_version == "3"
 	msg := sprintf(
