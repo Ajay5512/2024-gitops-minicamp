@@ -1,148 +1,107 @@
 {
-    "format_version": "1.2",
-    "terraform_version": "1.10.3",
-    "variables": {
-      "environment": {
-        "value": "prod"
-      },
-      "project": {
-        "value": "topdevs"
-      }
-    },
-    "planned_values": {
-      "outputs": {
-        "glue_database_name": {
-          "sensitive": false,
-          "type": "string",
-          "value": "topdevs-prod-org-report"
-        },
-        "source_bucket_name": {
-          "sensitive": false
-        },
-        "target_bucket_name": {
-          "sensitive": false
-        }
-      },
-      "root_module": {
-        "child_modules": [
-          {
-            "resources": [
-              {
-                "address": "module.s3.aws_s3_bucket.code",
-                "mode": "managed",
-                "type": "aws_s3_bucket",
-                "name": "code",
-                "provider_name": "registry.terraform.io/hashicorp/aws",
-                "schema_version": 0,
-                "values": {
-                  "bucket": "topdevs-prod-glue-code",
-                  "force_destroy": true,
+  "format_version": "1.0",
+  "terraform_version": "1.10.3",
+  "resource_changes": [
+      {
+          "address": "module.s3.aws_s3_bucket.code_bucket",
+          "type": "aws_s3_bucket",
+          "change": {
+              "actions": [
+                  "create"
+              ],
+              "before": null,
+              "after": {
+                  "bucket": "topdevs-prod-code-bucket",
+                  "force_destroy": false,
                   "tags": {
-                    "Environment": "prod",
-                    "Managed_by": "terraform",
-                    "Project": "topdevs"
+                      "Environment": "prod"
                   }
-                }
-              },
-              {
-                "address": "module.s3.aws_s3_bucket.source_data",
-                "mode": "managed",
-                "type": "aws_s3_bucket",
-                "name": "source_data",
-                "provider_name": "registry.terraform.io/hashicorp/aws",
-                "schema_version": 0,
-                "values": {
-                  "bucket": "topdevs-prod-source-data",
-                  "force_destroy": true,
-                  "tags": {
-                    "Environment": "prod",
-                    "Managed_by": "terraform",
-                    "Project": "topdevs"
-                  }
-                }
-              },
-              {
-                "address": "module.s3.aws_s3_bucket.target_data",
-                "mode": "managed",
-                "type": "aws_s3_bucket",
-                "name": "target_data",
-                "provider_name": "registry.terraform.io/hashicorp/aws",
-                "schema_version": 0,
-                "values": {
-                  "bucket": "topdevs-prod-target-data",
-                  "force_destroy": true,
-                  "tags": {
-                    "Environment": "prod",
-                    "Managed_by": "terraform",
-                    "Project": "topdevs"
-                  }
-                }
               }
-            ]
           }
-        ]
-      }
-    },
-    "resource_changes": [
-      {
-        "address": "module.s3.aws_s3_bucket.code",
-        "mode": "managed",
-        "type": "aws_s3_bucket",
-        "name": "code",
-        "provider_name": "registry.terraform.io/hashicorp/aws",
-        "change": {
-          "actions": ["create"],
-          "before": null,
-          "after": {
-            "bucket": "topdevs-prod-glue-code",
-            "force_destroy": true,
-            "tags": {
-              "Environment": "prod",
-              "Managed_by": "terraform",
-              "Project": "topdevs"
-            }
-          }
-        }
       },
       {
-        "address": "module.s3.aws_s3_bucket.source_data",
-        "mode": "managed",
-        "type": "aws_s3_bucket",
-        "name": "source_data",
-        "provider_name": "registry.terraform.io/hashicorp/aws",
-        "change": {
-          "actions": ["create"],
-          "before": null,
-          "after": {
-            "bucket": "topdevs-prod-source-data",
-            "force_destroy": true,
-            "tags": {
-              "Environment": "prod",
-              "Managed_by": "terraform",
-              "Project": "topdevs"
-            }
+          "address": "module.glue.aws_glue_job.etl_job",
+          "type": "aws_glue_job",
+          "change": {
+              "actions": [
+                  "create"
+              ],
+              "before": null,
+              "after": {
+                  "name": "topdevs-prod-etl-job",
+                  "role_arn": "arn:aws:iam::123456789012:role/topdevs-prod-glue-service-role",
+                  "glue_version": "4.0",
+                  "worker_type": "G.1X",
+                  "number_of_workers": 3,
+                  "timeout": 2880,
+                  "max_retries": 1,
+                  "command": [
+                      {
+                          "name": "glueetl",
+                          "python_version": "3",
+                          "script_location": "s3://topdevs-prod-code-bucket/script.py"
+                      }
+                  ]
+              }
           }
-        }
       },
       {
-        "address": "module.s3.aws_s3_bucket.target_data",
-        "mode": "managed", 
-        "type": "aws_s3_bucket",
-        "name": "target_data",
-        "provider_name": "registry.terraform.io/hashicorp/aws",
-        "change": {
-          "actions": ["create"],
-          "before": null,
-          "after": {
-            "bucket": "topdevs-prod-target-data",
-            "force_destroy": true,
-            "tags": {
-              "Environment": "prod",
-              "Managed_by": "terraform",
-              "Project": "topdevs"
-            }
+          "address": "module.glue.aws_glue_crawler.crawler",
+          "type": "aws_glue_crawler",
+          "change": {
+              "actions": [
+                  "create"
+              ],
+              "before": null,
+              "after": {
+                  "name": "topdevs-prod-org-report-crawler",
+                  "database_name": "topdevs-prod-org-report",
+                  "role": "arn:aws:iam::123456789012:role/topdevs-prod-glue-service-role",
+                  "schema_change_policy": [
+                      {
+                          "delete_behavior": "LOG",
+                          "update_behavior": "UPDATE_IN_DATABASE"
+                      }
+                  ],
+                  "s3_target": [
+                      {
+                          "path": "s3://topdevs-prod-source-data/"
+                      }
+                  ]
+              }
           }
-        }
+      },
+      {
+          "address": "module.iam.aws_iam_role.glue_service_role",
+          "type": "aws_iam_role",
+          "change": {
+              "actions": [
+                  "create"
+              ],
+              "before": null,
+              "after": {
+                  "name": "topdevs-prod-glue-service-role",
+                  "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"glue.amazonaws.com\"}}]}",
+                  "tags": {
+                      "Environment": "prod"
+                  }
+              }
+          }
+      },
+      {
+          "address": "module.iam.aws_iam_role_policy.glue_service_policy",
+          "type": "aws_iam_role_policy",
+          "change": {
+              "actions": [
+                  "create"
+              ],
+              "before": null,
+              "after": {
+                  "name": "topdevs-prod-glue-service-policy",
+                  "role": "topdevs-prod-glue-service-role",
+                  "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":[\"glue:*\",\"s3:GetBucketLocation\",\"s3:ListBucket\",\"s3:ListAllMyBuckets\",\"s3:GetBucketAcl\",\"s3:GetObject\",\"s3:PutObject\",\"s3:DeleteObject\"],\"Resource\":[\"*\"]}]}"
+              }
+          }
       }
-    ]
-  }
+  ]
+}
