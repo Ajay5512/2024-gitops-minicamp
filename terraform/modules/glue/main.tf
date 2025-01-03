@@ -1,5 +1,8 @@
 
 # modules/glue/main.tf
+
+data "aws_caller_identity" "current" {}
+
 resource "aws_glue_catalog_database" "database" {
   name = "topdevs-${var.environment}-org-report"
 }
