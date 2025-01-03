@@ -4,12 +4,12 @@ provider "aws" {
 }
 
 module "s3" {
-  source                   = "./modules/s3"
-  source_bucket           = var.source_bucket
-  target_bucket           = var.target_bucket
-  code_bucket             = var.code_bucket
-  environment             = var.environment
-  script_path             = var.script_path
+  source                    = "./modules/s3"
+  source_bucket             = var.source_bucket
+  target_bucket             = var.target_bucket
+  code_bucket               = var.code_bucket
+  environment               = var.environment
+  script_path               = var.script_path
   schema_change_script_path = var.schema_change_script_path
 }
 
