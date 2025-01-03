@@ -107,7 +107,7 @@ deny contains msg if {
 	)
 }
 
-# Python version check for Glue jobs
+# Python version check for Glue jobs.
 deny contains msg if {
 	some resource in input.resource_changes
 	resource.type == "aws_glue_job"
