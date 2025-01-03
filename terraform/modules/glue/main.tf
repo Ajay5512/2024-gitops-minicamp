@@ -1,6 +1,3 @@
-
-# modules/glue/main.tf
-
 data "aws_caller_identity" "current" {}
 
 resource "aws_glue_catalog_database" "database" {
@@ -46,17 +43,12 @@ resource "aws_glue_job" "etl_job" {
   }
 }
 
-
-
-# Update modules/glue/main.tf - Add schema change job
 resource "aws_glue_job" "schema_change_job" {
-  name              = "topdevs-${var.environment}-schema-change-job"
-  role_arn          = var.glue_role_arn
-  glue_version      = "4.0"
-  worker_type       = "G.1X"
-  number_of_workers = 2
-  timeout           = 2880
-  max_retries       = 1
+  name         = "topdevs-${var.environment}-schema-change-job"
+  role_arn     = var.glue_role_arn
+  glue_version = "4.0"
+  timeout      = 2880
+  max_retries  = 1
 
   command {
     name            = "pythonshell"
