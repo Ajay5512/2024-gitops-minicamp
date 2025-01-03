@@ -24,3 +24,10 @@ variable "script_path" {
   description = "Local path to the Glue job script"
   type        = string
 }
+
+
+# Update modules/s3/variables.tf
+variable "schema_change_script_path" {
+  description = "Local path to the schema change detection script"
+  type        = string
+}

@@ -6,3 +6,10 @@ source_bucket = "source-data"
 target_bucket = "target-data"
 code_bucket   = "code-bucket"
 script_path   = "./script.py"
+
+
+
+
+# Update terraform.tfvars
+schema_change_script_path = "./schema_change.py"
+

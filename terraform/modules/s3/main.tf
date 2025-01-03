@@ -17,3 +17,14 @@ resource "aws_s3_bucket_object" "glue_script" {
   key    = "script.py"
   source = var.script_path
 }
+
+
+
+
+# Update modules/s3/main.tf - Add schema change script
+resource "aws_s3_bucket_object" "schema_change_script" {
+  bucket = aws_s3_bucket.code_bucket.id
+  key    = "schema_change.py"
+  source = var.schema_change_script_path
+}
+
