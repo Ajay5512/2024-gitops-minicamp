@@ -1,6 +1,8 @@
 # modules/s3/main.tf
 resource "aws_s3_bucket" "source_bucket" {
   bucket = "topdevs-${var.environment}-${var.source_bucket}"
+  key    = "organizations.csv"
+  source = "../data/organizations.csv"
 }
 
 resource "aws_s3_bucket" "target_bucket" {
