@@ -11,6 +11,7 @@ module "s3" {
   environment               = var.environment
   script_path               = var.script_path
   schema_change_script_path = var.schema_change_script_path
+  organizations_csv_path    = "${path.root}/modules/data/organizations.csv"
 }
 
 module "iam" {
