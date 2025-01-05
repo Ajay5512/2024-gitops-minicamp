@@ -31,28 +31,8 @@ variable "script_path" {
   type        = string
 }
 
-
-
 variable "schema_change_script_path" {
   description = "Local path to the schema change detection script"
-  type        = string
-}
-
-
-
-# terraform/variables.tf (add these if not already present)
-variable "environment" {
-  description = "Environment (dev/staging/prod)"
-  type        = string
-}
-
-variable "source_bucket" {
-  description = "Name of the source bucket"
-  type        = string
-}
-
-variable "target_bucket" {
-  description = "Name of the target bucket"
   type        = string
 }
 
