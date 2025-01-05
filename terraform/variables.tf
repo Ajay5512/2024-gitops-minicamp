@@ -31,9 +31,8 @@ variable "script_path" {
   type        = string
 }
 
-
-
 variable "schema_change_script_path" {
   description = "Local path to the schema change detection script"
   type        = string
 }
+
