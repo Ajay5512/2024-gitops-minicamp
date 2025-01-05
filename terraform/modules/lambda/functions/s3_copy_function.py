@@ -1,19 +1,22 @@
-
-# terraform/modules/lambda/functions/s3_copy_function.py
 import boto3
-import os
 from datetime import datetime
 
 def lambda_handler(event, context):
     # Initialize S3 client
     s3_client = boto3.client('s3')
     
-    # Get the source bucket and key from the event
+    # Get the source key from the event
     source_bucket = event['Records'][0]['s3']['bucket']['name']
     source_key = event['Records'][0]['s3']['object']['key']
     
-    # Get destination bucket from environment variable
-    destination_bucket = os.environ['TARGET_BUCKET']
+    # Extract environment and bucket type from source bucket name
+    # Example: if source_bucket is "topdevs-dev-source", 
+    # then environment will be "dev" and target will be "target"
+    bucket_parts = source_bucket.split('-')
+    environment = bucket_parts[1]
+    
+    # Construct target bucket name following the same pattern
+    destination_bucket = f"topdevs-{environment}-target"
     
     try:
         # Copy the object to the destination bucket
