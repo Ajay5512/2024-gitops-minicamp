@@ -34,3 +34,14 @@ module "glue" {
   environment   = var.environment
   sns_topic_arn = module.sns.topic_arn
 }
+
+# Add to your existing terraform/main.tf
+module "lambda" {
+  source = "./modules/lambda"
+
+  environment   = var.environment
+  source_bucket = var.source_bucket
+  target_bucket = var.target_bucket
+
+  depends_on = [module.s3]
+}
