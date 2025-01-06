@@ -1,5 +1,3 @@
-# modules/s3/main.tf
-
 resource "aws_s3_bucket" "source_bucket" {
   bucket = "topdevs-${var.environment}-${var.source_bucket}"
 }
@@ -28,4 +26,18 @@ resource "aws_s3_object" "schema_change_script" {
   bucket = aws_s3_bucket.code_bucket.id
   key    = "schema_change.py"
   source = var.schema_change_script_path
+}
+
+resource "aws_s3_object" "s3_to_redshift_script" {
+  bucket = aws_s3_bucket.code_bucket.id
+  key    = "s3_to_redshift.py"
+  source = var.s3_to_redshift_script_path
+}
+
+
+
+resource "aws_s3_object" "s3_to_redshift_script" {
+  bucket = aws_s3_bucket.code_bucket.id
+  key    = "s3_to_redshift.py"
+  source = var.s3_to_redshift_script_path
 }

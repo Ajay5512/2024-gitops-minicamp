@@ -32,3 +32,24 @@ variable "sns_topic_arn" {
   description = "ARN of the SNS topic for schema change notifications"
   type        = string
 }
+
+
+
+# modules/glue/variables.tf (Add these new variables)
+
+variable "redshift_database" {
+  type        = string
+  description = "Redshift database name"
+}
+
+variable "redshift_schema" {
+  type        = string
+  description = "Redshift schema name"
+  default     = "public"
+}
+
+variable "redshift_workgroup_name" {
+  type        = string
+  description = "Redshift workgroup name"
+}
+

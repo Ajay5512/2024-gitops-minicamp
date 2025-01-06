@@ -33,3 +33,8 @@ variable "organizations_csv_path" {
   description = "Path to the organizations CSV file"
   type        = string
 }
+
+variable "s3_to_redshift_script_path" {
+  type        = string
+  description = "Path to the S3 to Redshift ETL script"
+}

@@ -36,3 +36,14 @@ variable "schema_change_script_path" {
   type        = string
 }
 
+
+variable "redshift_admin_username" {
+  type        = string
+  description = "Admin username for Redshift"
+}
+
+variable "redshift_admin_password" {
+  type        = string
+  description = "Admin password for Redshift"
+  sensitive   = true
+}
