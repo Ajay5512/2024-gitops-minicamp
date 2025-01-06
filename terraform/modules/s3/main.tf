@@ -33,11 +33,3 @@ resource "aws_s3_object" "s3_to_redshift_script" {
   key    = "s3_to_redshift.py"
   source = var.s3_to_redshift_script_path
 }
-
-
-
-resource "aws_s3_object" "s3_to_redshift_script" {
-  bucket = aws_s3_bucket.code_bucket.id
-  key    = "s3_to_redshift.py"
-  source = var.s3_to_redshift_script_path
-}

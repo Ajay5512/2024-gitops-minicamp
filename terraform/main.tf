@@ -63,8 +63,8 @@ module "redshift" {
   source_bucket = module.s3.source_bucket_name
   target_bucket = module.s3.target_bucket_name
 
-  redshift_serverless_namespace_name = "${var.app_name}-${var.environment}-namespace"
-  redshift_serverless_database_name  = "${var.app_name}_${var.environment}_db"
+  redshift_serverless_namespace_name = "topdevs-${var.environment}-namespace"
+  redshift_serverless_database_name  = "$topdevs_${var.environment}_db"
   redshift_serverless_admin_username = var.redshift_admin_username
   redshift_serverless_admin_password = var.redshift_admin_password
 
