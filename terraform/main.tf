@@ -49,11 +49,10 @@ module "lambda" {
   depends_on = [module.s3]
 }
 
-
 module "redshift" {
   source = "./modules/redshift"
 
-
+  app_name    = "topdevs" # Add this line
   environment = var.environment
 
   vpc_id     = module.vpc.vpc_id
@@ -64,9 +63,9 @@ module "redshift" {
   target_bucket = module.s3.target_bucket_name
 
   redshift_serverless_namespace_name = "topdevs-${var.environment}-namespace"
-  redshift_serverless_database_name  = "$topdevs_${var.environment}_db"
-  redshift_serverless_admin_username = var.redshift_admin_username
-  redshift_serverless_admin_password = var.redshift_admin_password
+  redshift_serverless_database_name  = "topdevs_${var.environment}_db"
+  redshift_serverless_admin_username = var.redshift_serverless_admin_username # Updated variable name
+  redshift_serverless_admin_password = var.redshift_serverless_admin_password # Updated variable name
 
   glue_role_arn = module.iam.glue_role_arn
 }

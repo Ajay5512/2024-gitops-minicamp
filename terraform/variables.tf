@@ -36,14 +36,14 @@ variable "schema_change_script_path" {
   type        = string
 }
 
-
-variable "redshift_admin_username" {
+variable "redshift_serverless_admin_username" { # Updated variable name
   type        = string
-  description = "Admin username for Redshift"
+  description = "Admin username for Redshift - Set via GitHub Secrets"
+  sensitive   = true
 }
 
-variable "redshift_admin_password" {
+variable "redshift_serverless_admin_password" { # Updated variable name
   type        = string
-  description = "Admin password for Redshift"
+  description = "Admin password for Redshift - Set via GitHub Secrets"
   sensitive   = true
 }
