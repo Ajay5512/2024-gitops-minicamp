@@ -53,7 +53,7 @@ module "lambda" {
 module "redshift" {
   source = "./modules/redshift"
 
-  app_name    = var.app_name
+
   environment = var.environment
 
   vpc_id     = module.vpc.vpc_id
