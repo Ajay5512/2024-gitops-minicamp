@@ -1,11 +1,16 @@
-
-
-output "vpc_endpoint_s3_id" {
-  value = aws_vpc_endpoint.s3.id
+variable "aws_region" {
+  description = "AWS region to deploy resources"
+  type        = string
 }
 
-output "vpc_endpoint_redshift_id" {
-  value = aws_vpc_endpoint.redshift.id
+variable "environment" {
+  description = "Environment (dev/staging/prod)"
+  type        = string
+}
+
+variable "vpc_cidr" {
+  description = "CIDR block for VPC"
+  type        = string
 }
 
 variable "source_bucket" {
