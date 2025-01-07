@@ -44,6 +44,7 @@ module "sns" {
   glue_role_arn = module.iam.glue_role_arn
 }
 
+<<<<<<< HEAD
 module "redshift" {
   source = "./modules/redshift"
 
@@ -78,11 +79,17 @@ module "glue" {
   subnet_id           = module.vpc.subnet_ids[0]
 
   # Glue configuration
+=======
+# Glue Module
+module "glue" {
+  source                  = "./modules/glue"
+>>>>>>> d68a768 (Updated the code)
   source_bucket           = module.s3.source_bucket_id
   target_bucket           = module.s3.target_bucket_id
   code_bucket             = module.s3.code_bucket_id
   glue_role_arn           = module.iam.glue_role_arn
   environment             = var.environment
+<<<<<<< HEAD
   sns_topic_arn           = module.sns.topic_arn
   redshift_schema         = "raw"
   redshift_workgroup_name = module.redshift.redshift_workgroup_id
@@ -110,6 +117,14 @@ module "glue" {
   glue_trigger_name                   = var.glue_trigger_name
   glue_trigger_schedule_value         = var.glue_trigger_schedule_value
   glue_trigger_schedule_type          = var.glue_trigger_schedule_type
+=======
+  sns_topic_arn          = module.sns.topic_arn
+  redshift_database      = module.redshift.redshift_database_name
+  redshift_schema        = "raw"
+  redshift_workgroup_name = module.redshift.redshift_workgroup_id
+
+  depends_on = [module.s3, module.redshift]
+>>>>>>> d68a768 (Updated the code)
 }
 
 module "lambda" {
@@ -123,38 +138,53 @@ module "lambda" {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Data source for availability zones
 data "aws_availability_zones" "available" {
   state = "available"
 =======
 # main.tf
+=======
+
+
+>>>>>>> d68a768 (Updated the code)
 module "iam" {
   source = "./modules/iam"
+  
+  app_name     = var.app_name
+  environment  = var.environment
+  source_bucket = var.source_bucket
+  target_bucket = var.target_bucket
 }
 
 module "vpc" {
   source = "./modules/vpc"
   
-  redshift_serverless_vpc_cidr = var.redshift_serverless_vpc_cidr
-  redshift_serverless_subnet_1_cidr = var.redshift_serverless_subnet_1_cidr
-  redshift_serverless_subnet_2_cidr = var.redshift_serverless_subnet_2_cidr
-  redshift_serverless_subnet_3_cidr = var.redshift_serverless_subnet_3_cidr
-  app_name = var.app_name
+  vpc_cidr            = var.vpc_cidr
+  private_subnet_cidrs = var.private_subnet_cidrs
+  app_name            = var.app_name
+  environment         = var.environment
+  aws_region          = var.aws_region
 }
 
 module "redshift" {
   source = "./modules/redshift"
   
   redshift_serverless_namespace_name = var.redshift_serverless_namespace_name
-  redshift_serverless_database_name = var.redshift_serverless_database_name
+  redshift_serverless_database_name  = var.redshift_serverless_database_name
   redshift_serverless_admin_username = var.redshift_serverless_admin_username
   redshift_serverless_admin_password = var.redshift_serverless_admin_password
   redshift_serverless_workgroup_name = var.redshift_serverless_workgroup_name
-  redshift_serverless_base_capacity = var.redshift_serverless_base_capacity
+  redshift_serverless_base_capacity  = var.redshift_serverless_base_capacity
   redshift_serverless_publicly_accessible = var.redshift_serverless_publicly_accessible
   
   redshift_role_arn = module.iam.redshift_role_arn
   security_group_id = module.vpc.security_group_id
+<<<<<<< HEAD
   subnet_ids = module.vpc.subnet_ids
 >>>>>>> cd2c14e (uPDATE)
+=======
+  subnet_ids        = module.vpc.subnet_ids
+  environment       = var.environment
+>>>>>>> d68a768 (Updated the code)
 }

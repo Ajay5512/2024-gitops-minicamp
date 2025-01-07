@@ -1,10 +1,14 @@
 
+<<<<<<< HEAD
 # modules/glue/variables.tf
 variable "environment" {
   description = "Environment (dev/staging/prod)"
   type        = string
 }
 
+=======
+# Variables
+>>>>>>> d68a768 (Updated the code)
 variable "source_bucket" {
   description = "Source bucket ID"
   type        = string
@@ -25,12 +29,23 @@ variable "glue_role_arn" {
   type        = string
 }
 
+<<<<<<< HEAD
+=======
+variable "environment" {
+  description = "Environment (dev/staging/prod)"
+  type        = string
+}
+
+>>>>>>> d68a768 (Updated the code)
 variable "sns_topic_arn" {
   description = "ARN of the SNS topic for schema change notifications"
   type        = string
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d68a768 (Updated the code)
 variable "redshift_database" {
   description = "Redshift database name"
   type        = string
@@ -46,6 +61,7 @@ variable "redshift_workgroup_name" {
   description = "Redshift workgroup name"
   type        = string
 }
+<<<<<<< HEAD
 
 variable "redshift_endpoint" {
   description = "Redshift endpoint"
@@ -82,3 +98,5 @@ variable "subnet_id" {
   description = "Subnet ID for the connection"
   type        = string
 }
+=======
+>>>>>>> d68a768 (Updated the code)

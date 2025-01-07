@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 # modules/iam/main.tf
 resource "aws_iam_role" "glue_service_role" {
@@ -17,24 +18,32 @@ resource "aws_iam_role" "glue_service_role" {
   })
 }
 
+=======
+# modules/iam/main.tf
+>>>>>>> d68a768 (Updated the code)
 resource "aws_iam_role" "redshift_serverless_role" {
-  name = "topdevs-${var.environment}-redshift-serverless-role"
+  name = "${var.app_name}-${var.environment}-redshift-serverless-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
         Action = "sts:AssumeRole"
+        Effect = "Allow"
         Principal = {
           Service = "redshift.amazonaws.com"
         }
-        Effect = "Allow"
-        Sid    = ""
       }
     ]
   })
+
+  tags = {
+    Name        = "${var.app_name}-${var.environment}-redshift-role"
+    Environment = var.environment
+  }
 }
 
+<<<<<<< HEAD
 resource "aws_iam_role_policy" "glue_service_policy" {
   name = "topdevs-${var.environment}-glue-service-policy"
   role = aws_iam_role.glue_service_role.id
@@ -59,8 +68,10 @@ resource "aws_iam_role_policy" "glue_service_policy" {
   })
 }
 
+=======
+>>>>>>> d68a768 (Updated the code)
 resource "aws_iam_role_policy" "redshift_s3_access" {
-  name = "topdevs-${var.environment}-redshift-s3-access"
+  name = "${var.app_name}-${var.environment}-redshift-s3-policy"
   role = aws_iam_role.redshift_serverless_role.id
 
   policy = jsonencode({
@@ -71,7 +82,8 @@ resource "aws_iam_role_policy" "redshift_s3_access" {
         Action = [
           "s3:GetBucketLocation",
           "s3:GetObject",
-          "s3:ListBucket"
+          "s3:ListBucket",
+          "s3:PutObject"
         ]
         Resource = [
           "arn:aws:s3:::${var.source_bucket}",
@@ -86,29 +98,12 @@ resource "aws_iam_role_policy" "redshift_s3_access" {
 <<<<<<< HEAD
 =======
 
-# modules/iam/main.tf
-resource "aws_iam_role" "redshift-serverless-role" {
-  name = "nsw-properties-redshift-serverless-role"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "redshift.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-  tags = {
-    Name = "nsw-properties-redshift-serverless-role"
-  }
+resource "aws_iam_role_policy_attachment" "redshift_full_access" {
+  role       = aws_iam_role.redshift_serverless_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonRedshiftAllCommandsFullAccess"
 }
 
+<<<<<<< HEAD
 resource "aws_iam_role_policy" "redshift-s3-full-access-policy" {
   name = "nsw-properties-redshift-serverless-role-s3-policy"
   role = aws_iam_role.redshift-serverless-role.id
@@ -139,3 +134,5 @@ output "redshift_role_arn" {
   value = aws_iam_role.redshift-serverless-role.arn
 }
 >>>>>>> cd2c14e (uPDATE)
+=======
+>>>>>>> d68a768 (Updated the code)

@@ -3,7 +3,8 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_glue_catalog_database" "database" {
-  name = "topdevs-${var.environment}-org-report"
+  name        = "topdevs-${var.environment}-org-report"
+  description = "Database for ${var.environment} environment organization reports"
 }
 
 resource "aws_glue_crawler" "crawler" {
@@ -18,6 +19,13 @@ resource "aws_glue_crawler" "crawler" {
   schema_change_policy {
     delete_behavior = "LOG"
   }
+
+  configuration = jsonencode({
+    Version = 1.0
+    CrawlerOutput = {
+      Partitions = { AddOrUpdateBehavior = "InheritFromTable" }
+    }
+  })
 }
 
 resource "aws_glue_connection" "jdbc_connection" {
@@ -53,6 +61,7 @@ resource "aws_glue_job" "etl_job" {
   }
 
   default_arguments = {
+<<<<<<< HEAD
     "--enable-auto-scaling"             = "true"
     "--enable-continuous-cloudwatch-log" = "true"
     "--source-path"                     = "s3://${var.source_bucket}/"
@@ -61,15 +70,34 @@ resource "aws_glue_job" "etl_job" {
     "--enable-metrics"                  = "true"
     "--TempDir"                         = "s3://${var.code_bucket}/temporary/"
     "--spark-event-logs-path"           = "s3://${var.code_bucket}/spark-logs/"
+=======
+    "--enable-auto-scaling"              = "true"
+    "--enable-continuous-cloudwatch-log" = "true"
+    "--source-path"                      = "s3://${var.source_bucket}/"
+    "--destination-path"                 = "s3://${var.target_bucket}/"
+    "--job-name"                         = "topdevs-${var.environment}-etl-job"
+    "--enable-metrics"                   = "true"
+  }
+
+  execution_property {
+    max_concurrent_runs = 1
+  }
+
+  tags = {
+    Environment = var.environment
+    Service     = "glue"
+>>>>>>> d68a768 (Updated the code)
   }
 }
 
 resource "aws_glue_job" "schema_change_job" {
-  name         = "topdevs-${var.environment}-schema-change-job"
-  role_arn     = var.glue_role_arn
-  glue_version = "4.0"
-  timeout      = 2880
-  max_retries  = 1
+  name              = "topdevs-${var.environment}-schema-change-job"
+  role_arn          = var.glue_role_arn
+  glue_version      = "4.0"
+  worker_type       = "Standard"
+  number_of_workers = 1
+  timeout           = 2880
+  max_retries       = 1
 
   command {
     name            = "pythonshell"
@@ -79,12 +107,21 @@ resource "aws_glue_job" "schema_change_job" {
 
   default_arguments = {
     "--enable-continuous-cloudwatch-log" = "true"
-    "--catalog_id"                      = data.aws_caller_identity.current.account_id
+    "--catalog_id"                       = data.aws_caller_identity.current.account_id
     "--db_name"                         = aws_glue_catalog_database.database.name
     "--table_name"                      = aws_glue_crawler.crawler.name
     "--topic_arn"                       = var.sns_topic_arn
     "--job-name"                        = "topdevs-${var.environment}-schema-change-job"
     "--enable-metrics"                  = "true"
+  }
+
+  execution_property {
+    max_concurrent_runs = 1
+  }
+
+  tags = {
+    Environment = var.environment
+    Service     = "glue"
   }
 }
 
@@ -121,4 +158,12 @@ resource "aws_glue_job" "s3_to_redshift_job" {
   execution_property {
     max_concurrent_runs = 1
   }
+<<<<<<< HEAD
+=======
+
+  tags = {
+    Environment = var.environment
+    Service     = "glue"
+  }
+>>>>>>> d68a768 (Updated the code)
 }

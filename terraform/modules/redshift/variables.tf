@@ -43,6 +43,7 @@ variable "redshift_serverless_admin_password" {
   type        = string
 >>>>>>> cd2c14e (uPDATE)
   description = "Redshift Serverless Admin Password"
+  sensitive   = true
 }
 
 variable "redshift_serverless_workgroup_name" {
@@ -80,7 +81,16 @@ variable "subnet_ids" {
   type        = list(string)
   description = "List of subnet IDs for Redshift"
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
 =======
 }
 >>>>>>> cd2c14e (uPDATE)
+=======
+}
+
+variable "environment" {
+  type        = string
+  description = "Environment (dev/staging/prod)"
+}
+>>>>>>> d68a768 (Updated the code)

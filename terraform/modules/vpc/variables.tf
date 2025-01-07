@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 # modules/vpc/variables.tf
 variable "app_name" {
@@ -31,29 +32,35 @@ variable "subnet_3_cidr" {
   description = "IPv4 CIDR for subnet 3"
 }
 =======
+=======
+
+>>>>>>> d68a768 (Updated the code)
 # modules/vpc/variables.tf
-variable "redshift_serverless_vpc_cidr" {
+variable "vpc_cidr" {
   type        = string
-  description = "VPC IPv4 CIDR"
+  description = "VPC CIDR block"
 }
 
-variable "redshift_serverless_subnet_1_cidr" {
-  type        = string
-  description = "IPv4 CIDR for Redshift subnet 1"
-}
-
-variable "redshift_serverless_subnet_2_cidr" {
-  type        = string
-  description = "IPv4 CIDR for Redshift subnet 2"
-}
-
-variable "redshift_serverless_subnet_3_cidr" {
-  type        = string
-  description = "IPv4 CIDR for Redshift subnet 3"
+variable "private_subnet_cidrs" {
+  type        = list(string)
+  description = "List of private subnet CIDR blocks"
 }
 
 variable "app_name" {
   type        = string
   description = "Application name"
 }
+<<<<<<< HEAD
 >>>>>>> cd2c14e (uPDATE)
+=======
+
+variable "environment" {
+  type        = string
+  description = "Environment (dev/staging/prod)"
+}
+
+variable "aws_region" {
+  type        = string
+  description = "AWS Region"
+}
+>>>>>>> d68a768 (Updated the code)
