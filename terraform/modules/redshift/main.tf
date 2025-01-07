@@ -72,7 +72,7 @@ resource "aws_iam_role_policy" "glue-redshift-access" {
   })
 }
 
-# Create Redshift Serverless Namespace
+# Create Redshift Serverless Namespace.
 resource "aws_redshiftserverless_namespace" "serverless" {
   namespace_name      = var.redshift_serverless_namespace_name
   db_name            = var.redshift_serverless_database_name
