@@ -105,3 +105,60 @@ resource "aws_glue_job" "s3_to_redshift_job" {
     max_concurrent_runs = 1
   }
 }
+
+
+resource "aws_glue_connection" "jdbc_connection" {
+  name = "topdevs-${var.environment}-redshift-connection"
+  connection_type = "JDBC"
+
+  connection_properties = {
+    JDBC_CONNECTION_URL = "jdbc:redshift://${var.redshift_endpoint}:${var.redshift_port}/${var.redshift_database}"
+    USERNAME           = var.redshift_username
+    PASSWORD           = var.redshift_password
+  }
+
+  physical_connection_requirements {
+    availability_zone      = var.availability_zone
+    security_group_id_list = [var.security_group_id]
+    subnet_id             = var.subnet_id
+  }
+}
+
+resource "aws_glue_job" "s3_to_redshift" {
+  name              = "topdevs-${var.environment}-s3-to-redshift-job"
+  role_arn          = var.glue_role_arn
+  glue_version      = var.glue_version
+  worker_type       = "G.1X"
+  number_of_workers = var.number_of_workers
+  timeout           = var.timeout
+
+  command {
+    name            = "glueetl"
+    python_version  = "3"
+    script_location = "s3://${var.code_bucket}/s3_to_redshift.py"
+  }
+
+  default_arguments = {
+    "--enable-auto-scaling"             = tostring(var.enable_auto_scaling)
+    "--enable-continuous-cloudwatch-log" = "true"
+    "--enable-metrics"                  = "true"
+    "--enable-spark-ui"                 = "true"
+    "--enable-job-insights"             = tostring(var.enable_job_insights)
+    "--enable-glue-datacatalog"         = tostring(var.enable_glue_datacatalog)
+    "--job-language"                    = var.job_language
+    "--job-bookmark-option"             = var.job_bookmark_option
+    "--datalake-formats"                = var.datalake_formats
+    "--additional-conf"                 = var.additional_conf
+    "--TempDir"                         = "s3://${var.code_bucket}/temporary/"
+    "--spark-event-logs-path"           = "s3://${var.code_bucket}/spark-logs/"
+    "--source-bucket"                   = var.source_bucket
+    "--redshift-database"               = var.redshift_database
+    "--redshift-schema"                 = var.redshift_schema
+    "--redshift-workgroup"              = var.redshift_workgroup_name
+    "--redshift-temp-dir"               = "s3://${var.code_bucket}/temp/"
+  }
+
+  execution_property {
+    max_concurrent_runs = 1
+  }
+}

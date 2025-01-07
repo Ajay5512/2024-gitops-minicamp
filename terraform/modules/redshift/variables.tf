@@ -1,68 +1,77 @@
-# modules/redshift/variables.tf
 
+# modules/redshift/variables.tf
 variable "app_name" {
   type        = string
-  description = "Name of the application"
+  description = "Application name"
 }
 
-variable "environment" {
+variable "redshift_serverless_vpc_cidr" {
   type        = string
-  description = "Environment (dev, staging, prod)"
+  description = "VPC IPv4 CIDR"
 }
 
-variable "vpc_id" {
+variable "redshift_serverless_subnet_1_cidr" {
   type        = string
-  description = "ID of the VPC"
+  description = "IPv4 CIDR for Redshift subnet 1"
 }
 
-variable "vpc_cidr" {
+variable "redshift_serverless_subnet_2_cidr" {
   type        = string
-  description = "CIDR block of the VPC"
+  description = "IPv4 CIDR for Redshift subnet 2"
+}
+
+variable "redshift_serverless_subnet_3_cidr" {
+  type        = string
+  description = "IPv4 CIDR for Redshift subnet 3"
+}
+
+variable "redshift_serverless_namespace_name" {
+  type        = string
+  description = "Redshift Serverless Namespace Name"
+}
+
+variable "redshift_serverless_database_name" {
+  type        = string
+  description = "Redshift Serverless Database Name"
+}
+
+variable "redshift_serverless_admin_username" {
+  type        = string
+  description = "Redshift Serverless Admin Username"
+}
+
+variable "redshift_serverless_admin_password" {
+  type        = string
+  description = "Redshift Serverless Admin Password"
+}
+
+variable "redshift_serverless_workgroup_name" {
+  type        = string
+  description = "Redshift Serverless Workgroup Name"
+}
+
+variable "redshift_serverless_base_capacity" {
+  type        = number
+  description = "Redshift Serverless Base Capacity"
+  default     = 32
+}
+
+variable "redshift_serverless_publicly_accessible" {
+  type        = bool
+  description = "Set the Redshift Serverless to be Publicly Accessible"
+  default     = false
+}
+
+variable "redshift_role_arn" {
+  type        = string
+  description = "ARN of the IAM role for Redshift"
+}
+variable "security_group_id" {
+  type        = string
+  description = "Security group ID for Redshift"
 }
 
 variable "subnet_ids" {
   type        = list(string)
   description = "List of subnet IDs for Redshift"
-}
-
-variable "source_bucket" {
-  type        = string
-  description = "Name of the source S3 bucket"
-}
-
-variable "target_bucket" {
-  type        = string
-  description = "Name of the target S3 bucket"
-}
-
-variable "redshift_serverless_namespace_name" {
-  type        = string
-  description = "Name of the Redshift Serverless namespace"
-}
-
-variable "redshift_serverless_database_name" {
-  type        = string
-  description = "Name of the Redshift database"
-}
-
-variable "redshift_serverless_admin_username" {
-  type        = string
-  description = "Admin username for Redshift"
-}
-
-variable "redshift_serverless_admin_password" {
-  type        = string
-  description = "Admin password for Redshift"
-  sensitive   = true
-}
-
-variable "redshift_serverless_base_capacity" {
-  type        = number
-  description = "Base capacity for Redshift Serverless in RPUs"
-  default     = 32
-}
-
-variable "glue_role_arn" {
-  type        = string
-  description = "ARN of the Glue service role"
 }

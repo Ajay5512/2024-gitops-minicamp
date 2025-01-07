@@ -1,29 +1,26 @@
-variable "aws_region" {
-  description = "AWS region to deploy resources"
-  type        = string
-}
 
-variable "environment" {
-  description = "Environment (dev/staging/prod)"
+# modules/vpc/variables.tf
+variable "app_name" {
   type        = string
+  description = "Application name"
 }
 
 variable "vpc_cidr" {
-  description = "CIDR block for VPC"
   type        = string
+  description = "VPC IPv4 CIDR"
 }
 
-variable "source_bucket" {
+variable "subnet_1_cidr" {
   type        = string
-  description = "Name of the source S3 bucket"
+  description = "IPv4 CIDR for subnet 1"
 }
 
-variable "target_bucket" {
+variable "subnet_2_cidr" {
   type        = string
-  description = "Name of the target S3 bucket"
+  description = "IPv4 CIDR for subnet 2"
 }
 
-variable "code_bucket" {
+variable "subnet_3_cidr" {
   type        = string
-  description = "Name of the code bucket"
+  description = "IPv4 CIDR for subnet 3"
 }

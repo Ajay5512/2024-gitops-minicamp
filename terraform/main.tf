@@ -1,6 +1,21 @@
-# main.tf file
+# main.tf
 provider "aws" {
   region = var.aws_region
+}
+
+module "vpc" {
+  source = "./modules/vpc"
+
+  app_name      = var.app_name
+  environment   = var.environment
+  aws_region    = var.aws_region
+  vpc_cidr      = var.redshift_serverless_vpc_cidr
+  subnet_1_cidr = var.redshift_serverless_subnet_1_cidr
+  subnet_2_cidr = var.redshift_serverless_subnet_2_cidr
+  subnet_3_cidr = var.redshift_serverless_subnet_3_cidr
+  source_bucket = var.source_bucket
+  target_bucket = var.target_bucket
+  code_bucket   = var.code_bucket
 }
 
 module "s3" {
@@ -15,7 +30,13 @@ module "s3" {
   organizations_csv_path     = "${path.root}/modules/data/organizations.csv"
 }
 
-
+module "iam" {
+  source        = "./modules/iam"
+  app_name      = var.app_name
+  environment   = var.environment
+  source_bucket = var.source_bucket
+  target_bucket = var.target_bucket
+}
 
 module "sns" {
   source        = "./modules/sns"
@@ -23,19 +44,74 @@ module "sns" {
   glue_role_arn = module.iam.glue_role_arn
 }
 
+module "redshift" {
+  source = "./modules/redshift"
+
+  app_name                                = var.app_name
+  environment                             = var.environment
+  redshift_serverless_namespace_name      = "${var.app_name}-${var.environment}-namespace"
+  redshift_serverless_database_name       = "${var.app_name}_${var.environment}_db"
+  redshift_serverless_admin_username      = var.redshift_serverless_admin_username
+  redshift_serverless_admin_password      = var.redshift_serverless_admin_password
+  redshift_serverless_workgroup_name      = var.redshift_serverless_workgroup_name
+  redshift_serverless_base_capacity       = var.redshift_serverless_base_capacity
+  redshift_serverless_publicly_accessible = var.redshift_serverless_publicly_accessible
+  redshift_role_arn                       = module.iam.redshift_role_arn
+  security_group_id                       = module.vpc.security_group_id
+  subnet_ids                              = module.vpc.subnet_ids
+  source_bucket                           = module.s3.source_bucket_name
+  target_bucket                           = module.s3.target_bucket_name
+}
+
 module "glue" {
-  source                  = "./modules/glue"
-  source_bucket           = module.s3.source_bucket_id # Keep only this one
+  source = "./modules/glue"
+
+  # Connection configuration
+  glue_jdbc_conn_name = var.glue_jdbc_conn_name
+  redshift_endpoint   = module.redshift.redshift_endpoint
+  redshift_port       = "5439"
+  redshift_database   = module.redshift.redshift_database_name
+  redshift_username   = var.redshift_serverless_admin_username
+  redshift_password   = var.redshift_serverless_admin_password
+  availability_zone   = data.aws_availability_zones.available.names[0]
+  security_group_id   = module.vpc.security_group_id
+  subnet_id           = module.vpc.subnet_ids[0]
+
+  # Glue configuration
+  source_bucket           = module.s3.source_bucket_id
   target_bucket           = module.s3.target_bucket_id
-  code_bucket             = module.s3.code_bucket_id # Keep only this one
+  code_bucket             = module.s3.code_bucket_id
   glue_role_arn           = module.iam.glue_role_arn
   environment             = var.environment
   sns_topic_arn           = module.sns.topic_arn
-  redshift_database       = module.redshift.redshift_database_name
-  redshift_schema         = "raw" # or your preferred schema
+  redshift_schema         = "raw"
   redshift_workgroup_name = module.redshift.redshift_workgroup_id
+
+  # Glue job and crawler configuration
+  s3_glue_catalog_database_name       = var.s3_glue_catalog_database_name
+  redshift_glue_catalog_database_name = var.redshift_glue_catalog_database_name
+  s3_glue_crawler_name                = var.s3_glue_crawler_name
+  redshift_glue_crawler_name          = var.redshift_glue_crawler_name
+  s3_utils_name                       = var.s3_utils_name
+  s3_utils_key                        = var.s3_utils_key
+  glue_src_path                       = var.glue_src_path
+  s3_to_redshift_glue_job_name        = var.s3_to_redshift_glue_job_name
+  timeout                             = var.timeout
+  glue_version                        = var.glue_version
+  number_of_workers                   = var.number_of_workers
+  class                               = var.class
+  enable-job-insights                 = var.enable-job-insights
+  enable-auto-scaling                 = var.enable-auto-scaling
+  enable-glue-datacatalog             = var.enable-glue-datacatalog
+  job-language                        = var.job-language
+  job-bookmark-option                 = var.job-bookmark-option
+  datalake-formats                    = var.datalake-formats
+  conf                                = var.conf
+  glue_trigger_name                   = var.glue_trigger_name
+  glue_trigger_schedule_value         = var.glue_trigger_schedule_value
+  glue_trigger_schedule_type          = var.glue_trigger_schedule_type
 }
-# Add to your existing terraform/main.tf
+
 module "lambda" {
   source = "./modules/lambda"
 
@@ -46,52 +122,7 @@ module "lambda" {
   depends_on = [module.s3]
 }
 
-module "redshift" {
-  source = "./modules/redshift"
-
-  app_name    = "topdevs" # Add this line
-  environment = var.environment
-
-  vpc_id     = module.vpc.vpc_id
-  vpc_cidr   = module.vpc.vpc_cidr
-  subnet_ids = module.vpc.private_subnet_ids
-
-  source_bucket = module.s3.source_bucket_name
-  target_bucket = module.s3.target_bucket_name
-
-  redshift_serverless_namespace_name = "topdevs-${var.environment}-namespace"
-  redshift_serverless_database_name  = "topdevs_${var.environment}_db"
-  redshift_serverless_admin_username = var.redshift_serverless_admin_username # Updated variable name
-  redshift_serverless_admin_password = var.redshift_serverless_admin_password # Updated variable name
-
-  glue_role_arn = module.iam.glue_role_arn
+# Data source for availability zones
+data "aws_availability_zones" "available" {
+  state = "available"
 }
-
-
-module "vpc" {
-  source = "./modules/vpc"
-
-  aws_region    = var.aws_region
-  environment   = var.environment
-  vpc_cidr      = var.vpc_cidr
-  source_bucket = var.source_bucket
-  target_bucket = var.target_bucket
-  code_bucket   = var.code_bucket
-}
-
-# Add to your root variables.tf
-variable "vpc_cidr" {
-  description = "CIDR block for VPC"
-  type        = string
-  default     = "10.0.0.0/16"
-}
-
-
-
-module "iam" {
-  source        = "./modules/iam"
-  environment   = var.environment
-  source_bucket = var.source_bucket
-  target_bucket = var.target_bucket
-}
-

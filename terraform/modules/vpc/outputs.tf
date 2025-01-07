@@ -1,19 +1,17 @@
+
+# modules/vpc/outputs.tf
 output "vpc_id" {
-  value = aws_vpc.main.id
+  value = aws_vpc.vpc.id
 }
 
-output "vpc_cidr" {
-  value = aws_vpc.main.cidr_block
+output "subnet_ids" {
+  value = [
+    aws_subnet.subnet-az1.id,
+    aws_subnet.subnet-az2.id,
+    aws_subnet.subnet-az3.id
+  ]
 }
 
-output "private_subnet_ids" {
-  value = aws_subnet.private[*].id
-}
-
-output "vpc_endpoint_s3_id" {
-  value = aws_vpc_endpoint.s3.id
-}
-
-output "vpc_endpoint_redshift_id" {
-  value = aws_vpc_endpoint.redshift.id
+output "security_group_id" {
+  value = aws_security_group.security-group.id
 }
