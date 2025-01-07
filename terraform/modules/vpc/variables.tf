@@ -5,6 +5,11 @@ variable "app_name" {
   description = "Application name"
 }
 
+variable "aws_region" {
+  type        = string
+  description = "AWS Region"
+}
+
 variable "vpc_cidr" {
   type        = string
   description = "VPC IPv4 CIDR"

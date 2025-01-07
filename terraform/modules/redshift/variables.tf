@@ -5,26 +5,6 @@ variable "app_name" {
   description = "Application name"
 }
 
-variable "redshift_serverless_vpc_cidr" {
-  type        = string
-  description = "VPC IPv4 CIDR"
-}
-
-variable "redshift_serverless_subnet_1_cidr" {
-  type        = string
-  description = "IPv4 CIDR for Redshift subnet 1"
-}
-
-variable "redshift_serverless_subnet_2_cidr" {
-  type        = string
-  description = "IPv4 CIDR for Redshift subnet 2"
-}
-
-variable "redshift_serverless_subnet_3_cidr" {
-  type        = string
-  description = "IPv4 CIDR for Redshift subnet 3"
-}
-
 variable "redshift_serverless_namespace_name" {
   type        = string
   description = "Redshift Serverless Namespace Name"
@@ -66,6 +46,7 @@ variable "redshift_role_arn" {
   type        = string
   description = "ARN of the IAM role for Redshift"
 }
+
 variable "security_group_id" {
   type        = string
   description = "Security group ID for Redshift"

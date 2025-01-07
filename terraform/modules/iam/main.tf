@@ -1,5 +1,5 @@
-# modules/iam/main.tf
 
+# modules/iam/main.tf
 resource "aws_iam_role" "glue_service_role" {
   name = "topdevs-${var.environment}-glue-service-role"
 
@@ -35,7 +35,6 @@ resource "aws_iam_role" "redshift_serverless_role" {
   })
 }
 
-# Glue service policies
 resource "aws_iam_role_policy" "glue_service_policy" {
   name = "topdevs-${var.environment}-glue-service-policy"
   role = aws_iam_role.glue_service_role.id
@@ -60,7 +59,6 @@ resource "aws_iam_role_policy" "glue_service_policy" {
   })
 }
 
-# Redshift policies
 resource "aws_iam_role_policy" "redshift_s3_access" {
   name = "topdevs-${var.environment}-redshift-s3-access"
   role = aws_iam_role.redshift_serverless_role.id
@@ -85,4 +83,3 @@ resource "aws_iam_role_policy" "redshift_s3_access" {
     ]
   })
 }
-
