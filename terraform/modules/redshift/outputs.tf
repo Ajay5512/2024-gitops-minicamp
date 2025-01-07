@@ -20,14 +20,8 @@ output "redshift_role_arn" {
   description = "ARN of the Redshift IAM role"
 }
 
-output "redshift_role_arn" {
-  value = aws_iam_role.redshift-serverless-role.arn
-}
 
 output "redshift_database_name" {
   value = aws_redshiftserverless_namespace.serverless.db_name
 }
 
-output "redshift_workgroup_id" {
-  value = aws_redshiftserverless_workgroup.serverless.id
-}
