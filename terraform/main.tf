@@ -18,6 +18,7 @@ module "s3" {
 module "iam" {
   source      = "./modules/iam"
   environment = var.environment
+
 }
 
 module "sns" {
