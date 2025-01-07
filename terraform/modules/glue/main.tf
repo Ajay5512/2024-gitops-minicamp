@@ -75,7 +75,7 @@ resource "aws_glue_job" "s3_to_redshift_job" {
   name              = "topdevs-${var.environment}-s3-to-redshift-job"
   role_arn          = var.glue_role_arn
   glue_version      = "4.0"
-  worker_type       = "G.2X"  # More memory for data transfer operations
+  worker_type       = "G.1X"  
   number_of_workers = 2
   timeout           = 2880
   max_retries       = 1

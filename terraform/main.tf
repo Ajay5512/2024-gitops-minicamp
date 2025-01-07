@@ -15,11 +15,7 @@ module "s3" {
   organizations_csv_path     = "${path.root}/modules/data/organizations.csv"
 }
 
-module "iam" {
-  source      = "./modules/iam"
-  environment = var.environment
 
-}
 
 module "sns" {
   source        = "./modules/sns"
@@ -70,3 +66,32 @@ module "redshift" {
 
   glue_role_arn = module.iam.glue_role_arn
 }
+
+
+module "vpc" {
+  source = "./modules/vpc"
+
+  aws_region    = var.aws_region
+  environment   = var.environment
+  vpc_cidr      = var.vpc_cidr
+  source_bucket = var.source_bucket
+  target_bucket = var.target_bucket
+  code_bucket   = var.code_bucket
+}
+
+# Add to your root variables.tf
+variable "vpc_cidr" {
+  description = "CIDR block for VPC"
+  type        = string
+  default     = "10.0.0.0/16"
+}
+
+
+
+module "iam" {
+  source        = "./modules/iam"
+  environment   = var.environment
+  source_bucket = var.source_bucket
+  target_bucket = var.target_bucket
+}
+
