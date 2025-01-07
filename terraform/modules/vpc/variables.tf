@@ -1,29 +1,25 @@
-variable "aws_region" {
-  description = "AWS region to deploy resources"
+# modules/vpc/variables.tf
+variable "redshift_serverless_vpc_cidr" {
   type        = string
+  description = "VPC IPv4 CIDR"
 }
 
-variable "environment" {
-  description = "Environment (dev/staging/prod)"
+variable "redshift_serverless_subnet_1_cidr" {
   type        = string
+  description = "IPv4 CIDR for Redshift subnet 1"
 }
 
-variable "vpc_cidr" {
-  description = "CIDR block for VPC"
+variable "redshift_serverless_subnet_2_cidr" {
   type        = string
+  description = "IPv4 CIDR for Redshift subnet 2"
 }
 
-variable "source_bucket" {
+variable "redshift_serverless_subnet_3_cidr" {
   type        = string
-  description = "Name of the source S3 bucket"
+  description = "IPv4 CIDR for Redshift subnet 3"
 }
 
-variable "target_bucket" {
+variable "app_name" {
   type        = string
-  description = "Name of the target S3 bucket"
-}
-
-variable "code_bucket" {
-  type        = string
-  description = "Name of the code bucket"
+  description = "Application name"
 }

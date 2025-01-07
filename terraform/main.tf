@@ -46,52 +46,33 @@ module "lambda" {
   depends_on = [module.s3]
 }
 
-module "redshift" {
-  source = "./modules/redshift"
-
-  app_name    = "topdevs" # Add this line
-  environment = var.environment
-
-  vpc_id     = module.vpc.vpc_id
-  vpc_cidr   = module.vpc.vpc_cidr
-  subnet_ids = module.vpc.private_subnet_ids
-
-  source_bucket = module.s3.source_bucket_name
-  target_bucket = module.s3.target_bucket_name
-
-  redshift_serverless_namespace_name = "topdevs-${var.environment}-namespace"
-  redshift_serverless_database_name  = "topdevs_${var.environment}_db"
-  redshift_serverless_admin_username = var.redshift_serverless_admin_username # Updated variable name
-  redshift_serverless_admin_password = var.redshift_serverless_admin_password # Updated variable name
-
-  glue_role_arn = module.iam.glue_role_arn
+# main.tf
+module "iam" {
+  source = "./modules/iam"
 }
-
 
 module "vpc" {
   source = "./modules/vpc"
-
-  aws_region    = var.aws_region
-  environment   = var.environment
-  vpc_cidr      = var.vpc_cidr
-  source_bucket = var.source_bucket
-  target_bucket = var.target_bucket
-  code_bucket   = var.code_bucket
+  
+  redshift_serverless_vpc_cidr = var.redshift_serverless_vpc_cidr
+  redshift_serverless_subnet_1_cidr = var.redshift_serverless_subnet_1_cidr
+  redshift_serverless_subnet_2_cidr = var.redshift_serverless_subnet_2_cidr
+  redshift_serverless_subnet_3_cidr = var.redshift_serverless_subnet_3_cidr
+  app_name = var.app_name
 }
 
-# Add to your root variables.tf
-variable "vpc_cidr" {
-  description = "CIDR block for VPC"
-  type        = string
-  default     = "10.0.0.0/16"
+module "redshift" {
+  source = "./modules/redshift"
+  
+  redshift_serverless_namespace_name = var.redshift_serverless_namespace_name
+  redshift_serverless_database_name = var.redshift_serverless_database_name
+  redshift_serverless_admin_username = var.redshift_serverless_admin_username
+  redshift_serverless_admin_password = var.redshift_serverless_admin_password
+  redshift_serverless_workgroup_name = var.redshift_serverless_workgroup_name
+  redshift_serverless_base_capacity = var.redshift_serverless_base_capacity
+  redshift_serverless_publicly_accessible = var.redshift_serverless_publicly_accessible
+  
+  redshift_role_arn = module.iam.redshift_role_arn
+  security_group_id = module.vpc.security_group_id
+  subnet_ids = module.vpc.subnet_ids
 }
-
-
-
-module "iam" {
-  source        = "./modules/iam"
-  environment   = var.environment
-  source_bucket = var.source_bucket
-  target_bucket = var.target_bucket
-}
-
