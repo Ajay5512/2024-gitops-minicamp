@@ -6,3 +6,6 @@ target_bucket             = "target-data"
 code_bucket               = "code-bucket"
 script_path               = "./script.py"
 schema_change_script_path = "./schema_change.py"
+
+redshift_serverless_admin_username = "admin"
+redshift_serverless_admin_password = "YourSecurePassword123!"
