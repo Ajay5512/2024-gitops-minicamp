@@ -15,11 +15,7 @@ module "s3" {
   organizations_csv_path     = "${path.root}/modules/data/organizations.csv"
 }
 
-module "iam" {
-  source      = "./modules/iam"
-  environment = var.environment
 
-}
 
 module "sns" {
   source        = "./modules/sns"
@@ -89,3 +85,13 @@ variable "vpc_cidr" {
   type        = string
   default     = "10.0.0.0/16"
 }
+
+
+
+module "iam" {
+  source        = "./modules/iam"
+  environment   = var.environment
+  source_bucket = var.source_bucket
+  target_bucket = var.target_bucket
+}
+
