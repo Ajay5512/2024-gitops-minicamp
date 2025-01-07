@@ -61,61 +61,8 @@ resource "aws_security_group" "security-group" {
   }
 }
 
-resource "aws_vpc_endpoint" "s3" {
-  vpc_id            = aws_vpc.vpc.id
-  service_name      = "com.amazonaws.${var.aws_region}.s3"
-  vpc_endpoint_type = "Gateway"
-  route_table_ids   = [aws_route_table.private.id]
-  
-  tags = {
-    Name = "${var.app_name}-s3-endpoint"
-  }
-}
 
-resource "aws_vpc_endpoint" "redshift" {
-  vpc_id              = aws_vpc.vpc.id
-  service_name        = "com.amazonaws.${var.aws_region}.redshift-serverless"
-  vpc_endpoint_type   = "Interface"
-  subnet_ids          = [aws_subnet.subnet-az1.id, aws_subnet.subnet-az2.id, aws_subnet.subnet-az3.id]
-  security_group_ids  = [aws_security_group.redshift_endpoint.id]
-  private_dns_enabled = true
-  
-  tags = {
-    Name = "${var.app_name}-redshift-endpoint"
-  }
-}
 
-resource "aws_security_group" "redshift_endpoint" {
-  name        = "${var.app_name}-redshift-endpoint-sg"
-  description = "Security group for Redshift VPC endpoint"
-  vpc_id      = aws_vpc.vpc.id
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [var.vpc_cidr]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${var.app_name}-redshift-endpoint-sg"
-  }
-}
-
-resource "aws_route_table" "private" {
-  vpc_id = aws_vpc.vpc.id
-
-  tags = {
-    Name = "${var.app_name}-private-rt"
-  }
-}
 
 resource "aws_route_table_association" "private_az1" {
   subnet_id      = aws_subnet.subnet-az1.id
