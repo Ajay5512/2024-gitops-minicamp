@@ -1,5 +1,14 @@
 # modules/redshift/main.tf
 
+# Extract role name from ARN
+data "aws_arn" "glue_role" {
+  arn = var.glue_role_arn
+}
+
+locals {
+  glue_role_name = split("/", data.aws_arn.glue_role.resource)[1]
+}
+
 # Create an IAM Role for Redshift
 resource "aws_iam_role" "redshift-serverless-role" {
   name = "${var.app_name}-redshift-serverless-role"
@@ -49,7 +58,7 @@ resource "aws_iam_role_policy" "redshift-s3-access-policy" {
 # Update the Glue role policy to allow Redshift access
 resource "aws_iam_role_policy" "glue-redshift-access" {
   name = "${var.app_name}-glue-redshift-access"
-  role = var.glue_role_arn
+  role = local.glue_role_name
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -72,7 +81,7 @@ resource "aws_iam_role_policy" "glue-redshift-access" {
   })
 }
 
-# Create Redshift Serverless Namespace.
+# Create Redshift Serverless Namespace
 resource "aws_redshiftserverless_namespace" "serverless" {
   namespace_name      = var.redshift_serverless_namespace_name
   db_name            = var.redshift_serverless_database_name
