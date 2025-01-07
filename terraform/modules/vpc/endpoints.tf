@@ -1,12 +1,9 @@
-# modules/vpc/endpoints.tf
-
 # VPC Endpoint for S3
 resource "aws_vpc_endpoint" "s3" {
   vpc_id            = aws_vpc.main.id
   service_name      = "com.amazonaws.${var.aws_region}.s3"
   vpc_endpoint_type = "Gateway"
-
-  route_table_ids = [aws_route_table.private.id]
+  route_table_ids   = [aws_route_table.private.id]
 
   tags = {
     Name = "topdevs-${var.environment}-s3-endpoint"
@@ -40,6 +37,13 @@ resource "aws_security_group" "redshift_endpoint" {
     cidr_blocks = [var.vpc_cidr]
   }
 
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   tags = {
     Name = "topdevs-${var.environment}-redshift-endpoint-sg"
   }
@@ -59,10 +63,4 @@ resource "aws_route_table_association" "private" {
   count          = length(aws_subnet.private)
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private.id
-}
-
-# Update VPC module variables
-variable "aws_region" {
-  type        = string
-  description = "AWS region"
 }
