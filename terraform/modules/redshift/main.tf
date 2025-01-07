@@ -6,17 +6,25 @@ resource "aws_redshiftserverless_namespace" "serverless" {
   admin_username     = var.redshift_serverless_admin_username
   admin_user_password = var.redshift_serverless_admin_password
   iam_roles          = [var.redshift_role_arn]
+<<<<<<< HEAD
   
+=======
+>>>>>>> cd2c14e (uPDATE)
   tags = {
     Name = var.redshift_serverless_namespace_name
   }
 }
 
 resource "aws_redshiftserverless_workgroup" "serverless" {
+<<<<<<< HEAD
+=======
+  depends_on = [aws_redshiftserverless_namespace.serverless]
+>>>>>>> cd2c14e (uPDATE)
   namespace_name = aws_redshiftserverless_namespace.serverless.id
   workgroup_name = var.redshift_serverless_workgroup_name
   base_capacity  = var.redshift_serverless_base_capacity
   security_group_ids = [var.security_group_id]
+<<<<<<< HEAD
   subnet_ids     = var.subnet_ids
   publicly_accessible = var.redshift_serverless_publicly_accessible
   
@@ -24,3 +32,11 @@ resource "aws_redshiftserverless_workgroup" "serverless" {
     Name = var.redshift_serverless_workgroup_name
   }
 }
+=======
+  subnet_ids = var.subnet_ids
+  publicly_accessible = var.redshift_serverless_publicly_accessible
+  tags = {
+    Name = var.redshift_serverless_workgroup_name
+  }
+}
+>>>>>>> cd2c14e (uPDATE)
