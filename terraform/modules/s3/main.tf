@@ -1,40 +1,31 @@
-resource "aws_s3_bucket" "source_data" {
-  bucket = "${var.project}-${var.environment}-source-data"
-  force_destroy = true
+# modules/s3/main.tf
 
-  tags = {
-    Environment = var.environment
-    Project     = var.project
-    Managed_by  = "terraform"
-  }
+resource "aws_s3_bucket" "source_bucket" {
+  bucket = "topdevs-${var.environment}-${var.source_bucket}"
 }
 
-resource "aws_s3_bucket" "target_data" {
-  bucket = "${var.project}-${var.environment}-target-data"
-  force_destroy = true
-
-  tags = {
-    Environment = var.environment
-    Project     = var.project
-    Managed_by  = "terraform"
-  }
+resource "aws_s3_object" "organizations_file" {
+  bucket = aws_s3_bucket.source_bucket.id
+  key    = "organizations.csv"
+  source = var.organizations_csv_path
 }
 
-resource "aws_s3_bucket" "code" {
-  bucket = "${var.project}-${var.environment}-glue-code"
-  force_destroy = true
+resource "aws_s3_bucket" "target_bucket" {
+  bucket = "topdevs-${var.environment}-${var.target_bucket}"
+}
 
-  tags = {
-    Environment = var.environment
-    Project     = var.project
-    Managed_by  = "terraform"
-  }
+resource "aws_s3_bucket" "code_bucket" {
+  bucket = "topdevs-${var.environment}-${var.code_bucket}"
 }
 
 resource "aws_s3_object" "glue_script" {
-  bucket = aws_s3_bucket.code.id
-  key    = "scripts/org_data_processor.py"
-  source = "${path.root}/scripts/glue/org_data_processor.py"
+  bucket = aws_s3_bucket.code_bucket.id
+  key    = "script.py"
+  source = var.script_path
+}
 
-  etag = filemd5("${path.root}/scripts/glue/org_data_processor.py")
+resource "aws_s3_object" "schema_change_script" {
+  bucket = aws_s3_bucket.code_bucket.id
+  key    = "schema_change.py"
+  source = var.schema_change_script_path
 }

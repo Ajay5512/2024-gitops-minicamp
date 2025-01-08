@@ -1,17 +1,38 @@
+
+# variables.tf (root)
 variable "aws_region" {
   description = "AWS region to deploy resources"
   type        = string
-  default     = "us-east-1"  # Changed to match GitHub Actions configuration
+  default     = "us-east-1"
 }
 
 variable "environment" {
-  description = "Environment name (e.g., dev, staging, prod)"
+  description = "Environment (dev/staging/prod)"
   type        = string
-  default     = "prod"  # Default to prod since your workflow uses production environment
 }
 
-variable "project" {
-  description = "Project name"
+variable "source_bucket" {
+  description = "Name of the source data bucket"
   type        = string
-  default     = "topdevs"
 }
+
+variable "target_bucket" {
+  description = "Name of the target data bucket"
+  type        = string
+}
+
+variable "code_bucket" {
+  description = "Name of the code bucket"
+  type        = string
+}
+
+variable "script_path" {
+  description = "Local path to the Glue job script"
+  type        = string
+}
+
+variable "schema_change_script_path" {
+  description = "Local path to the schema change detection script"
+  type        = string
+}
+

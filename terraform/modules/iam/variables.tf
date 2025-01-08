@@ -1,9 +1,6 @@
-variable "environment" {
-  description = "Environment name"
-  type        = string
-}
 
-variable "project" {
-  description = "Project name"
+# modules/iam/variables.tf
+variable "environment" {
+  description = "Environment (dev/staging/prod)"
   type        = string
 }

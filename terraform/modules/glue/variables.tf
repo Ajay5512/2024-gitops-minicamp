@@ -1,24 +1,34 @@
-variable "environment" {
-  description = "Environment name"
+
+
+# modules/glue/variables.tf
+variable "source_bucket" {
+  description = "Source bucket ID"
   type        = string
 }
 
-variable "project" {
-  description = "Project name"
+variable "target_bucket" {
+  description = "Target bucket ID"
   type        = string
 }
 
-variable "source_bucket_id" {
-  description = "ID of the source S3 bucket"
+variable "code_bucket" {
+  description = "Code bucket ID"
   type        = string
 }
 
-variable "target_bucket_id" {
-  description = "ID of the target S3 bucket"
-  type        = string
-}
-
-variable "glue_service_role_arn" {
+variable "glue_role_arn" {
   description = "ARN of the Glue service role"
+  type        = string
+}
+
+variable "environment" {
+  description = "Environment (dev/staging/prod)"
+  type        = string
+}
+
+
+# Add to modules/glue/variables.tf
+variable "sns_topic_arn" {
+  description = "ARN of the SNS topic for schema change notifications"
   type        = string
 }

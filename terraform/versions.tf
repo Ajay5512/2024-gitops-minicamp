@@ -1,6 +1,6 @@
 terraform {
-  required_version = "~> 1.9.5"
-  
+  required_version = ">= 1.9.5"
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -9,13 +9,9 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "gitops-tf-backend"
+    bucket         = "topdevs-tf-backend"
     key            = "terraform.tfstate"
     region         = "us-east-1"
-    dynamodb_table = "GitopsTerraformLocks"
+    dynamodb_table = "topdevsTerraformLocks"
   }
-}
-
-provider "aws" {
-  region = var.aws_region
 }
