@@ -1,5 +1,5 @@
 module "s3" {
-  source = "./modules/s3"
+  source = "./modules/s3"n
 
   environment = var.environment
   project     = var.project
