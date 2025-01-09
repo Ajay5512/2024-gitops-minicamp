@@ -60,14 +60,13 @@ resource "aws_glue_job" "etl_job" {
   }
 }
 
+
 resource "aws_glue_job" "schema_change_job" {
-  name              = "topdevs-${var.environment}-schema-change-job"
-  role_arn          = var.glue_role_arn
-  glue_version      = "4.0"
-  worker_type       = "G.1X"
-  number_of_workers = 1
-  timeout           = 2880
-  max_retries       = 1
+  name         = "topdevs-${var.environment}-schema-change-job"
+  role_arn     = var.glue_role_arn
+  glue_version = "4.0"
+  timeout      = 2880
+  max_retries  = 1
 
   command {
     name            = "pythonshell"
@@ -77,21 +76,12 @@ resource "aws_glue_job" "schema_change_job" {
 
   default_arguments = {
     "--enable-continuous-cloudwatch-log" = "true"
-    "--catalog_id"                       = data.aws_caller_identity.current.account_id
+    "--catalog_id"                      = data.aws_caller_identity.current.account_id
     "--db_name"                         = aws_glue_catalog_database.database.name
     "--table_name"                      = aws_glue_crawler.crawler.name
     "--topic_arn"                       = var.sns_topic_arn
     "--job-name"                        = "topdevs-${var.environment}-schema-change-job"
     "--enable-metrics"                  = "true"
-  }
-
-  execution_property {
-    max_concurrent_runs = 1
-  }
-
-  tags = {
-    Environment = var.environment
-    Service     = "glue"
   }
 }
 
