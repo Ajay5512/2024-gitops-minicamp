@@ -28,4 +28,3 @@ resource "aws_s3_object" "code_files" {
   key    = "scripts/${each.key}"
   source = each.value
 }
-

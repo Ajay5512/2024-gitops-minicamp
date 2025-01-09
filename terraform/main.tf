@@ -15,12 +15,12 @@ module "s3" {
   source_files = {
     "customers.csv" = "${path.root}/modules/data/customers.csv"
     "products.csv"  = "${path.root}/modules/data/products.csv"
-    "dates.csv"     = "${path.root}/modules/data/dates.csv"
+    "date.csv"      = "${path.root}/modules/data/date.csv"
   }
 
   code_files = {
-    "script.py"        = "${path.root}/script.py"
-    "schema_change.py" = "${path.root}/schema_change.py"
+    "script.py"        = "${path.root}/modules/scripts/script.py"
+    "schema_change.py" = "${path.root}/modules/scripts/schema_change.py"
   }
 }
 
