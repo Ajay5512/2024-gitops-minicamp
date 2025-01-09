@@ -19,12 +19,12 @@ resource "aws_s3_bucket" "code_bucket" {
   bucket = "nexabrands-${var.environment}-${var.code_bucket}"
 }
 
+
 # Dynamic code files
 resource "aws_s3_object" "code_files" {
   for_each = var.code_files
 
   bucket = aws_s3_bucket.code_bucket.id
-  key    = each.key
+  key    = "scripts/${each.key}"
   source = each.value
 }
-
