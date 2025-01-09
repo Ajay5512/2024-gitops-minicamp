@@ -15,7 +15,7 @@ module "s3" {
   source_files = {
     "customers.csv" = "${path.root}/modules/data/customers.csv"
     "products.csv"  = "${path.root}/modules/data/products.csv"
-    "date.csv"     = "${path.root}/modules/data/date.csv"
+    "date.csv"      = "${path.root}/modules/data/date.csv"
   }
 
   code_files = {
