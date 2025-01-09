@@ -1,100 +1,68 @@
-name: Deploy S3 to Redshift Job
+name: Deploy AWS Glue Job
 
-on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to deploy to'
-        required: true
-        default: 'prod'
-        type: choice
-        options:
-          - dev
-          - staging
-          - prod
-  push:
-    branches:
-      - main
-    paths:
-      - 'modules/scripts/s3_to_redshift.py'
-      - '.github/workflows/deploy-s3-redshift.yml'
-  pull_request:
-    branches:
-      - main
-    paths:
-      - 'modules/scripts/s3_to_redshift.py'
+on: workflow_dispatch
 
 permissions:
-  id-token: write
   contents: read
-
-env:
-  TF_STATE_BUCKET: "topdevs-tf-backend"
-  TF_STATE_LOCK_TABLE: "topdevsTerraformLocks"
-  AWS_REGION: "us-east-1"
-  ENVIRONMENT: ${{ github.event_name == 'workflow_dispatch' && inputs.environment || 'prod' }}
+  id-token: write
 
 jobs:
-  deploy:
-    name: Deploy S3 to Redshift Job
+  deploy-glue:
+    name: 'Deploy Glue Job'
     runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        shell: bash
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
+        aws-region: us-east-1
+    
+    - name: Checkout
+      uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: us-east-1
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.9'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install boto3 pytest
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install boto3 pytest
+    - name: Upload Glue Script to S3
+      run: |
+        aws s3 cp modules/scripts/s3_to_redshift.py "s3://nexabrands-prod-code/scripts/"
 
-      - name: Upload S3 to Redshift script to S3
-        run: |
-          aws s3 cp modules/scripts/s3_to_redshift.py "s3://nexabrands-${ENVIRONMENT}-code/scripts/"
-
-
-      - name: Deploy S3 to Redshift Job
-        run: |
-          GLUE_ROLE_ARN=$(terraform output -raw glue_role_arn)
-          REDSHIFT_DB=$(terraform output -raw redshift_database)
-          REDSHIFT_SCHEMA=$(terraform output -raw redshift_schema)
-          REDSHIFT_WORKGROUP=$(terraform output -raw redshift_workgroup_name)
-
-          aws glue update-job \
-            --job-name "topdevs-${ENVIRONMENT}-s3-to-redshift-job" \
-            --job-update '{
-              "Role": "'"${GLUE_ROLE_ARN}"'",
-              "Command": {
-                "Name": "glueetl",
-                "ScriptLocation": "s3://nexabrands-'"${ENVIRONMENT}"'-code/scripts/s3_to_redshift.py",
-                "PythonVersion": "3"
-              },
-              "GlueVersion": "4.0",
-              "WorkerType": "G.1X",
-              "NumberOfWorkers": 2,
-              "Timeout": 2880,
-              "MaxRetries": 1,
-              "DefaultArguments": {
-                "--enable-auto-scaling": "true",
-                "--enable-continuous-cloudwatch-log": "true",
-                "--enable-metrics": "true",
-                "--job-language": "python",
-                "--TempDir": "s3://nexabrands-'"${ENVIRONMENT}"'-code/temporary/",
-                "--enable-spark-ui": "true",
-                "--spark-event-logs-path": "s3://nexabrands-'"${ENVIRONMENT}"'-code/spark-logs/",
-                "--redshift-temp-dir": "s3://nexabrands-'"${ENVIRONMENT}"'-code/temp/",
-                "--redshift-database": "'"${REDSHIFT_DB}"'",
-                "--redshift-schema": "'"${REDSHIFT_SCHEMA}"'",
-                "--redshift-workgroup": "'"${REDSHIFT_WORKGROUP}"'"
-              }
-            }'
+    - name: Deploy Glue Job
+      run: |
+        aws glue update-job \
+          --job-name "topdevs-prod-s3-to-redshift-job" \
+          --job-update '{
+            "Role": "'"${GLUE_ROLE_ARN}"'",
+            "Command": {
+              "Name": "glueetl",
+              "ScriptLocation": "s3://nexabrands-prod-code/scripts/s3_to_redshift.py",
+              "PythonVersion": "3"
+            },
+            "GlueVersion": "4.0",
+            "WorkerType": "G.1X",
+            "NumberOfWorkers": 2,
+            "Timeout": 2880,
+            "MaxRetries": 1,
+            "DefaultArguments": {
+              "--enable-auto-scaling": "true",
+              "--enable-continuous-cloudwatch-log": "true",
+              "--enable-metrics": "true",
+              "--job-language": "python",
+              "--TempDir": "s3://nexabrands-prod-code/temporary/",
+              "--enable-spark-ui": "true",
+              "--spark-event-logs-path": "s3://nexabrands-prod-code/spark-logs/",
+              "--redshift-temp-dir": "s3://nexabrands-prod-code/temp/"
+            }
+          }'
