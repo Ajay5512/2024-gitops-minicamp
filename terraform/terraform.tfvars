@@ -1,11 +1,10 @@
 # AWS and Environment Configuration
 aws_region                = "us-east-1"
 environment               = "prod"
-source_bucket             = "source-data"
-target_bucket             = "target-data"
-code_bucket               = "code-bucket"
-script_path               = "./script.py"
-schema_change_script_path = "./schema_change.py"
+source_bucket             = "source"
+target_bucket             = "target"
+code_bucket               = "code"
+
 
 # Application Configuration
 app_name = "nsw-properties"

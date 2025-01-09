@@ -19,17 +19,15 @@ variable "code_bucket" {
   type        = string
 }
 
-variable "script_path" {
-  description = "Local path to the Glue job script"
-  type        = string
+variable "source_files" {
+  description = "Map of source data file names to their local paths"
+  type        = map(string)
+  default     = {}
 }
 
-variable "schema_change_script_path" {
-  description = "Local path to the schema change detection script"
-  type        = string
+variable "code_files" {
+  description = "Map of code file names to their local paths"
+  type        = map(string)
+  default     = {}
 }
 
-variable "organizations_csv_path" {
-  description = "Path to the organizations CSV file"
-  type        = string
-}
