@@ -37,7 +37,7 @@ jobs:
 
     - name: Upload Glue Script to S3
       run: |
-        aws s3 cp modules/scripts/s3_to_redshift.py "s3://nexabrands-prod-code/scripts/"
+        aws s3 cp terraform/modules/scripts/s3_to_redshift.py "s3://nexabrands-prod-code/scripts/"
 
     - name: Deploy Glue Job
       run: |
