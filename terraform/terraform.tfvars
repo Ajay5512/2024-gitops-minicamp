@@ -1,9 +1,9 @@
 # AWS and Environment Configuration
-aws_region                = "us-east-1"
-environment               = "prod"
-source_bucket             = "source"
-target_bucket             = "target"
-code_bucket               = "code"
+aws_region    = "us-east-1"
+environment   = "prod"
+source_bucket = "source"
+target_bucket = "target"
+code_bucket   = "code"
 
 
 # Application Configuration

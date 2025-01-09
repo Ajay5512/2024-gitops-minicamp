@@ -5,22 +5,22 @@ provider "aws" {
 
 module "s3" {
   source = "./modules/s3"
-  
-  environment    = var.environment
-  source_bucket  = var.source_bucket
-  target_bucket  = var.target_bucket
-  code_bucket    = var.code_bucket
-  
+
+  environment   = var.environment
+  source_bucket = var.source_bucket
+  target_bucket = var.target_bucket
+  code_bucket   = var.code_bucket
+
   # Source data files
   source_files = {
     "customers.csv" = "${path.root}/modules/data/customers.csv"
     "products.csv"  = "${path.root}/modules/data/products.csv"
     "dates.csv"     = "${path.root}/modules/data/dates.csv"
   }
-  
+
   code_files = {
-    "script.py"         = "${path.root}/script.py"
-    "schema_change.py"  = "${path.root}/schema_change.py"
+    "script.py"        = "${path.root}/script.py"
+    "schema_change.py" = "${path.root}/schema_change.py"
   }
 }
 
