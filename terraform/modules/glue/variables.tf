@@ -1,6 +1,5 @@
 
-
-# modules/glue/variables.tf
+# Variables
 variable "source_bucket" {
   description = "Source bucket ID"
   type        = string
@@ -26,9 +25,23 @@ variable "environment" {
   type        = string
 }
 
-
-# Add to modules/glue/variables.tf
 variable "sns_topic_arn" {
   description = "ARN of the SNS topic for schema change notifications"
   type        = string
+}
+
+variable "redshift_database" {
+  type        = string
+  description = "Redshift database name"
+}
+
+variable "redshift_schema" {
+  type        = string
+  description = "Redshift schema name"
+  default     = "public"
+}
+
+variable "redshift_workgroup_name" {
+  type        = string
+  description = "Redshift workgroup name"
 }
