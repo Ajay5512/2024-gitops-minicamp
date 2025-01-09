@@ -1,8 +1,9 @@
-
 # modules/iam/main.tf
+
+# Glue Service Role
 resource "aws_iam_role" "glue_service_role" {
   name = "topdevs-${var.environment}-glue-service-role"
-
+  
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -15,16 +16,17 @@ resource "aws_iam_role" "glue_service_role" {
       }
     ]
   })
+
+  tags = {
+    Name = "topdevs-${var.environment}-glue-service-role"
+  }
 }
 
-
-
-
-# Update modules/iam/main.tf - Add SNS permissions
+# Glue Service Policy
 resource "aws_iam_role_policy" "glue_service_policy" {
   name = "topdevs-${var.environment}-glue-service-policy"
   role = aws_iam_role.glue_service_role.id
-
+  
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -43,7 +45,7 @@ resource "aws_iam_role_policy" "glue_service_policy" {
           "logs:CreateLogStream",
           "logs:PutLogEvents",
           "cloudwatch:PutMetricData",
-          "sns:Publish"  # Add SNS publish permission
+          "sns:Publish"
         ]
         Resource = ["*"]
       }
@@ -51,57 +53,48 @@ resource "aws_iam_role_policy" "glue_service_policy" {
   })
 }
 
-
-# modules/iam/main.tf
+# Redshift Serverless Role
 resource "aws_iam_role" "redshift-serverless-role" {
-  name = "nsw-properties-redshift-serverless-role"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "redshift.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
+  name = "topdevs-${var.environment}-redshift-serverless-role"
+  
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Principal = {
+          Service = "redshift.amazonaws.com"
+        }
+        Effect = "Allow"
+        Sid    = ""
+      }
+    ]
+  })
+
   tags = {
-    Name = "nsw-properties-redshift-serverless-role"
+    Name = "topdevs-${var.environment}-redshift-serverless-role"
   }
 }
 
+# Redshift S3 Full Access Policy
 resource "aws_iam_role_policy" "redshift-s3-full-access-policy" {
-  name = "nsw-properties-redshift-serverless-role-s3-policy"
+  name = "topdevs-${var.environment}-redshift-serverless-role-s3-policy"
   role = aws_iam_role.redshift-serverless-role.id
-  policy = <<EOF
-{
-   "Version": "2012-10-17",
-   "Statement": [
-     {
-       "Effect": "Allow",
-       "Action": "s3:*",
-       "Resource": "*"
+  
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = "s3:*"
+        Resource = "*"
       }
-   ]
-}
-EOF
-}
-
-data "aws_iam_policy" "redshift-full-access-policy" {
-  name = "AmazonRedshiftAllCommandsFullAccess"
+    ]
+  })
 }
 
-resource "aws_iam_role_policy_attachment" "attach-s3" {
+# Attach Redshift Full Access Policy
+resource "aws_iam_role_policy_attachment" "attach-redshift" {
   role       = aws_iam_role.redshift-serverless-role.name
-  policy_arn = data.aws_iam_policy.redshift-full-access-policy.arn
+  policy_arn = "arn:aws:iam::aws:policy/AmazonRedshiftAllCommandsFullAccess"
 }
-
-output "redshift_role_arn" {
-  value = aws_iam_role.redshift-serverless-role.arn
-}
-
