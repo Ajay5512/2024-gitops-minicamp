@@ -4,14 +4,24 @@ provider "aws" {
 }
 
 module "s3" {
-  source                    = "./modules/s3"
-  source_bucket             = var.source_bucket
-  target_bucket             = var.target_bucket
-  code_bucket               = var.code_bucket
-  environment               = var.environment
-  script_path               = var.script_path
-  schema_change_script_path = var.schema_change_script_path
-  organizations_csv_path    = "${path.root}/modules/data/organizations.csv"
+  source = "./modules/s3"
+
+  environment   = var.environment
+  source_bucket = var.source_bucket
+  target_bucket = var.target_bucket
+  code_bucket   = var.code_bucket
+
+  # Source data files
+  source_files = {
+    "customers.csv" = "${path.root}/modules/data/customers.csv"
+    "products.csv"  = "${path.root}/modules/data/products.csv"
+    "dates.csv"     = "${path.root}/modules/data/dates.csv"
+  }
+
+  code_files = {
+    "script.py"        = "${path.root}/script.py"
+    "schema_change.py" = "${path.root}/schema_change.py"
+  }
 }
 
 module "iam" {
@@ -34,6 +44,10 @@ module "glue" {
   glue_role_arn = module.iam.glue_role_arn
   environment   = var.environment
   sns_topic_arn = module.sns.topic_arn
+
+  # Add these two required arguments
+  redshift_database       = var.redshift_serverless_database_name
+  redshift_workgroup_name = var.redshift_serverless_workgroup_name
 }
 
 # Add to your existing terraform/main.tf
