@@ -46,18 +46,18 @@ module "glue" {
   sns_topic_arn = module.sns.topic_arn
 
   module "glue" {
-  source        = "./modules/glue"
-  source_bucket = module.s3.source_bucket_id
-  target_bucket = module.s3.target_bucket_id
-  code_bucket   = module.s3.code_bucket_id
-  glue_role_arn = module.iam.glue_role_arn
-  environment   = var.environment
-  sns_topic_arn = module.sns.topic_arn
-  
- # Add these two required arguments
-redshift_database       = var.redshift_serverless_database_name
-redshift_workgroup_name = var.redshift_serverless_workgroup_name
-}
+    source        = "./modules/glue"
+    source_bucket = module.s3.source_bucket_id
+    target_bucket = module.s3.target_bucket_id
+    code_bucket   = module.s3.code_bucket_id
+    glue_role_arn = module.iam.glue_role_arn
+    environment   = var.environment
+    sns_topic_arn = module.sns.topic_arn
+
+    # Add these two required arguments
+    redshift_database       = var.redshift_serverless_database_name
+    redshift_workgroup_name = var.redshift_serverless_workgroup_name
+  }
 }
 
 # Add to your existing terraform/main.tf
