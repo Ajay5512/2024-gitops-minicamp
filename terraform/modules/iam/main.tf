@@ -33,21 +33,60 @@ resource "aws_iam_role_policy" "glue_service_policy" {
       {
         Effect = "Allow"
         Action = [
-          "glue:*",
-          "s3:GetBucketLocation",
-          "s3:ListBucket",
-          "s3:ListAllMyBuckets",
-          "s3:GetBucketAcl",
-          "s3:GetObject",
-          "s3:PutObject",
-          "s3:DeleteObject",
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents",
-          "cloudwatch:PutMetricData",
-          "sns:Publish"
+          "glue:*"
         ]
         Resource = ["*"]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetBucketLocation",
+          "s3:ListBucket",
+          "s3:GetBucketAcl"
+        ]
+        Resource = [
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}"
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+        Resource = [
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}/*",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}/*",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}/*"
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = [
+          "arn:aws:logs:*:*:/aws-glue/*"
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "cloudwatch:PutMetricData"
+        ]
+        Resource = ["*"]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "sns:Publish"
+        ]
+        Resource = [var.sns_topic_arn]
       }
     ]
   })
@@ -76,8 +115,8 @@ resource "aws_iam_role" "redshift-serverless-role" {
   }
 }
 
-# Redshift S3 Full Access Policy
-resource "aws_iam_role_policy" "redshift-s3-full-access-policy" {
+# Redshift S3 Access Policy (More specific than full access)
+resource "aws_iam_role_policy" "redshift-s3-access-policy" {
   name = "topdevs-${var.environment}-redshift-serverless-role-s3-policy"
   role = aws_iam_role.redshift-serverless-role.id
   
@@ -86,8 +125,18 @@ resource "aws_iam_role_policy" "redshift-s3-full-access-policy" {
     Statement = [
       {
         Effect = "Allow"
-        Action = "s3:*"
-        Resource = "*"
+        Action = [
+          "s3:GetBucketLocation",
+          "s3:ListBucket",
+          "s3:GetObject",
+          "s3:PutObject"
+        ]
+        Resource = [
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}/*",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}/*"
+        ]
       }
     ]
   })
