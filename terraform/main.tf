@@ -32,6 +32,10 @@ module "iam" {
   sns_topic_arn = module.sns.topic_arn
 }
 
+
+
+
+
 module "sns" {
   source      = "./modules/sns"
   environment = var.environment
