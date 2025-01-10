@@ -25,9 +25,13 @@ module "s3" {
 }
 
 module "iam" {
-  source      = "./modules/iam"
-  environment = var.environment
-
+  source        = "./modules/iam"
+  environment   = var.environment
+  source_bucket = var.source_bucket
+  target_bucket = var.target_bucket
+  code_bucket   = var.code_bucket
+  sns_topic_arn = module.sns.topic_arn # Reference the SNS module output
+  depends_on    = [module.sns]
 }
 
 module "sns" {
