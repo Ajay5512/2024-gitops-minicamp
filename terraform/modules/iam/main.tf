@@ -147,3 +147,21 @@ resource "aws_iam_role_policy_attachment" "attach-redshift" {
   role       = aws_iam_role.redshift-serverless-role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonRedshiftAllCommandsFullAccess"
 }
+
+resource "aws_sns_topic_policy" "schema_changes" {
+  arn = var.sns_topic_arn
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowGluePublish"
+        Effect = "Allow"
+        Principal = {
+          AWS = aws_iam_role.glue_service_role.arn
+        }
+        Action   = "SNS:Publish"
+        Resource = var.sns_topic_arn
+      }
+    ]
+  })
+}

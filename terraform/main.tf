@@ -23,21 +23,18 @@ module "s3" {
     "schema_change.py" = "${path.root}/modules/scripts/schema_change.py"
   }
 }
-
 module "iam" {
   source        = "./modules/iam"
   environment   = var.environment
   source_bucket = var.source_bucket
   target_bucket = var.target_bucket
   code_bucket   = var.code_bucket
-  sns_topic_arn = module.sns.topic_arn # Reference the SNS module output
-  depends_on    = [module.sns]
+  sns_topic_arn = module.sns.topic_arn
 }
 
 module "sns" {
-  source        = "./modules/sns"
-  environment   = var.environment
-  glue_role_arn = module.iam.glue_role_arn
+  source      = "./modules/sns"
+  environment = var.environment
 }
 
 module "glue" {
