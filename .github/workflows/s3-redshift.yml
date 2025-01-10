@@ -1,4 +1,4 @@
-name: Deploy AWS Glue Job
+name: S3 to Redshift Glue Job
 
 on: workflow_dispatch
 

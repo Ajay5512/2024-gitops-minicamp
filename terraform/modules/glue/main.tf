@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_glue_catalog_database" "database" {
-  name        = "topdevs-${var.environment}-org-report"
+  name        = "topdevs-${var.environment}-report"
   description = "Database for ${var.environment} environment organization reports"
 }
 
