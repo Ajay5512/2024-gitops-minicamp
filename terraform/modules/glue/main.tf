@@ -71,7 +71,7 @@ resource "aws_glue_job" "schema_change_job" {
   command {
     name            = "pythonshell"
     python_version  = "3"
-    script_location = "s3://${var.code_bucket}/schema_change.py"
+    script_location = "s3://${var.code_bucket}/scripts/schema_change.py"
   }
 
   default_arguments = {
