@@ -1,34 +1,50 @@
-# schema_change.py
 import boto3
 import pandas as pd
 from awsglue.utils import getResolvedOptions
 import sys
 
+# Get job parameters
 args = getResolvedOptions(sys.argv, [
     'catalog_id',
     'db_name',
-    'table_name',
     'topic_arn'
 ])
 
-def get_table_versions():
+def get_tables_in_database():
+    """Get all tables in the specified database"""
     glue = boto3.client('glue')
-    response = glue.get_table_versions(
-        CatalogId=args['catalog_id'],
-        DatabaseName=args['db_name'],
-        TableName=args['table_name'],
-        MaxResults=100
-    )
-    
-    if 'TableVersions' not in response or len(response['TableVersions']) < 2:
-        print("Not enough versions to compare")
-        return None, None
+    try:
+        response = glue.get_tables(
+            CatalogId=args['catalog_id'],
+            DatabaseName=args['db_name']
+        )
+        return [table['Name'] for table in response.get('TableList', [])]
+    except Exception as e:
+        print(f"Error getting tables from database: {str(e)}")
+        return []
+
+def get_table_versions(table_name):
+    glue = boto3.client('glue')
+    try:
+        response = glue.get_table_versions(
+            CatalogId=args['catalog_id'],
+            DatabaseName=args['db_name'],
+            TableName=table_name,
+            MaxResults=100
+        )
         
-    versions = sorted(response['TableVersions'], 
-                     key=lambda x: int(x['VersionId']), 
-                     reverse=True)
-                     
-    return versions[0], versions[1]  # Latest and previous versions
+        if 'TableVersions' not in response or len(response['TableVersions']) < 2:
+            print(f"Not enough versions to compare for table {table_name}")
+            return None, None
+            
+        versions = sorted(response['TableVersions'], 
+                         key=lambda x: int(x['VersionId']), 
+                         reverse=True)
+                         
+        return versions[0], versions[1]  # Latest and previous versions
+    except Exception as e:
+        print(f"Error getting table versions for {table_name}: {str(e)}")
+        return None, None
 
 def compare_schemas(new_version, old_version):
     changes = []
@@ -52,9 +68,9 @@ def compare_schemas(new_version, old_version):
             
     return changes
 
-def notify_changes(changes):
+def notify_changes(changes, table_name):
     sns = boto3.client('sns')
-    message = (f"Schema changes detected in {args['db_name']}.{args['table_name']}:\n\n"
+    message = (f"Schema changes detected in {args['db_name']}.{table_name}:\n\n"
               f"The following changes were identified:\n")
     
     for change in changes:
@@ -62,28 +78,40 @@ def notify_changes(changes):
         
     message += "\nPlease review these changes and update any dependent processes if necessary."
     
-    sns.publish(
-        TopicArn=args['topic_arn'],
-        Message=message,
-        Subject=f"Schema Changes Detected - {args['table_name']}"
-    )
-    
-    print(f"Notification sent to SNS topic: {args['topic_arn']}")
+    try:
+        sns.publish(
+            TopicArn=args['topic_arn'],
+            Message=message,
+            Subject=f"Schema Changes Detected - {table_name}"
+        )
+        print(f"Notification sent to SNS topic: {args['topic_arn']} for table {table_name}")
+    except Exception as e:
+        print(f"Error sending SNS notification: {str(e)}")
 
 def main():
-    print(f"Starting schema change detection for {args['db_name']}.{args['table_name']}")
+    print(f"Starting schema change detection for database {args['db_name']}")
     
-    new_version, old_version = get_table_versions()
-    if not new_version or not old_version:
+    # Get all tables in the database
+    tables = get_tables_in_database()
+    if not tables:
+        print(f"No tables found in database {args['db_name']}")
         return
         
-    changes = compare_schemas(new_version, old_version)
+    print(f"Found tables: {tables}")
     
-    if changes:
-        print(f"Detected {len(changes)} schema changes")
-        notify_changes(changes)
-    else:
-        print("No schema changes detected")
+    for table_name in tables:
+        print(f"\nChecking schema changes for table: {table_name}")
+        new_version, old_version = get_table_versions(table_name)
+        if not new_version or not old_version:
+            continue
+        
+        changes = compare_schemas(new_version, old_version)
+        
+        if changes:
+            print(f"Detected {len(changes)} schema changes in {table_name}")
+            notify_changes(changes, table_name)
+        else:
+            print(f"No schema changes detected for {table_name}")
 
 if __name__ == "__main__":
     main()
