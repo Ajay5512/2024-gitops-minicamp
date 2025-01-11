@@ -60,6 +60,7 @@ resource "aws_glue_job" "etl_job" {
   }
 }
 
+
 resource "aws_glue_job" "schema_change_job" {
   name         = "topdevs-${var.environment}-schema-change-job"
   role_arn     = var.glue_role_arn
@@ -77,6 +78,7 @@ resource "aws_glue_job" "schema_change_job" {
     "--enable-continuous-cloudwatch-log" = "true"
     "--catalog_id"                      = data.aws_caller_identity.current.account_id
     "--db_name"                         = aws_glue_catalog_database.database.name
+    "--table_name"                      = aws_glue_crawler.crawler.name
     "--topic_arn"                       = var.sns_topic_arn
     "--job-name"                        = "topdevs-${var.environment}-schema-change-job"
     "--enable-metrics"                  = "true"
