@@ -1,7 +1,7 @@
-customer_id,customer_name,city
-789201,Rel Fresh,Surat
-789202,Rel Fresh,Ahmedabad
-789203,Rel Fresh,Vadodara
+customer_id,customer_name,city,sample
+789201,Rel Fresh,Surat,kjhdld
+789202,Rel Fresh,Ahmedabad,kkkkd
+789203,Rel Fresh,Vadodara,kkjhd
 789301,Expression Stores,Surat
 789303,Expression Stores,Vadodara
 789101,Vijay Stores,Surat
