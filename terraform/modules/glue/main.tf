@@ -64,7 +64,7 @@ resource "aws_glue_job" "etl_job" {
 resource "aws_glue_job" "schema_change_job" {
   name         = "topdevs-${var.environment}-schema-change-job"
   role_arn     = var.glue_role_arn
-  glue_version = "3.0"
+  glue_version = "1.0"
   timeout      = 2880
   max_retries  = 1
 
