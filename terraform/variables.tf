@@ -98,21 +98,18 @@ variable "redshift_serverless_publicly_accessible" {
   default     = false
 }
 
-# variables.tf
-variable "project_name" {
-  description = "Name of the Nexabrands project"
+
+variable "environment" {
   type        = string
-  default     = "nexabrands"
+  description = "Environment (dev/staging/prod)"
 }
 
 variable "ami_id" {
-  description = "AMI ID for the Nexabrands EC2 instance"
   type        = string
+  description = "ID of the AMI to use for the EC2 instance"
 }
 
 variable "instance_type" {
-  description = "Instance type for the Nexabrands EC2 instance"
   type        = string
+  description = "Type of EC2 instance"
 }
-
-

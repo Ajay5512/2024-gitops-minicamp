@@ -24,7 +24,7 @@ redshift_serverless_workgroup_name      = "nexabrands-redshift-workgroup"
 redshift_serverless_base_capacity       = 32
 redshift_serverless_publicly_accessible = false
 
+
 project_name  = "nexabrands"
 ami_id        = "ami-0e2c8caa4b6378d8c" # Replace with your actual AMI ID
-instance_type = "t3.large"              # Adjust based on your needs
-# Adjust based on deployment environment
+instance_type = "t3.large" 

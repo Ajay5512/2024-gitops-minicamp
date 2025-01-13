@@ -1,19 +1,19 @@
-resource "aws_instance" "nexabrands_cs_instance" {
+resource "aws_instance" "rag_cs_instance" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
-  vpc_security_group_ids = [aws_security_group.nexabrands_cs_sg.id]
-  subnet_id              = var.subnet_id
-  iam_instance_profile   = var.ec2_instance_profile_name
+  vpc_security_group_ids = [aws_security_group.rag_cs_sg.id]
+  subnet_id             = var.subnet_id
+  iam_instance_profile  = var.ec2_instance_profile_name
   user_data             = base64encode(file("${path.module}/install_docker.sh"))
   
   tags = {
-    Name = "nexabrands-ec2-instance"
+    Name = "${var.project_name}-RAG-CS-Instance"
   }
 }
 
-resource "aws_security_group" "nexabrands_cs_sg" {
-  name        = "nexabrands-cs-sg"
-  description = "Security group for Nexabrands Customer Support instance"
+resource "aws_security_group" "rag_cs_sg" {
+  name        = "${var.project_name}-rag-cs-sg"
+  description = "Security group for RAG Customer Support instance"
   vpc_id      = var.vpc_id
 
   ingress {
@@ -104,11 +104,6 @@ resource "aws_security_group" "nexabrands_cs_sg" {
   }
 
   tags = {
-    Name = "${var.project_name}-nexabrands-cs-sg"
+    Name = "${var.project_name}-rag-cs-sg"
   }
-}
-
-resource "aws_iam_instance_profile" "ec2_profile" {
-  name = "nexabrands-${var.environment}-ec2-profile"
-  role = aws_iam_role.ec2_role.name
 }
