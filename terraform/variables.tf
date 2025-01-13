@@ -97,3 +97,19 @@ variable "redshift_serverless_publicly_accessible" {
   description = "Set the Redshift Serverless to be Publicly Accessible"
   default     = false
 }
+
+
+variable "ami_id" {
+  type        = string
+  description = "ID of the AMI to use for the EC2 instance"
+}
+
+variable "instance_type" {
+  type        = string
+  description = "Type of EC2 instance"
+}
+
+variable "project_name" {
+  description = "Name of the project"
+  type        = string
+}
