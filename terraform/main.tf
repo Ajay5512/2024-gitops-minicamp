@@ -88,5 +88,6 @@ module "ec2" {
   vpc_id                    = module.vpc.vpc_id
   subnet_id                 = module.vpc.subnet_ids[0]
   ec2_instance_profile_name = module.iam.ec2_instance_profile_name
-  depends_on                = [module.vpc, module.iam]
+
+  depends_on = [module.vpc, module.iam]
 }
