@@ -108,3 +108,8 @@ variable "instance_type" {
   type        = string
   description = "Type of EC2 instance"
 }
+
+variable "project_name" {
+  description = "Name of the project"
+  type        = string
+}

@@ -2,10 +2,10 @@ resource "aws_instance" "rag_cs_instance" {
   ami                    = var.ami_id
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.rag_cs_sg.id]
-  subnet_id             = var.subnet_id
-  iam_instance_profile  = var.ec2_instance_profile_name
+  subnet_id              = var.subnet_id
+  iam_instance_profile   = var.ec2_instance_profile_name
   user_data             = base64encode(file("${path.module}/install_docker.sh"))
-  
+
   tags = {
     Name = "${var.project_name}-RAG-CS-Instance"
   }

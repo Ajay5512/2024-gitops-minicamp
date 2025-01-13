@@ -28,3 +28,4 @@ redshift_serverless_publicly_accessible = false
 project_name  = "nexabrands"
 ami_id        = "ami-0e2c8caa4b6378d8c" # Replace with your actual AMI ID
 instance_type = "t3.large" 
+

@@ -81,13 +81,12 @@ module "redshift" {
 
 module "ec2" {
   source = "./modules/ec2"
-
-  environment               = var.environment
+  
+  project_name               = var.project_name
   ami_id                    = var.ami_id
   instance_type             = var.instance_type
   vpc_id                    = module.vpc.vpc_id
   subnet_id                 = module.vpc.subnet_ids[0]
   ec2_instance_profile_name = module.iam.ec2_instance_profile_name
-
-  depends_on = [module.vpc, module.iam]
+depends_on = [module.vpc, module.iam]
 }
