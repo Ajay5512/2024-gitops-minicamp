@@ -99,11 +99,6 @@ variable "redshift_serverless_publicly_accessible" {
 }
 
 
-variable "environment" {
-  type        = string
-  description = "Environment (dev/staging/prod)"
-}
-
 variable "ami_id" {
   type        = string
   description = "ID of the AMI to use for the EC2 instance"
