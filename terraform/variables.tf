@@ -115,12 +115,4 @@ variable "instance_type" {
   type        = string
 }
 
-variable "key_name" {
-  description = "Name of the SSH key pair for EC2 instance"
-  type        = string
-}
 
-variable "environment" {
-  description = "Environment name (e.g., dev, staging, prod)"
-  type        = string
-}
