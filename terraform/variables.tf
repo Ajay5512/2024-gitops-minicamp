@@ -97,3 +97,30 @@ variable "redshift_serverless_publicly_accessible" {
   description = "Set the Redshift Serverless to be Publicly Accessible"
   default     = false
 }
+
+# variables.tf
+variable "project_name" {
+  description = "Name of the Nexabrands project"
+  type        = string
+  default     = "nexabrands"
+}
+
+variable "ami_id" {
+  description = "AMI ID for the Nexabrands EC2 instance"
+  type        = string
+}
+
+variable "instance_type" {
+  description = "Instance type for the Nexabrands EC2 instance"
+  type        = string
+}
+
+variable "key_name" {
+  description = "Name of the SSH key pair for EC2 instance"
+  type        = string
+}
+
+variable "environment" {
+  description = "Environment name (e.g., dev, staging, prod)"
+  type        = string
+}

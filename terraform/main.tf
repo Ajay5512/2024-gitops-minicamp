@@ -81,3 +81,15 @@ module "redshift" {
   security_group_id = module.vpc.security_group_id
   subnet_ids        = module.vpc.subnet_ids
 }
+# main.tf
+module "ec2" {
+  source = "./modules/ec2"
+
+  project_name              = "nexabrands"
+  ami_id                    = var.ami_id
+  instance_type             = var.instance_type
+  vpc_id                    = module.vpc.vpc_id
+  subnet_id                 = module.vpc.subnet_ids[0]
+  ec2_instance_profile_name = module.iam.ec2_instance_profile_name
+  environment               = var.environment
+}

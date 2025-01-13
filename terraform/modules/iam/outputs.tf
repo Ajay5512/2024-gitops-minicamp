@@ -10,3 +10,6 @@ output "redshift_role_arn" {
   value = aws_iam_role.redshift-serverless-role.arn
 }
 
+output "ec2_instance_profile_name" {
+  value = aws_iam_instance_profile.ec2_profile.name
+}

@@ -165,3 +165,57 @@ resource "aws_sns_topic_policy" "schema_changes" {
     ]
   })
 }
+
+
+
+resource "aws_iam_role_policy" "ec2_policy" {
+  name = "nexabrands-${var.environment}-ec2-policy"
+  role = aws_iam_role.ec2_role.id
+  
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:ListBucket",
+          "s3:DeleteObject"
+        ]
+        Resource = [
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}/*",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}/*",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}/*"
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "glue:*"
+        ]
+        Resource = ["*"]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "redshift:*",
+          "redshift-data:*"
+        ]
+        Resource = ["*"]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = ["arn:aws:logs:*:*:*"]
+      }
+    ]
+  })
+}
