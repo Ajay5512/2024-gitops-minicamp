@@ -36,29 +36,11 @@ def load_data(spark, file_path, schema):
     """
     return spark.read.format("csv").option("header", True).schema(schema).load(file_path)
 
+# Customers Processing
 def clean_customer_names(df):
-    """
-    Replaces null or missing names with 'Unknown'.
-
-    Args:
-        df (DataFrame): Input customer DataFrame.
-
-    Returns:
-        DataFrame: Cleaned DataFrame with replaced names.
-    """
     return df.na.fill({"customer_name": "Unknown"}).cache()
 
 def remove_trailing_numbers_from_names(df):
-    """
-    Removes trailing numbers and special characters from the 'customer_name' and 'city' columns 
-    and converts 'customer_name' to Title Case.
-
-    Args:
-        df (DataFrame): Input DataFrame with 'customer_name' and 'city' columns.
-
-    Returns:
-        DataFrame: DataFrame with cleaned columns.
-    """
     return df.withColumn(
         "customer_name",
         initcap(regexp_replace(col("customer_name"), r"[\d_.\-*]+$", ""))
@@ -68,16 +50,6 @@ def remove_trailing_numbers_from_names(df):
     )
 
 def standardize_city_names(df, cities_broadcast):
-    """
-    Standardizes city names based on a reference list.
-
-    Args:
-        df (DataFrame): Input DataFrame with a 'city' column.
-        cities_broadcast (Broadcast): Broadcast variable with city names.
-
-    Returns:
-        DataFrame: Cleaned DataFrame with standardized city names.
-    """
     return df.withColumn(
         "city",
         when(
@@ -93,15 +65,6 @@ def standardize_city_names(df, cities_broadcast):
     )
 
 def generate_customer_id(df):
-    """
-    Generates unique customer IDs using MD5 hash.
-
-    Args:
-        df (DataFrame): DataFrame with 'customer_name' and 'city' columns.
-
-    Returns:
-        DataFrame: DataFrame with an additional 'customer_id' column.
-    """
     return df.withColumn(
         "customer_id",
         md5(concat(
@@ -112,62 +75,119 @@ def generate_customer_id(df):
     ).cache()
 
 def remove_duplicates(df):
-    """
-    Removes duplicate rows based on key columns.
-
-    Args:
-        df (DataFrame): Input DataFrame.
-
-    Returns:
-        DataFrame: DataFrame with duplicates removed.
-    """
     return df.dropDuplicates(["customer_id", "customer_name", "city"])
 
-def clean_and_process_customers(spark, file_path, target_path):
+# Dates Processing
+def read_date_data(spark, file_path):
+    date_schema = StructType([
+        StructField("date", DateType(), True),
+        StructField("mmm_yy", StringType(), True),
+        StructField("week_no", StringType(), True)
+    ])
+    return load_data(spark, file_path, date_schema)
+
+def clean_date_data(df):
+    cleaned_df = df.na.drop(how="any").filter(
+        ~lower(col("mmm_yy")).contains("invalid_date")
+    )
+    cleaned_df = cleaned_df.withColumn(
+        "week_no",
+        regexp_extract(col("week_no"), r"(\d+)", 1)
+    )
+    return cleaned_df
+
+# Products Processing
+def read_products_data(spark, file_path):
+    products_schema = StructType([
+        StructField("product_id", StringType(), True),
+        StructField("product_name", StringType(), True),
+        StructField("category", StringType(), True),
+    ])
+    return load_data(spark, file_path, products_schema)
+
+def clean_product_names(df):
+    fill_dict = {"product_name": "Unknown", "category": "Unknown"}
+    return df.na.fill(fill_dict)
+
+def clean_and_standardize_products(df):
+    cleaned_df = df.select(
+        col("product_id"),
+        initcap(
+            regexp_replace(
+                regexp_replace(
+                    regexp_replace(
+                        col("product_name"),
+                        r'[_\-]|\d+$',
+                        ''
+                    ),
+                    r'\s+',
+                    ' '
+                ),
+                r'\s+$',
+                ''
+            )
+        ).alias("product_name"),
+        when(
+            (col("category").isNull()) | (col("category") == "InvalidCategory"),
+            lit("Unknown")
+        ).otherwise(col("category")).alias("category")
+    )
+    return cleaned_df.dropDuplicates(["product_id", "product_name", "category"])
+
+def hash_product_ids(df):
+    return df.withColumn(
+        "product_id",
+        md5(concat(
+            coalesce(col("product_name"), lit("")),
+            lit("_"),
+            coalesce(col("category"), lit(""))
+        ))
+    ).select("product_id", "product_name", "category")
+
+# Combined Pipeline
+def main():
+    spark = create_spark_session(app_name="nexabrands")
     logger = setup_logging()
 
-    logger.info("Defining schema for customers data.")
+    # Customers
+    logger.info("Processing customers data.")
+    source_customers = "s3://nexabrands-prod-source/customers.csv"
+    target_customers = "s3://nexabrands-prod-target/processed_customers/"
     customers_schema = StructType([
         StructField("customer_id", StringType(), True),
         StructField("customer_name", StringType(), True),
         StructField("city", StringType(), True),
     ])
-
-    logger.info("Loading customer data from source.")
-    customers_df = load_data(spark, file_path, customers_schema)
-
-    logger.info("Cleaning customer names.")
+    customers_df = load_data(spark, source_customers, customers_schema)
     customers_df = clean_customer_names(customers_df)
-
-    logger.info("Removing trailing numbers and special characters from names and city.")
     customers_df = remove_trailing_numbers_from_names(customers_df)
-
-    logger.info("Broadcasting city list for standardization.")
     cities = [
         "Johannesburg", "Cape Town", "Durban", "Pretoria", "Port Elizabeth",
         "East London", "Bloemfontein", "Nelspruit", "Polokwane", "Kimberley"
     ]
     cities_broadcast = spark.sparkContext.broadcast([city.lower() for city in cities])
-
-    logger.info("Standardizing city names.")
     customers_df = standardize_city_names(customers_df, cities_broadcast)
-
-    logger.info("Generating customer IDs.")
     customers_df = generate_customer_id(customers_df)
-
-    logger.info("Removing duplicates.")
     customers_df = remove_duplicates(customers_df)
+    customers_df.write.mode("overwrite").parquet(target_customers)
 
-    logger.info("Saving processed data to target S3 bucket as Parquet.")
-    customers_df.write.mode("overwrite").parquet(target_path)
+    # Dates
+    logger.info("Processing dates data.")
+    source_dates = "s3://nexabrands-prod-source/date.csv"
+    target_dates = "s3://nexabrands-prod-target/processed_dates/"
+    dates_df = read_date_data(spark, source_dates)
+    dates_df = clean_date_data(dates_df)
+    dates_df.write.mode("overwrite").parquet(target_dates)
 
-def main():
-    spark = create_spark_session(app_name="nexabrands")
-
-    source_path = "s3://nexabrands-prod-source/customers.csv"
-    target_path = "s3://nexabrands-prod-target/processed_customers/"
-
-    clean_and_process_customers(spark, source_path, target_path)
+    # Products
+    logger.info("Processing products data.")
+    source_products = "s3://nexabrands-prod-source/products.csv"
+    target_products = "s3://nexabrands-prod-target/processed_products/"
+    products_df = read_products_data(spark, source_products)
+    products_df = clean_product_names(products_df)
+    products_df = clean_and_standardize_products(products_df)
+    products_df = hash_product_ids(products_df)
+    products_df.write.mode("overwrite").parquet(target_products)
 
 if __name__ == "__main__":
     main()
