@@ -1,5 +1,4 @@
 name: S3 to Redshift ETL Job Deployment
-
 on:
   workflow_dispatch:
   push:
@@ -53,6 +52,7 @@ jobs:
           aws glue update-job \
             --job-name "topdevs-${ENVIRONMENT}-s3-to-redshift-job" \
             --job-update '{
+              "Role": "'${GLUE_ROLE_ARN}'",
               "Command": {
                 "Name": "pythonshell",
                 "ScriptLocation": "s3://'${CODE_BUCKET}'/scripts/s3_to_redshift.py",
@@ -63,10 +63,10 @@ jobs:
               "MaxRetries": 1,
               "DefaultArguments": {
                 "--enable-continuous-cloudwatch-log": "true",
-                "--catalog_id": "'${AWS_ACCOUNT_ID}'",
-                "--db_name": "'${GLUE_DATABASE_NAME}'",
-                "--table_name": "'${GLUE_CRAWLER_NAME}'",
-                "--topic_arn": "'${SNS_TOPIC_ARN}'",
+                "--source-bucket": "'${SOURCE_BUCKET}'",
+                "--redshift-database": "'${REDSHIFT_DATABASE}'",
+                "--redshift-schema": "'${REDSHIFT_SCHEMA}'",
+                "--redshift-workgroup": "'${REDSHIFT_WORKGROUP}'",
                 "--job-name": "topdevs-'${ENVIRONMENT}'-s3-to-redshift-job",
                 "--enable-metrics": "true"
               }
@@ -74,10 +74,11 @@ jobs:
         env:
           ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
           CODE_BUCKET: ${{ secrets.CODE_BUCKET }}
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          GLUE_DATABASE_NAME: ${{ secrets.GLUE_DATABASE_NAME }}
-          GLUE_CRAWLER_NAME: ${{ secrets.GLUE_CRAWLER_NAME }}
-          SNS_TOPIC_ARN: ${{ secrets.SNS_TOPIC_ARN }}
+          SOURCE_BUCKET: ${{ secrets.SOURCE_BUCKET }}
+          REDSHIFT_DATABASE: ${{ secrets.REDSHIFT_DATABASE }}
+          REDSHIFT_SCHEMA: ${{ secrets.REDSHIFT_SCHEMA }}
+          REDSHIFT_WORKGROUP: ${{ secrets.REDSHIFT_WORKGROUP }}
+          GLUE_ROLE_ARN: ${{ secrets.GLUE_SERVICE_ROLE }}
       
       - name: Verify Deployment
         run: |
