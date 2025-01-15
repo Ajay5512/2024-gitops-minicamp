@@ -53,6 +53,7 @@ jobs:
           aws glue update-job \
             --job-name "topdevs-${ENVIRONMENT}-s3-to-redshift-job" \
             --job-update '{
+              "Role": "'${GLUE_ROLE_ARN}'",
               "Command": {
                 "Name": "glueetl",
                 "ScriptLocation": "s3://'${CODE_BUCKET}'/s3_to_redshift.py",
@@ -86,6 +87,7 @@ jobs:
           REDSHIFT_DATABASE: ${{ secrets.REDSHIFT_DATABASE }}
           REDSHIFT_SCHEMA: ${{ secrets.REDSHIFT_SCHEMA }}
           REDSHIFT_WORKGROUP: ${{ secrets.REDSHIFT_WORKGROUP }}
+          GLUE_ROLE_ARN: ${{ secrets.GLUE_ROLE_ARN }}
       
       - name: Verify Deployment
         run: |
