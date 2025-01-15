@@ -47,6 +47,7 @@ jobs:
           aws glue update-job \
             --job-name "topdevs-${ENVIRONMENT}-etl-job" \
             --job-update '{
+              "Role": "'"${GLUE_SERVICE_ROLE}"'",
               "Command": {
                 "Name": "glueetl",
                 "ScriptLocation": "s3://'${CODE_BUCKET}'/scripts/script.py",
@@ -71,3 +72,4 @@ jobs:
           CODE_BUCKET: ${{ secrets.CODE_BUCKET }}
           SOURCE_BUCKET: ${{ secrets.SOURCE_BUCKET }}
           TARGET_BUCKET: ${{ secrets.TARGET_BUCKET }}
+          GLUE_SERVICE_ROLE: ${{ secrets.GLUE_SERVICE_ROLE }}
