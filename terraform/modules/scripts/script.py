@@ -173,7 +173,7 @@ def main():
 
     # Dates
     logger.info("Processing dates data.")
-    source_dates = "s3://nexabrands-prod-source/dates.csv"
+    source_dates = "s3://nexabrands-prod-source/date.csv"
     target_dates = "s3://nexabrands-prod-target/processed_dates/"
     dates_df = read_date_data(spark, source_dates)
     dates_df = clean_date_data(dates_df)
