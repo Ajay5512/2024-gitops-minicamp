@@ -17,8 +17,7 @@ args = getResolvedOptions(sys.argv, [
     'source-bucket',
     'redshift-database',
     'redshift-schema',
-    'redshift-workgroup',
-    'redshift-temp-dir'
+    'redshift-workgroup'
 ])
 
 # Initialize AWS clients
@@ -31,7 +30,6 @@ class S3ToRedshiftETL:
         self.database = args['redshift-database']
         self.schema = args['redshift-schema']
         self.workgroup = args['redshift-workgroup']
-        self.temp_dir = args['redshift-temp-dir']
         
         # Batch size for processing
         self.batch_size = 100000
@@ -99,7 +97,6 @@ class S3ToRedshiftETL:
                     
                     wr.redshift.copy(
                         df=chunk,
-                        path=self.temp_dir,
                         schema=self.schema,
                         table=table_name,
                         database=self.database,

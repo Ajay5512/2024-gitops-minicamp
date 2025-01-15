@@ -68,7 +68,8 @@ jobs:
                 "--redshift-schema": "'${REDSHIFT_SCHEMA}'",
                 "--redshift-workgroup": "'${REDSHIFT_WORKGROUP}'",
                 "--job-name": "topdevs-'${ENVIRONMENT}'-s3-to-redshift-job",
-                "--enable-metrics": "true"
+                "--enable-metrics": "true",
+                "--additional-python-modules": "awswrangler==3.5.1,pandas==2.0.3,numpy==1.24.3"
               }
             }'
         env:
