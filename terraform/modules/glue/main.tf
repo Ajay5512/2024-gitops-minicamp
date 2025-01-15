@@ -69,7 +69,7 @@ resource "aws_glue_job" "s3_to_redshift_job" {
 
   command {
     name            = "pythonshell"
-    python_version  = "3.9"  # Specifying Python version explicitly
+    python_version  = "3"  # Specifying Python version explicitly
     script_location = "s3://${var.code_bucket}/scripts/s3_to_redshift.py"
   }
 
