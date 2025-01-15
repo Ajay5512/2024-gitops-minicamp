@@ -60,7 +60,6 @@ resource "aws_glue_job" "etl_job" {
   }
 }
 
-
 resource "aws_glue_job" "s3_to_redshift_job" {
   name         = "topdevs-${var.environment}-s3-to-redshift-job"
   role_arn     = var.glue_role_arn
@@ -76,14 +75,27 @@ resource "aws_glue_job" "s3_to_redshift_job" {
 
   default_arguments = {
     "--enable-continuous-cloudwatch-log" = "true"
-    "--catalog_id"                      = data.aws_caller_identity.current.account_id
-    "--db_name"                         = aws_glue_catalog_database.database.name
-    "--table_name"                      = aws_glue_crawler.crawler.name
-    "--topic_arn"                       = var.sns_topic_arn
-    "--job-name"                        = "topdevs-${var.environment}-s3-to-redshift-job"
-    "--enable-metrics"                  = "true"
+    "--enable-metrics"                   = "true"
+    "--job-language"                     = "python"
+    "--source-bucket"                    = var.source_bucket
+    "--redshift-database"                = var.redshift_database
+    "--redshift-schema"                  = var.redshift_schema
+    "--redshift-workgroup"               = var.redshift_workgroup_name
+    "--redshift-temp-dir"                = "s3://${var.code_bucket}/temp/"
+    "--TempDir"                          = "s3://${var.code_bucket}/temporary/"
+    "--additional-python-modules"         = "awswrangler==3.5.1,pandas==2.0.3,numpy==1.24.3"
+  }
+
+  execution_property {
+    max_concurrent_runs = 1
+  }
+
+  tags = {
+    Environment = var.environment
+    Service     = "glue"
   }
 }
+
 
 # resource "aws_glue_job" "s3_to_redshift_job" {
 #   name              = "topdevs-${var.environment}-s3-to-redshift-job"
