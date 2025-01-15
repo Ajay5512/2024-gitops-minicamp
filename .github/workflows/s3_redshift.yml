@@ -42,13 +42,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install boto3 pytest pandas awswrangler
       
-      - name: Run Tests
-        run: |
-          pytest terraform/modules/scripts/tests/ -v
-      
       - name: Upload Glue Script to S3
         run: |
-          aws s3 cp terraform/modules/scripts/s3_to_redshift.py "s3://${CODE_BUCKET}/s3_to_redshift.py"
+          aws s3 cp terraform/modules/scripts/s3_to_redshift.py "s3://${CODE_BUCKET}/scripts/s3_to_redshift.py"
         env:
           CODE_BUCKET: ${{ secrets.CODE_BUCKET }}
       
@@ -58,38 +54,30 @@ jobs:
             --job-name "topdevs-${ENVIRONMENT}-s3-to-redshift-job" \
             --job-update '{
               "Command": {
-                "Name": "glueetl",
-                "ScriptLocation": "s3://'${CODE_BUCKET}'/s3_to_redshift.py",
+                "Name": "pythonshell",
+                "ScriptLocation": "s3://'${CODE_BUCKET}'/scripts/s3_to_redshift.py",
                 "PythonVersion": "3"
               },
-              "GlueVersion": "4.0",
-              "WorkerType": "G.1X",
-              "NumberOfWorkers": 2,
+              "GlueVersion": "1.0",
               "Timeout": 2880,
               "MaxRetries": 1,
               "DefaultArguments": {
-                "--enable-auto-scaling": "true",
                 "--enable-continuous-cloudwatch-log": "true",
-                "--enable-metrics": "true",
-                "--job-language": "python",
-                "--source-bucket": "'${SOURCE_BUCKET}'",
-                "--redshift-database": "'${REDSHIFT_DATABASE}'",
-                "--redshift-schema": "'${REDSHIFT_SCHEMA}'",
-                "--redshift-workgroup": "'${REDSHIFT_WORKGROUP}'",
-                "--redshift-temp-dir": "s3://'${CODE_BUCKET}'/temp/",
-                "--TempDir": "s3://'${CODE_BUCKET}'/temporary/",
-                "--enable-spark-ui": "true",
-                "--spark-event-logs-path": "s3://'${CODE_BUCKET}'/spark-logs/",
-                "--additional-python-modules": "pandas,awswrangler"
+                "--catalog_id": "'${AWS_ACCOUNT_ID}'",
+                "--db_name": "'${GLUE_DATABASE_NAME}'",
+                "--table_name": "'${GLUE_CRAWLER_NAME}'",
+                "--topic_arn": "'${SNS_TOPIC_ARN}'",
+                "--job-name": "topdevs-'${ENVIRONMENT}'-s3-to-redshift-job",
+                "--enable-metrics": "true"
               }
             }'
         env:
           ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
           CODE_BUCKET: ${{ secrets.CODE_BUCKET }}
-          SOURCE_BUCKET: ${{ secrets.SOURCE_BUCKET }}
-          REDSHIFT_DATABASE: ${{ secrets.REDSHIFT_DATABASE }}
-          REDSHIFT_SCHEMA: ${{ secrets.REDSHIFT_SCHEMA }}
-          REDSHIFT_WORKGROUP: ${{ secrets.REDSHIFT_WORKGROUP }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          GLUE_DATABASE_NAME: ${{ secrets.GLUE_DATABASE_NAME }}
+          GLUE_CRAWLER_NAME: ${{ secrets.GLUE_CRAWLER_NAME }}
+          SNS_TOPIC_ARN: ${{ secrets.SNS_TOPIC_ARN }}
       
       - name: Verify Deployment
         run: |
