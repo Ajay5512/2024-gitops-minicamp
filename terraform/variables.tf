@@ -1,5 +1,8 @@
+# variables.tf
 
-# variables.tf (root)
+########################
+## AWS - Variables ##
+########################
 variable "aws_region" {
   description = "AWS region to deploy resources"
   type        = string
@@ -10,6 +13,10 @@ variable "environment" {
   description = "Environment (dev/staging/prod)"
   type        = string
 }
+
+########################
+## S3 - Variables ##
+########################
 variable "source_bucket" {
   description = "Name of the source data bucket"
   type        = string
@@ -25,8 +32,7 @@ variable "code_bucket" {
   type        = string
 }
 
-# variables.tf
-#############################
+############################# 
 ## Application - Variables ##
 #############################
 variable "app_name" {
@@ -98,7 +104,9 @@ variable "redshift_serverless_publicly_accessible" {
   default     = false
 }
 
-
+#######################
+## EC2 - Variables ##
+#######################
 variable "ami_id" {
   type        = string
   description = "ID of the AMI to use for the EC2 instance"
@@ -112,4 +120,10 @@ variable "instance_type" {
 variable "project_name" {
   description = "Name of the project"
   type        = string
+}
+
+variable "public_key" {
+  type        = string
+  description = "Public SSH key for EC2 instance access"
+  sensitive   = true
 }
