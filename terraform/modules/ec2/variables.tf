@@ -1,4 +1,29 @@
+variable "project_name" {
+  type        = string
+  description = "Name of the project"
+}
 
-output "vpc_id" {
-  value = aws_vpc.redshift-serverless-vpc.id
+variable "ami_id" {
+  type        = string
+  description = "ID of the AMI to use for the EC2 instance"
+}
+
+variable "instance_type" {
+  type        = string
+  description = "Type of EC2 instance"
+}
+
+variable "vpc_id" {
+  type        = string
+  description = "ID of the VPC"
+}
+
+variable "subnet_id" {
+  type        = string
+  description = "ID of the subnet where the EC2 instance will be launched"
+}
+
+variable "ec2_instance_profile_name" {
+  type        = string
+  description = "Name of the EC2 instance profile"
 }

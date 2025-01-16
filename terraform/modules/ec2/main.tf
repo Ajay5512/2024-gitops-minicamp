@@ -1,16 +1,9 @@
-
-# Key pair for EC2 instance
-resource "aws_key_pair" "ec2_key_pair" {
-  key_name   = "rag-cs-key"
-  public_key = var.public_key
-}
-
 # Modified EC2 instance
 resource "aws_instance" "rag_cs_instance" {
   ami                         = var.ami_id
   instance_type              = var.instance_type
   vpc_security_group_ids     = [aws_security_group.rag_cs_sg.id]
-  subnet_id                  = aws_subnet.public_subnet_az1.id
+  subnet_id                  = var.subnet_id
   iam_instance_profile       = var.ec2_instance_profile_name
   associate_public_ip_address = true
   key_name                   = aws_key_pair.ec2_key_pair.key_name
@@ -20,7 +13,6 @@ resource "aws_instance" "rag_cs_instance" {
     Name = "${var.project_name}-RAG-CS-Instance"
   }
 }
-
 # Security group for EC2
 resource "aws_security_group" "rag_cs_sg" {
   name        = "${var.project_name}-rag-cs-sg"
@@ -117,4 +109,12 @@ resource "aws_security_group" "rag_cs_sg" {
   tags = {
     Name = "${var.project_name}-rag-cs-sg"
   }
+}
+
+
+
+# Key pair for EC2 instance
+resource "aws_key_pair" "ec2_key_pair" {
+  key_name   = "${var.project_name}-key"
+  public_key = var.public_key
 }
