@@ -143,14 +143,3 @@ variable "public_key" {
   sensitive   = true
 }
 
-variable "glue_service_role" {
-  type        = string
-  description = "ARN of the Glue service role"
-  sensitive   = true
-}
-
-variable "role_to_assume" {
-  type        = string
-  description = "ARN of the role to assume"
-  sensitive   = true
-}
