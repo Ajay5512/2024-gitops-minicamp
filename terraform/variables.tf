@@ -20,19 +20,19 @@ variable "environment" {
 variable "source_bucket" {
   description = "Name of the source data bucket"
   type        = string
-  sensitive   = true
+
 }
 
 variable "target_bucket" {
   description = "Name of the target data bucket"
   type        = string
-  sensitive   = true
+
 }
 
 variable "code_bucket" {
   description = "Name of the code bucket"
   type        = string
-  sensitive   = true
+
 }
 
 ############################# 
