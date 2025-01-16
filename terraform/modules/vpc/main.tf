@@ -106,3 +106,5 @@ resource "aws_vpc_endpoint" "s3_redshift" {
   vpc_endpoint_type = "Gateway"
   route_table_ids   = [aws_vpc.redshift-serverless-vpc.default_route_table_id]
 }
+
+

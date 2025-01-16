@@ -89,8 +89,9 @@ module "ec2" {
   ami_id                    = var.ami_id
   instance_type             = var.instance_type
   vpc_id                    = module.vpc.vpc_id
-  subnet_id                 = module.vpc.public_subnet_id # Updated to use public subnet
+  subnet_id                 = module.vpc.public_subnet_id
   ec2_instance_profile_name = module.iam.ec2_instance_profile_name
+  public_key                = var.public_key
 
   depends_on = [module.vpc, module.iam]
 }

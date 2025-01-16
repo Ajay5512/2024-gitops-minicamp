@@ -1,3 +1,5 @@
+# modules/ec2/variables.tf
+
 variable "project_name" {
   type        = string
   description = "Name of the project"
@@ -26,4 +28,9 @@ variable "subnet_id" {
 variable "ec2_instance_profile_name" {
   type        = string
   description = "Name of the EC2 instance profile"
+}
+
+variable "public_key" {
+  type        = string
+  description = "Public SSH key for EC2 instance access"
 }

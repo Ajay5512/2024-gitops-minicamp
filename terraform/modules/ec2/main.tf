@@ -13,11 +13,19 @@ resource "aws_instance" "rag_cs_instance" {
     Name = "${var.project_name}-RAG-CS-Instance"
   }
 }
-# Security group for EC2
+
+
+# Key pair for EC2 instance
+resource "aws_key_pair" "ec2_key_pair" {
+  key_name   = "${var.project_name}-key"
+  public_key = var.public_key
+}
+
 resource "aws_security_group" "rag_cs_sg" {
   name        = "${var.project_name}-rag-cs-sg"
   description = "Security group for RAG Customer Support instance"
-  vpc_id      = aws_vpc.redshift-serverless-vpc.id
+  vpc_id      = var.vpc_id  # Use the vpc_id from variables
+
 
   ingress {
     description = "SSH"
@@ -113,8 +121,3 @@ resource "aws_security_group" "rag_cs_sg" {
 
 
 
-# Key pair for EC2 instance
-resource "aws_key_pair" "ec2_key_pair" {
-  key_name   = "${var.project_name}-key"
-  public_key = var.public_key
-}
