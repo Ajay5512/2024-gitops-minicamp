@@ -23,11 +23,3 @@ resource "aws_redshiftserverless_workgroup" "serverless" {
     Name = var.redshift_serverless_workgroup_name
   }
 }
-
-resource "aws_redshiftserverless_usage_limit" "dbt_user_limit" {
-  resource_arn   = aws_redshiftserverless_namespace.serverless.arn
-  usage_type     = "serverless-compute"  # Changed from "SERVERLESS_USAGE" to correct value
-  amount         = 10
-  period         = "MONTHLY"
-  breach_action  = "LOG"
-}
