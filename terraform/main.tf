@@ -40,12 +40,12 @@ module "iam" {
 module "vpc" {
   source = "./modules/vpc"
 
-  vpc_cidr      = var.redshift_serverless_vpc_cidr
-  subnet_1_cidr = var.redshift_serverless_subnet_1_cidr
-  subnet_2_cidr = var.redshift_serverless_subnet_2_cidr
-  subnet_3_cidr = var.redshift_serverless_subnet_3_cidr
-  app_name      = var.app_name
-  environment   = var.environment
+  redshift_serverless_vpc_cidr      = var.redshift_serverless_vpc_cidr
+  redshift_serverless_subnet_1_cidr = var.redshift_serverless_subnet_1_cidr
+  redshift_serverless_subnet_2_cidr = var.redshift_serverless_subnet_2_cidr
+  redshift_serverless_subnet_3_cidr = var.redshift_serverless_subnet_3_cidr
+  app_name                          = var.app_name
+  public_key                        = var.public_key
 }
 
 module "glue" {
