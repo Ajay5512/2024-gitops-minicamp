@@ -56,7 +56,6 @@ module "glue" {
   target_bucket           = module.s3.target_bucket_id
   code_bucket             = module.s3.code_bucket_id
   glue_role_arn           = module.iam.glue_role_arn
-  sns_topic_arn           = module.sns.topic_arn
   redshift_database       = var.redshift_serverless_database_name
   redshift_schema         = "public"
   redshift_workgroup_name = var.redshift_serverless_workgroup_name
