@@ -155,12 +155,3 @@ variable "public_key" {
 
 
 
-
-# variables.tf
-# [Previous variables remain the same, adding new ones below]
-
-variable "redshift_schema" {
-  description = "Default schema for Redshift database"
-  type        = string
-  default     = "public"
-}
