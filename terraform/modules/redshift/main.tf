@@ -38,13 +38,16 @@ resource "terraform_data" "sql_init" {
   }
 
   provisioner "local-exec" {
-    command = "python3 ${path.module}/sql-init.py ${var.redshift_serverless_database_name} ${var.redshift_serverless_workgroup_name} ${var.redshift_role_arn} '${var.dbt_password}' ${data.aws_caller_identity.current.account_id} ${var.glue_database_name}"
-    
+    command = <<-EOT
+      cd ${path.module} && python3 sql-init.py \
+      "${var.redshift_serverless_database_name}" \
+      "${var.redshift_serverless_workgroup_name}" \
+      "${var.redshift_role_arn}" \
+      "${var.dbt_password}"
+    EOT
+
     environment = {
       AWS_DEFAULT_REGION = data.aws_region.current.name
     }
   }
 }
-
-# Add this to get current region
-data "aws_region" "current" {}
