@@ -3,6 +3,8 @@
 # Add this at the top to get account ID
 data "aws_caller_identity" "current" {}
 
+data "aws_region" "current" {}
+
 resource "aws_redshiftserverless_namespace" "serverless" {
   namespace_name      = var.redshift_serverless_namespace_name
   db_name            = var.redshift_serverless_database_name
