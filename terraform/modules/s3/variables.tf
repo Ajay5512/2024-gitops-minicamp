@@ -21,11 +21,19 @@ variable "code_bucket" {
   description = "Name suffix of the code bucket (will be prefixed with nexabrands-{environment}-)"
   type        = string
 }
-
+# variables.tf
 variable "source_files" {
-  description = "Map of source data file names to their local paths for upload to source bucket"
+  description = "Map of source files to upload to S3"
   type        = map(string)
-  default     = {}
+  default = {
+    "customers.csv"         = "./data/customers.csv"
+    "customer_targets.csv"  = "./data/customer_targets.csv"
+    "dates.csv"            = "./data/dates.csv"
+    "orders.csv"           = "./data/orders.csv"
+    "order_fulfillment.csv" = "./data/order_fulfillment.csv"
+    "order_lines.csv"      = "./data/order_lines.csv"
+    "products.csv"         = "./data/products.csv"
+  }
 }
 
 variable "code_files" {
