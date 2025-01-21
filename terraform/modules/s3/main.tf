@@ -6,13 +6,25 @@ resource "aws_s3_bucket" "source_bucket" {
 }
 
 # Upload objects to source bucket with automatic folder organization and timestamps
+variable "source_files" {
+  description = "Map of source files to upload to S3"
+  type        = map(string)
+  default = {
+    "customers.csv"         = "./data/customers.csv"
+    "customer_targets.csv"  = "./data/customer_targets.csv"
+    "dates.csv"            = "./data/dates.csv"
+    "orders.csv"           = "./data/orders.csv"
+    "order_fulfillment.csv" = "./data/order_fulfillment.csv"
+    "order_lines.csv"      = "./data/order_lines.csv"
+    "products.csv"         = "./data/products.csv"
+  }
+}
+
+# Upload objects to source bucket with automatic folder organization
 resource "aws_s3_object" "source_files" {
   for_each = {
-    for filename, filepath in var.source_files : 
-    (can(regex("customer", filename)) ? "customer/${trimsuffix(filename, ".csv")}" : 
-     can(regex("product", filename)) ? "product/${trimsuffix(filename, ".csv")}" : 
-     can(regex("date", filename)) ? "date/${trimsuffix(filename, ".csv")}" : 
-     filename) => filepath
+    for filename, filepath in var.source_files :
+    "${trimsuffix(filename, ".csv")}/${filename}" => filepath
   }
 
   bucket                 = aws_s3_bucket.source_bucket.id
