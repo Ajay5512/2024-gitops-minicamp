@@ -1,6 +1,7 @@
 # Source Bucket
 resource "aws_s3_bucket" "source_bucket" {
   bucket = "nexabrands-${var.environment}-${var.source_bucket}"
+  object_lock_enabled = true
 }
 
 # Upload objects to source bucket with automatic folder organization and timestamps
@@ -23,6 +24,7 @@ resource "aws_s3_object" "source_files" {
 # Target Bucket
 resource "aws_s3_bucket" "target_bucket" {
   bucket = "nexabrands-${var.environment}-${var.target_bucket}"
+  object_lock_enabled = true
 }
 
 # Code Bucket
@@ -175,6 +177,8 @@ resource "aws_s3_bucket_object_lock_configuration" "source_bucket_lock" {
       days = var.object_lock_retention_days
     }
   }
+
+  depends_on = [aws_s3_bucket_versioning.source_bucket_versioning]
 }
 
 resource "aws_s3_bucket_object_lock_configuration" "target_bucket_lock" {
@@ -186,4 +190,6 @@ resource "aws_s3_bucket_object_lock_configuration" "target_bucket_lock" {
       days = var.object_lock_retention_days
     }
   }
+
+  depends_on = [aws_s3_bucket_versioning.target_bucket_versioning]
 }
