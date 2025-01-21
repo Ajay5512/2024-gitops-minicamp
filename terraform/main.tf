@@ -10,7 +10,6 @@ module "s3" {
   target_bucket = var.target_bucket
   code_bucket   = var.code_bucket
 
-  # S3 lifecycle settings
   kms_deletion_window               = var.kms_deletion_window
   lifecycle_ia_transition_days      = var.lifecycle_ia_transition_days
   lifecycle_glacier_transition_days = var.lifecycle_glacier_transition_days
