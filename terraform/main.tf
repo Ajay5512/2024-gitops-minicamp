@@ -17,14 +17,8 @@ module "s3" {
   lifecycle_expiration_days         = var.lifecycle_expiration_days
   object_lock_retention_days        = var.object_lock_retention_days
 
-  # Using the default source_files from variables.tf which has the correct paths
   source_files = var.source_files
-
-  code_files = {
-    "script.py"         = "${path.root}/modules/scripts/script.py"
-    "schema_change.py"  = "${path.root}/modules/scripts/schema_change.py"
-    "s3_to_redshift.py" = "${path.root}/modules/scripts/s3_to_redshift.py"
-  }
+  code_files   = var.code_files
 }
 
 module "sns" {
@@ -93,11 +87,11 @@ module "ec2" {
 
   project_name              = var.project_name
   ami_id                    = var.ami_id
-  instance_type             = var.instance_type
-  vpc_id                    = module.vpc.vpc_id
-  subnet_id                 = module.vpc.public_subnet_id
+  instance_type            = var.instance_type
+  vpc_id                   = module.vpc.vpc_id
+  subnet_id                = module.vpc.public_subnet_id
   ec2_instance_profile_name = module.iam.ec2_instance_profile_name
-  public_key                = var.public_key
+  public_key               = var.public_key
 
   depends_on = [module.vpc, module.iam]
 }
