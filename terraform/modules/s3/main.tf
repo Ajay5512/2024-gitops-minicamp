@@ -2,6 +2,7 @@
 resource "aws_s3_bucket" "source_bucket" {
   bucket = "nexabrands-${var.environment}-${var.source_bucket}"
   object_lock_enabled = true
+  force_destroy = true
 }
 
 # Upload objects to source bucket with automatic folder organization and timestamps
@@ -25,11 +26,13 @@ resource "aws_s3_object" "source_files" {
 resource "aws_s3_bucket" "target_bucket" {
   bucket = "nexabrands-${var.environment}-${var.target_bucket}"
   object_lock_enabled = true
+  force_destroy = true
 }
 
 # Code Bucket
 resource "aws_s3_bucket" "code_bucket" {
   bucket = "nexabrands-${var.environment}-${var.code_bucket}"
+  force_destroy = true
 }
 
 # Upload code files
