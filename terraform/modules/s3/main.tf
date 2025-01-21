@@ -119,7 +119,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "code_bucket_encry
   }
 }
 
-# Lifecycle Rules for source and target buckets only
+# Lifecycle Rules for source and target buckets only,
 resource "aws_s3_bucket_lifecycle_configuration" "source_bucket_lifecycle" {
   bucket = aws_s3_bucket.source_bucket.id
 
