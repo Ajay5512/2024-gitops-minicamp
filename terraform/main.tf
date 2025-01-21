@@ -17,15 +17,13 @@ module "s3" {
   lifecycle_expiration_days         = var.lifecycle_expiration_days
   object_lock_retention_days        = var.object_lock_retention_days
 
-  source_files = {
-    "customers.csv" = "${path.root}/modules/data/customers.csv"
-    "products.csv"  = "${path.root}/modules/data/products.csv"
-    "date.csv"      = "${path.root}/modules/data/date.csv"
-  }
+  # Using the default source_files from variables.tf which has the correct paths
+  source_files = var.source_files
 
   code_files = {
-    "script.py"        = "${path.root}/modules/scripts/script.py"
-    "schema_change.py" = "${path.root}/modules/scripts/schema_change.py"
+    "script.py"         = "${path.root}/modules/scripts/script.py"
+    "schema_change.py"  = "${path.root}/modules/scripts/schema_change.py"
+    "s3_to_redshift.py" = "${path.root}/modules/scripts/s3_to_redshift.py"
   }
 }
 
