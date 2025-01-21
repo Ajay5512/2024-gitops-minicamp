@@ -184,3 +184,28 @@ variable "glue_database_name" {
   description = "Name of the Glue database to connect to"
   default     = "tickit_dbt"
 }
+
+
+variable "source_files" {
+  description = "Map of source files to upload to S3"
+  type        = map(string)
+  default = {
+    "customers.csv"         = "./modules/data/customers.csv"
+    "customer_targets.csv"  = "./modules/data/customer_targets.csv"
+    "dates.csv"             = "./modules/data/dates.csv"
+    "orders.csv"            = "./modules/data/orders.csv"
+    "order_fulfillment.csv" = "./modules/data/order_fulfillment.csv"
+    "order_lines.csv"       = "./modules/data/order_lines.csv"
+    "products.csv"          = "./modules/data/products.csv"
+  }
+}
+
+variable "code_files" {
+  description = "Map of code file names to their local paths"
+  type        = map(string)
+  default = {
+    "script.py"         = "./modules/scripts/script.py"
+    "schema_change.py"  = "./modules/scripts/schema_change.py"
+    "s3_to_redshift.py" = "./modules/scripts/s3_to_redshift.py"
+  }
+}
