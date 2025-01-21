@@ -26,13 +26,13 @@ variable "source_files" {
   description = "Map of source files to upload to S3"
   type        = map(string)
   default = {
-    "customers.csv"         = "./data/customers.csv"
-    "customer_targets.csv"  = "./data/customer_targets.csv"
-    "dates.csv"            = "./data/dates.csv"
-    "orders.csv"           = "./data/orders.csv"
-    "order_fulfillment.csv" = "./data/order_fulfillment.csv"
-    "order_lines.csv"      = "./data/order_lines.csv"
-    "products.csv"         = "./data/products.csv"
+    "customers.csv"         = "./modules/data/customers.csv"
+    "customer_targets.csv"  = "./modules/data/customer_targets.csv"
+    "dates.csv"            = "./modules/data/dates.csv"
+    "orders.csv"           = "./modules/data/orders.csv"
+    "order_fulfillment.csv" = "./modules/data/order_fulfillment.csv"
+    "order_lines.csv"      = "./modules/data/order_lines.csv"
+    "products.csv"         = "./modules/data/products.csv"
   }
 }
 
