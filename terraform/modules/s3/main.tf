@@ -1,29 +1,15 @@
 # Source Bucket
 resource "aws_s3_bucket" "source_bucket" {
   bucket              = "nexabrands-${var.environment}-${var.source_bucket}"
-  object_lock_enabled = true
   force_destroy       = true
 }
 
-# Enable versioning for source bucket - Must be enabled before object lock
+# Enable versioning for source bucket
 resource "aws_s3_bucket_versioning" "source_bucket_versioning" {
   bucket = aws_s3_bucket.source_bucket.id
   versioning_configuration {
     status = "Enabled"
   }
-}
-
-# Object Lock Configuration for source bucket
-resource "aws_s3_bucket_object_lock_configuration" "source_bucket_lock" {
-  bucket = aws_s3_bucket.source_bucket.id
-
-  rule {
-    default_retention {
-      mode = "COMPLIANCE"
-      days = var.object_lock_retention_days
-    }
-  }
-  depends_on = [aws_s3_bucket_versioning.source_bucket_versioning]
 }
 
 # Upload objects to source bucket
@@ -37,15 +23,13 @@ resource "aws_s3_object" "source_files" {
   kms_key_id            = aws_kms_key.s3_kms_key.arn
   
   depends_on = [
-    aws_s3_bucket_versioning.source_bucket_versioning,
-    aws_s3_bucket_object_lock_configuration.source_bucket_lock
+    aws_s3_bucket_versioning.source_bucket_versioning
   ]
 }
 
 # Target Bucket
 resource "aws_s3_bucket" "target_bucket" {
   bucket              = "nexabrands-${var.environment}-${var.target_bucket}"
-  object_lock_enabled = true
   force_destroy       = true
 }
 
@@ -55,19 +39,6 @@ resource "aws_s3_bucket_versioning" "target_bucket_versioning" {
   versioning_configuration {
     status = "Enabled"
   }
-}
-
-# Object Lock Configuration for target bucket
-resource "aws_s3_bucket_object_lock_configuration" "target_bucket_lock" {
-  bucket = aws_s3_bucket.target_bucket.id
-
-  rule {
-    default_retention {
-      mode = "COMPLIANCE"
-      days = var.object_lock_retention_days
-    }
-  }
-  depends_on = [aws_s3_bucket_versioning.target_bucket_versioning]
 }
 
 # Code Bucket
