@@ -1,4 +1,3 @@
-# main.tf
 provider "aws" {
   region = var.aws_region
 }
@@ -10,6 +9,13 @@ module "s3" {
   source_bucket = var.source_bucket
   target_bucket = var.target_bucket
   code_bucket   = var.code_bucket
+
+  # S3 lifecycle settings
+  kms_deletion_window               = var.kms_deletion_window
+  lifecycle_ia_transition_days      = var.lifecycle_ia_transition_days
+  lifecycle_glacier_transition_days = var.lifecycle_glacier_transition_days
+  lifecycle_expiration_days         = var.lifecycle_expiration_days
+  object_lock_retention_days        = var.object_lock_retention_days
 
   source_files = {
     "customers.csv" = "${path.root}/modules/data/customers.csv"
@@ -57,7 +63,7 @@ module "glue" {
   code_bucket             = module.s3.code_bucket_id
   glue_role_arn           = module.iam.glue_role_arn
   redshift_database       = var.redshift_serverless_database_name
-  redshift_schema         = "tickit_dbt" # Updated from "public" since we're dropping public schema
+  redshift_schema         = "tickit_dbt"
   redshift_workgroup_name = var.redshift_serverless_workgroup_name
 
   depends_on = [module.s3, module.iam, module.sns]
@@ -77,7 +83,7 @@ module "redshift" {
   security_group_id                       = module.vpc.security_group_id
   subnet_ids                              = module.vpc.subnet_ids
 
-  # New variables for SQL initialization
+  # SQL initialization variables
   dbt_password       = var.dbt_password
   glue_database_name = var.glue_database_name
 
