@@ -13,7 +13,7 @@ def load_orders_data(spark: SparkSession, file_path: str) -> DataFrame:
         file_path (str): The path to the CSV file containing orders data.
 
     Returns:
-        DataFrame: A Spark DataFrame containing the loaded data with a defined schema.
+        DataFrame: A Spark DataFrame containing the loaded data with a defined schema
     """
     schema = StructType(
         [
