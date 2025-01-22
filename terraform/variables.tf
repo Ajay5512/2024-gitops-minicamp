@@ -210,7 +210,3 @@ variable "code_files" {
   }
 }
 
-variable "kms_key_arn" {
-  description = "The ARN of the KMS key used for S3 encryption"
-  type        = string
-}
