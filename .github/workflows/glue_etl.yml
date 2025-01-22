@@ -1,12 +1,17 @@
 name: Process Orders Data
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 on:
   push:
     branches:
-      - main  # Trigger on push to the main branch
+      - main
     paths:
-      - 'terraform/modules/scripts/orders.py'  # Updated path to match project structure
-  workflow_dispatch:  # Allow manual triggering.
+      - 'terraform/modules/scripts/orders.py'
+  workflow_dispatch:
 
 jobs:
   test:
@@ -51,21 +56,19 @@ jobs:
           allure_results: terraform/modules/tests/allure-results
           allure_report: allure-report
 
-      # Optional: Upload Allure Report as an Artifact
-      - name: Upload Allure Report (Optional)
+      - name: Upload Allure Report
         uses: actions/upload-artifact@v3
         with:
           name: allure-report
           path: allure-report
 
-      # Optional: Deploy Allure Report to GitHub Pages
-      - name: Deploy Allure Report to GitHub Pages (Optional)
+      - name: Deploy to GitHub Pages
         if: always()
-        uses: peaceiris/actions-gh-pages@v2
-        env:
-          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PUBLISH_BRANCH: gh-pages
-          PUBLISH_DIR: allure-report
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: allure-report
+          keep_files: false
 
       - name: Add Coverage Comment to PR
         if: github.event_name == 'pull_request'
@@ -80,14 +83,14 @@ jobs:
     name: 'Deploy ETL Glue Job'
     runs-on: ubuntu-latest
     environment: production
-    needs: test  # Ensure tests pass before deploying
+    needs: test
     defaults:
       run:
         shell: bash
 
     permissions:
-      id-token: write  # Required for OIDC
-      contents: read   # Required to checkout the repository
+      id-token: write
+      contents: read
 
     steps:
       - name: Configure AWS Credentials
