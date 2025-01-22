@@ -47,6 +47,15 @@ jobs:
           create-new-comment: true
           report-only-changed-files: true
 
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: terraform/modules/tests/coverage.xml
+          flags: unittests
+          name: codecov-actions
+          fail_ci_if_error: true
+
   deploy-glue:
     name: 'Deploy ETL Glue Job'
     runs-on: ubuntu-latest
