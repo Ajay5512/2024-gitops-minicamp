@@ -1,11 +1,12 @@
-name: ETL Glue Job Deployment
+name: Process Orders Data
 
 on:
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  id-token: write
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+    paths:
+      - 'scripts/orders.py'  # Only trigger if orders.py is modified
+  workflow_dispatch:  # Allow manual triggering
 
 jobs:
   deploy-glue:
@@ -15,57 +16,55 @@ jobs:
     defaults:
       run:
         shell: bash
-    
+
     steps:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
           aws-region: us-east-1
-      
-      - name: Checkout
+
+      - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-      
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install boto3 pytest
-      
+
       - name: Upload Glue Script to S3
         run: |
-          aws s3 cp terraform/modules/scripts/script.py "s3://${CODE_BUCKET}/scripts/"
+          aws s3 cp scripts/orders.py "s3://${CODE_BUCKET}/scripts/orders.py"
         env:
           CODE_BUCKET: ${{ secrets.CODE_BUCKET }}
-      
+
       - name: Deploy Glue Job
         run: |
-          aws glue update-job \
-            --job-name "topdevs-${ENVIRONMENT}-etl-job" \
-            --job-update '{
-              "Role": "'"${GLUE_SERVICE_ROLE}"'",
-              "Command": {
-                "Name": "glueetl",
-                "ScriptLocation": "s3://'${CODE_BUCKET}'/scripts/script.py",
-                "PythonVersion": "3"
-              },
-              "GlueVersion": "4.0",
-              "WorkerType": "G.1X",
-              "NumberOfWorkers": 2,
-              "Timeout": 2880,
-              "MaxRetries": 1,
-              "DefaultArguments": {
-                "--enable-auto-scaling": "true",
-                "--enable-continuous-cloudwatch-log": "true",
-                "--enable-metrics": "true",
-                "--source-path": "s3://'${SOURCE_BUCKET}'",
-                "--destination-path": "s3://'${TARGET_BUCKET}'",
-                "--job-name": "topdevs-'${ENVIRONMENT}'-etl-job"
-              }
+          aws glue create-job \
+            --name "topdevs-${ENVIRONMENT}-etl-orders-job" \
+            --role "${GLUE_SERVICE_ROLE}" \
+            --command '{
+              "Name": "glueetl",
+              "ScriptLocation": "s3://'${CODE_BUCKET}'/scripts/orders.py",
+              "PythonVersion": "3"
+            }' \
+            --glue-version "4.0" \
+            --worker-type "G.1X" \
+            --number-of-workers 2 \
+            --timeout 2880 \
+            --max-retries 1 \
+            --default-arguments '{
+              "--enable-auto-scaling": "true",
+              "--enable-continuous-cloudwatch-log": "true",
+              "--enable-metrics": "true",
+              "--source-path": "s3://'${SOURCE_BUCKET}'/data/orders.csv",
+              "--destination-path": "s3://'${TARGET_BUCKET}'/orders/",
+              "--job-language": "python"
             }'
         env:
           ENVIRONMENT: ${{ secrets.ENVIRONMENT }}

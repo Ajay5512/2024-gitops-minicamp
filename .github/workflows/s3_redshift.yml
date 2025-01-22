@@ -20,33 +20,33 @@ jobs:
     defaults:
       run:
         shell: bash
-    
+
     steps:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
           aws-region: us-east-1
-      
+
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-      
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install boto3 pytest pandas awswrangler
-      
+
       - name: Upload Glue Script to S3
         run: |
           aws s3 cp terraform/modules/scripts/s3_to_redshift.py "s3://${CODE_BUCKET}/scripts/s3_to_redshift.py"
         env:
           CODE_BUCKET: ${{ secrets.CODE_BUCKET }}
-      
+
       - name: Deploy Glue Job
         run: |
           aws glue update-job \
@@ -81,14 +81,14 @@ jobs:
           REDSHIFT_WORKGROUP: ${{ secrets.REDSHIFT_WORKGROUP }}
           GLUE_ROLE_ARN: ${{ secrets.GLUE_SERVICE_ROLE }}
 
-      
+
       - name: Verify Deployment
         run: |
           JOB_NAME="topdevs-${ENVIRONMENT}-s3-to-redshift-job"
           JOB_INFO=$(aws glue get-job --job-name "$JOB_NAME")
           echo "Verifying job configuration..."
           echo "$JOB_INFO" | jq .
-          
+
           if [ $? -eq 0 ]; then
             echo "✅ Job deployment verified successfully"
           else
