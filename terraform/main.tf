@@ -1,7 +1,7 @@
 provider "aws" {
   region = var.aws_region
 }
-# main.tf
+# main.tf.
 module "s3" {
   source = "./modules/s3"
 
