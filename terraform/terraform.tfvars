@@ -22,7 +22,7 @@ redshift_serverless_base_capacity       = 32
 redshift_serverless_publicly_accessible = false
 
 ami_id        = "ami-0e2c8caa4b6378d8c"
-instance_type = "t2.large"
+instance_type = "t2.micro"
 # Add these to your terraform.tfvars
 dbt_password       = "YourSecurePassword123!" # Consider using AWS Secrets Manager
 glue_database_name = "tickit_dbt"

@@ -90,6 +90,15 @@ resource "aws_iam_role_policy" "glue_service_policy" {
           "sns:Publish"
         ]
         Resource = [var.sns_topic_arn]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "kms:Decrypt"
+        ]
+        Resource = [
+          aws_kms_key.s3_kms_key.arn
+        ]
       }
     ]
   })
