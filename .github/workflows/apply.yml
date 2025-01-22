@@ -21,7 +21,7 @@ jobs:
       with:
         role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
         aws-region: us-east-1
-
+    
     - name: Checkout
       uses: actions/checkout@v4
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
