@@ -69,41 +69,15 @@ resource "aws_iam_role_policy" "glue_service_policy" {
       {
         Effect = "Allow"
         Action = [
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
-        ]
-        Resource = [
-          "arn:aws:logs:*:*:/aws-glue/*"
-        ]
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "cloudwatch:PutMetricData"
-        ]
-        Resource = ["*"]
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "sns:Publish"
-        ]
-        Resource = [var.sns_topic_arn]
-      },
-      {
-        Effect = "Allow"
-        Action = [
           "kms:Decrypt"
         ]
         Resource = [
-          aws_kms_key.s3_kms_key.arn
+          var.kms_key_arn  # Use the passed KMS key ARN here
         ]
       }
     ]
   })
 }
-
 # Redshift Serverless Role
 resource "aws_iam_role" "redshift-serverless-role" {
   name = "topdevs-${var.environment}-redshift-serverless-role"

@@ -209,3 +209,8 @@ variable "code_files" {
     "s3_to_redshift.py" = "./modules/scripts/s3_to_redshift.py"
   }
 }
+
+variable "kms_key_arn" {
+  description = "The ARN of the KMS key used for S3 encryption"
+  type        = string
+}
