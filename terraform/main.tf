@@ -20,6 +20,7 @@ module "s3" {
   code_files   = var.code_files
 }
 
+
 module "iam" {
   source        = "./modules/iam"
   environment   = var.environment
@@ -27,7 +28,7 @@ module "iam" {
   target_bucket = var.target_bucket
   code_bucket   = var.code_bucket
   sns_topic_arn = module.sns.topic_arn
-  kms_key_arn   = module.s3.kms_key_arn # Pass the KMS key ARN from the s3 module
+  kms_key_arn   = module.s3.kms_key_arn
 }
 module "sns" {
   source      = "./modules/sns"
