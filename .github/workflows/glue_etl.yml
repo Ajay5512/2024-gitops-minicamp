@@ -5,7 +5,7 @@ on:
     branches:
       - main  # Trigger on push to the main branch
     paths:
-      - 'scripts/orders.py'  # Only trigger if orders.py is modified
+      - 'terraform/modules/scripts/orders.py'  # Updated path to match project structure
   workflow_dispatch:  # Allow manual triggering
 
 jobs:
@@ -28,8 +28,9 @@ jobs:
 
       - name: Run PySpark tests
         run: |
-          export PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE/modules/scripts
-          pytest  terraform/modules/tests/test_orders.py -v
+          export PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE/terraform/modules/scripts
+          cd terraform/modules/tests
+          pytest test_orders.py -v
 
   deploy-glue:
     name: 'Deploy ETL Glue Job'
