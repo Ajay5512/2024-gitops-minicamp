@@ -128,6 +128,3 @@ resource "aws_security_group" "rag_cs_sg" {
     Name = "${var.project_name}-rag-cs-sg"
   }
 }
-
-
-

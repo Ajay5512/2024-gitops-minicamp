@@ -65,7 +65,7 @@ variable "object_lock_retention_days" {
   default     = 1
 }
 
-############################# 
+#############################
 ## Application - Variables ##
 #############################
 variable "app_name" {
