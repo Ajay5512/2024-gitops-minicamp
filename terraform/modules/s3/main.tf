@@ -21,7 +21,7 @@ resource "aws_s3_object" "source_files" {
   source                 = each.value
   server_side_encryption = "aws:kms"
   kms_key_id            = aws_kms_key.s3_kms_key.arn
-  
+
   depends_on = [
     aws_s3_bucket_versioning.source_bucket_versioning
   ]
@@ -64,7 +64,7 @@ resource "aws_s3_object" "code_files" {
   source                 = each.value
   server_side_encryption = "aws:kms"
   kms_key_id            = aws_kms_key.s3_kms_key.arn
-  
+
   depends_on = [aws_s3_bucket_versioning.code_bucket_versioning]
 }
 

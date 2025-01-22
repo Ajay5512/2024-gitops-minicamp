@@ -1,7 +1,7 @@
 {
     "format_version": "1.2",
     "terraform_version": "1.10.3",
-  
+
     "resource_changes": [
         {
             "address": "module.glue.aws_glue_catalog_database.database",

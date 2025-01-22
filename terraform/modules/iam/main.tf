@@ -6,7 +6,7 @@ data "aws_caller_identity" "current" {}
 # Glue Service Role
 resource "aws_iam_role" "glue_service_role" {
   name = "topdevs-${var.environment}-glue-service-role"
-  
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -25,11 +25,10 @@ resource "aws_iam_role" "glue_service_role" {
   }
 }
 
-# Glue Service Policy
 resource "aws_iam_role_policy" "glue_service_policy" {
   name = "topdevs-${var.environment}-glue-service-policy"
   role = aws_iam_role.glue_service_role.id
-  
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -69,36 +68,20 @@ resource "aws_iam_role_policy" "glue_service_policy" {
       {
         Effect = "Allow"
         Action = [
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
+          "kms:Decrypt",
+          "kms:GenerateDataKey"  # Add this permission
         ]
         Resource = [
-          "arn:aws:logs:*:*:/aws-glue/*"
+          var.kms_key_arn  # Use the passed KMS key ARN here
         ]
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "cloudwatch:PutMetricData"
-        ]
-        Resource = ["*"]
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "sns:Publish"
-        ]
-        Resource = [var.sns_topic_arn]
       }
     ]
   })
 }
-
 # Redshift Serverless Role
 resource "aws_iam_role" "redshift-serverless-role" {
   name = "topdevs-${var.environment}-redshift-serverless-role"
-  
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -130,7 +113,7 @@ resource "aws_iam_role" "redshift-serverless-role" {
 resource "aws_iam_role_policy" "redshift-s3-access-policy" {
   name = "topdevs-${var.environment}-redshift-serverless-role-s3-policy"
   role = aws_iam_role.redshift-serverless-role.id
-  
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -159,7 +142,7 @@ resource "aws_iam_role_policy" "redshift-s3-access-policy" {
 resource "aws_iam_role_policy" "redshift-glue-access-policy" {
   name = "topdevs-${var.environment}-redshift-serverless-role-glue-policy"
   role = aws_iam_role.redshift-serverless-role.id
-  
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -234,7 +217,7 @@ resource "aws_sns_topic_policy" "schema_changes" {
 # EC2 Instance Role
 resource "aws_iam_role" "ec2_role" {
   name = "topdevs-${var.environment}-ec2-role"
-  
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
