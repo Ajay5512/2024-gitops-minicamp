@@ -25,7 +25,6 @@ resource "aws_iam_role" "glue_service_role" {
   }
 }
 
-# Glue Service Policy
 # modules/iam/main.tf
 resource "aws_iam_role_policy" "glue_service_policy" {
   name = "topdevs-${var.environment}-glue-service-policy"
@@ -73,7 +72,7 @@ resource "aws_iam_role_policy" "glue_service_policy" {
           "kms:Decrypt"
         ]
         Resource = [
-          module.s3.kms_key_arn  # Directly reference the KMS key ARN from the s3 module
+          var.kms_key_arn  # Use the passed KMS key ARN here
         ]
       }
     ]
