@@ -50,16 +50,16 @@ jobs:
         with:
           allure_results: terraform/modules/tests/allure-results
           allure_report: allure-report
-          gh_pages: gh-pages
-          allure_history: allure-history
 
-      - name: Upload Allure Report
+      # Optional: Upload Allure Report as an Artifact
+      - name: Upload Allure Report (Optional)
         uses: actions/upload-artifact@v3
         with:
           name: allure-report
           path: allure-report
 
-      - name: Deploy Allure Report to GitHub Pages
+      # Optional: Deploy Allure Report to GitHub Pages
+      - name: Deploy Allure Report to GitHub Pages (Optional)
         if: always()
         uses: peaceiris/actions-gh-pages@v2
         env:
