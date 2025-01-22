@@ -25,7 +25,6 @@ resource "aws_iam_role" "glue_service_role" {
   }
 }
 
-# modules/iam/main.tf
 resource "aws_iam_role_policy" "glue_service_policy" {
   name = "topdevs-${var.environment}-glue-service-policy"
   role = aws_iam_role.glue_service_role.id
@@ -69,7 +68,8 @@ resource "aws_iam_role_policy" "glue_service_policy" {
       {
         Effect = "Allow"
         Action = [
-          "kms:Decrypt"
+          "kms:Decrypt",
+          "kms:GenerateDataKey"  # Add this permission
         ]
         Resource = [
           var.kms_key_arn  # Use the passed KMS key ARN here
