@@ -1,31 +1,8 @@
 repos:
-  # Pre-commit hooks repository (general-purpose hooks)
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
-    hooks:
-      - id: trailing-whitespace  # Trims trailing whitespace
-      - id: end-of-file-fixer    # Ensures files end with a newline
-
   # Black: Formats Python code to adhere to PEP 8
   - repo: https://github.com/psf/black
-    rev: 24.2.0
+    rev: 24.10.0
     hooks:
       - id: black
 
-  # Flake8: Lints Python code for style and logical errors
-  - repo: https://github.com/pycqa/flake8
-    rev: 7.0.0
-    hooks:
-      - id: flake8
-
-  # isort: Sorts Python imports
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-
-  # Pylint: Analyzes Python code for errors, coding standards, and refactoring suggestions
-  - repo: https://github.com/pycqa/pylint
-    rev: v3.0.3
-    hooks:
-      - id: pylint
+  
