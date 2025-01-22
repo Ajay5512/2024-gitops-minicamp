@@ -1,6 +1,7 @@
 import pytest
 from pyspark.sql import SparkSession
-from pyspark.sql.types import StructType, StructField, StringType, IntegerType, Row
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType
+from pyspark.sql.functions import col  
 from orders import load_orders_data, clean_orders_data
 
 @pytest.fixture(scope="module")
