@@ -6,7 +6,7 @@ on:
       - main  # Trigger on push to the main branch
     paths:
       - 'terraform/modules/scripts/orders.py'  # Updated path to match project structure
-  workflow_dispatch:  # Allow manual triggering
+  workflow_dispatch:  # Allow manual triggering.
 
 jobs:
   test:
