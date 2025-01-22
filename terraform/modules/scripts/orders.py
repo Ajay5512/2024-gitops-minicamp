@@ -1,4 +1,3 @@
-# orders.py
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import (col, regexp_replace, to_date, trim, upper,
                                    when)
@@ -6,7 +5,16 @@ from pyspark.sql.types import IntegerType, StringType, StructField, StructType
 
 
 def load_orders_data(spark: SparkSession, file_path: str) -> DataFrame:
-    """Load orders data from a CSV file."""
+    """
+    Load orders data from a CSV file.
+
+    Args:
+        spark (SparkSession): An active Spark session.
+        file_path (str): The path to the CSV file containing orders data.
+
+    Returns:
+        DataFrame: A Spark DataFrame containing the loaded data with a defined schema.
+    """
     schema = StructType(
         [
             StructField("ORDER_ID", StringType(), True),
@@ -20,21 +28,35 @@ def load_orders_data(spark: SparkSession, file_path: str) -> DataFrame:
 
 
 def clean_orders_data(df: DataFrame) -> DataFrame:
-    """Clean and transform orders data."""
+    """
+    Clean and transform orders data.
+
+    The function performs the following operations:
+    - Filters out rows with unwanted values in any column.
+    - Cleans and standardizes the `order_id` column.
+    - Validates and converts the `customer_id` column to an integer type.
+    - Parses and cleans the `order_placement_date` column.
+    - Drops rows with null values and removes duplicates.
+
+    Args:
+        df (DataFrame): A Spark DataFrame containing the raw orders data.
+
+    Returns:
+        DataFrame: A cleaned and transformed Spark DataFrame.
+    """
     orders_df = df.selectExpr(
         "ORDER_ID as order_id",
         "customer_id",  # Updated column name
         "order_placement_date",
     )
 
-    # Define unwanted values
+   
     unwanted_values = ["NA", "none", "NULL", "N/A"]
 
-    # Filter out rows with unwanted values in any column
     for column in orders_df.columns:
         orders_df = orders_df.filter(~trim(col(column)).isin(unwanted_values))
 
-    # Clean order_id
+   
     orders_df = orders_df.withColumn(
         "order_id",
         when(
@@ -44,7 +66,6 @@ def clean_orders_data(df: DataFrame) -> DataFrame:
         ).otherwise(upper(trim(col("order_id")))),
     )
 
-    # Clean customer_id
     orders_df = orders_df.withColumn(
         "customer_id",
         when(
@@ -56,7 +77,6 @@ def clean_orders_data(df: DataFrame) -> DataFrame:
         ).otherwise(col("customer_id").cast(IntegerType())),
     )
 
-    # Clean and parse order_placement_date
     orders_df = orders_df.withColumn(
         "order_placement_date",
         to_date(
@@ -69,27 +89,30 @@ def clean_orders_data(df: DataFrame) -> DataFrame:
             "MM/dd/yyyy",
         ),
     )
-
-    # Drop rows with null values in any column
     orders_df = orders_df.dropna()
 
     return orders_df.dropDuplicates()
 
 
 if __name__ == "__main__":
-    # Initialize Spark session
+    """
+    Main entry point for processing orders data.
+
+    Steps:
+        1. Initialize a Spark session.
+        2. Load orders data from the input S3 path.
+        3. Clean and transform the data.
+        4. Save the cleaned data to the target S3 path in Parquet format.
+        5. Stop the Spark session.
+    """
     spark = SparkSession.builder.appName("OrdersDataProcessing").getOrCreate()
 
     # S3 paths
     input_path = "s3a://nexabrands-prod-source/data/orders.csv"
     output_path = "s3a://nexabrands-prod-target/orders/"
 
-    # Load and clean data
     orders_df = load_orders_data(spark, input_path)
     cleaned_orders = clean_orders_data(orders_df)
-
-    # Write to S3 as Parquet
     cleaned_orders.write.mode("overwrite").parquet(output_path)
 
-    # Stop Spark session
     spark.stop()
