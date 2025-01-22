@@ -28,7 +28,7 @@ jobs:
 
       - name: Run PySpark tests
         run: |
-          pytest modules/tests/test_orders.py -v
+          pytest terraform/modules/tests/test_orders.py -v
 
   deploy-glue:
     name: 'Deploy ETL Glue Job'
@@ -65,7 +65,7 @@ jobs:
 
       - name: Upload Glue Script to S3
         run: |
-          aws s3 cp scripts/orders.py "s3://${CODE_BUCKET}/scripts/orders.py"
+          aws s3 cp terraform/modules/scripts/orders.py "s3://${CODE_BUCKET}/scripts/orders.py"
         env:
           CODE_BUCKET: ${{ secrets.CODE_BUCKET }}
 
