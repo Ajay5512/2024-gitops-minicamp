@@ -1,0 +1,8 @@
+repos:
+  # Black: Formats Python code to adhere to PEP 8
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+
+  

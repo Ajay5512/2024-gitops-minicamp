@@ -1,6 +1,5 @@
 from pyspark.sql import DataFrame, SparkSession
-from pyspark.sql.functions import (col, regexp_replace, to_date, trim, upper,
-                                   when)
+from pyspark.sql.functions import col, regexp_replace, to_date, trim, upper, when
 from pyspark.sql.types import IntegerType, StringType, StructField, StructType
 
 
@@ -13,7 +12,8 @@ def load_orders_data(spark: SparkSession, file_path: str) -> DataFrame:
         file_path (str): The path to the CSV file containing orders data.
 
     Returns:
-        DataFrame: A Spark DataFrame containing the loaded data with a defined schema
+        DataFrame: A Spark DataFrame containing the loaded data with a defined
+        schema
     """
     schema = StructType(
         [
@@ -50,13 +50,11 @@ def clean_orders_data(df: DataFrame) -> DataFrame:
         "order_placement_date",
     )
 
-   
     unwanted_values = ["NA", "none", "NULL", "N/A"]
 
     for column in orders_df.columns:
         orders_df = orders_df.filter(~trim(col(column)).isin(unwanted_values))
 
-   
     orders_df = orders_df.withColumn(
         "order_id",
         when(
@@ -95,16 +93,6 @@ def clean_orders_data(df: DataFrame) -> DataFrame:
 
 
 if __name__ == "__main__":
-    """
-    Main entry point for processing orders data.
-
-    Steps:
-        1. Initialize a Spark session.
-        2. Load orders data from the input S3 path.
-        3. Clean and transform the data.
-        4. Save the cleaned data to the target S3 path in Parquet format.
-        5. Stop the Spark session.
-    """
     spark = SparkSession.builder.appName("OrdersDataProcessing").getOrCreate()
 
     # S3 paths
