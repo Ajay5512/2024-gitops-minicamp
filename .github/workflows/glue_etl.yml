@@ -24,13 +24,28 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyspark pytest
+          pip install pyspark pytest pytest-cov
 
       - name: Run PySpark tests
         run: |
           export PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE/terraform/modules/scripts
           cd terraform/modules/tests
-          pytest test_orders.py -v
+          pytest test_orders.py -v --cov=../scripts --cov-report=xml:coverage.xml
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage.xml
+          path: terraform/modules/tests/coverage.xml
+
+      - name: Add Coverage Comment to PR
+        if: github.event_name == 'pull_request'
+        uses: MishaKav/pytest-coverage-comment@main
+        with:
+          pytest-xml-coverage-path: terraform/modules/tests/coverage.xml
+          title: PySpark Test Coverage Report
+          create-new-comment: true
+          report-only-changed-files: true
 
   deploy-glue:
     name: 'Deploy ETL Glue Job'
