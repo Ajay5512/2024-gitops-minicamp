@@ -28,7 +28,7 @@ jobs:
 
       - name: Run PySpark tests
         run: |
-          pytest scripts/tests/test_orders.py -v
+          pytest modules/tests/test_orders.py -v
 
   deploy-glue:
     name: 'Deploy ETL Glue Job'
