@@ -57,8 +57,3 @@ variable "code_files" {
   description = "Map of code files to upload"
   type        = map(string)
 }
-
-output "kms_key_arn" {
-  description = "The ARN of the KMS key used for S3 encryption"
-  value       = aws_kms_key.s3_kms_key.arn
-}
