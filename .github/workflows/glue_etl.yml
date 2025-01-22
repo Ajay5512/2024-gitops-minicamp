@@ -30,13 +30,19 @@ jobs:
         run: |
           export PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE/terraform/modules/scripts
           cd terraform/modules/tests
-          pytest test_orders.py -v --cov=../scripts --cov-report=xml:coverage.xml
+          pytest test_orders.py -v --cov=../scripts --cov-report=xml:coverage.xml --cov-report=html:coverage_html --cov-report=markdown:coverage.md
 
-      - name: Upload Coverage Report
+      - name: Upload Coverage Report (HTML)
         uses: actions/upload-artifact@v3
         with:
-          name: coverage.xml
-          path: terraform/modules/tests/coverage.xml
+          name: coverage_html
+          path: terraform/modules/tests/coverage_html
+
+      - name: Upload Coverage Report (Markdown)
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage.md
+          path: terraform/modules/tests/coverage.md
 
       - name: Add Coverage Comment to PR
         if: github.event_name == 'pull_request'
@@ -46,15 +52,6 @@ jobs:
           title: PySpark Test Coverage Report
           create-new-comment: true
           report-only-changed-files: true
-
-      - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}  # Add this line
-          file: terraform/modules/tests/coverage.xml
-          flags: unittests
-          name: codecov-actions
-          fail_ci_if_error: true
 
   deploy-glue:
     name: 'Deploy ETL Glue Job'
