@@ -25,7 +25,7 @@ resource "aws_iam_role" "glue_service_role" {
   }
 }
 
-# Glue Service Policy
+# modules/iam/main.tf
 resource "aws_iam_role_policy" "glue_service_policy" {
   name = "topdevs-${var.environment}-glue-service-policy"
   role = aws_iam_role.glue_service_role.id
@@ -69,32 +69,15 @@ resource "aws_iam_role_policy" "glue_service_policy" {
       {
         Effect = "Allow"
         Action = [
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
+          "kms:Decrypt"
         ]
         Resource = [
-          "arn:aws:logs:*:*:/aws-glue/*"
+          var.kms_key_arn  # Use the passed KMS key ARN here
         ]
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "cloudwatch:PutMetricData"
-        ]
-        Resource = ["*"]
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "sns:Publish"
-        ]
-        Resource = [var.sns_topic_arn]
       }
     ]
   })
 }
-
 # Redshift Serverless Role
 resource "aws_iam_role" "redshift-serverless-role" {
   name = "topdevs-${var.environment}-redshift-serverless-role"

@@ -209,3 +209,4 @@ variable "code_files" {
     "s3_to_redshift.py" = "./modules/scripts/s3_to_redshift.py"
   }
 }
+
