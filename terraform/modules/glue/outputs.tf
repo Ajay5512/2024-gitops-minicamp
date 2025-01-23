@@ -15,12 +15,4 @@ output "glue_crawler_name" {
   value       = aws_glue_crawler.crawler.name
 }
 
-output "glue_etl_job_name" {
-  description = "Name of the main ETL Glue job"
-  value       = aws_glue_job.etl_job.name
-}
 
-output "glue_s3_to_redshift_job_name" {
-  description = "Name of the S3 to Redshift Glue job"
-  value       = aws_glue_job.s3_to_redshift_job.name
-}
