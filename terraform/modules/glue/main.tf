@@ -66,8 +66,49 @@ resource "aws_glue_job" "etl_job" {
 }
 
 
-resource "aws_glue_job" "s3_to_redshift_job" {
-  name              = "topdevs-${var.environment}-s3-to-redshift-job"
+# Variables
+variable "environment" {
+  description = "The environment (e.g., dev, staging, prod)"
+  type        = string
+}
+
+variable "glue_role_arn" {
+  description = "The ARN of the IAM role for Glue"
+  type        = string
+}
+
+variable "code_bucket" {
+  description = "The S3 bucket where the Glue scripts are stored"
+  type        = string
+}
+
+variable "source_bucket" {
+  description = "The S3 bucket for source data"
+  type        = string
+}
+
+variable "target_bucket" {
+  description = "The S3 bucket for processed data"
+  type        = string
+}
+
+# Glue Jobs
+locals {
+  jobs = {
+    products_etl        = "products_etl"
+    orders              = "orders_etl"
+    order_lines         = "order_lines_etl"
+    order_fulfillment   = "order_fulfillment_etl"
+    dates               = "dates_etl"
+    customers           = "customers_etl"
+    customer_targets    = "customer_targets_etl"
+  }
+}
+
+resource "aws_glue_job" "etl_jobs" {
+  for_each = local.jobs
+
+  name              = "topdevs-${var.environment}-${each.value}-job"
   role_arn          = var.glue_role_arn
   glue_version      = "4.0"
   worker_type       = "G.1X"
@@ -78,23 +119,16 @@ resource "aws_glue_job" "s3_to_redshift_job" {
   command {
     name            = "glueetl"
     python_version  = "3"
-    script_location = "s3://${var.code_bucket}/s3_to_redshift.py"
+    script_location = "s3://${var.code_bucket}/scripts/${each.value}.py"
   }
 
   default_arguments = {
     "--enable-auto-scaling"              = "true"
     "--enable-continuous-cloudwatch-log" = "true"
-    "--enable-metrics"                  = "true"
-    "--job-language"                    = "python"
-    "--source-bucket"                   = var.source_bucket
-    "--redshift-database"               = var.redshift_database
-    "--redshift-schema"                 = var.redshift_schema
-    "--redshift-workgroup"              = var.redshift_workgroup_name
-    "--redshift-temp-dir"               = "s3://${var.code_bucket}/temp/"
-    "--TempDir"                         = "s3://${var.code_bucket}/temporary/"
-    "--enable-spark-ui"                 = "true"
-    "--spark-event-logs-path"           = "s3://${var.code_bucket}/spark-logs/"
-    "--additional-python-modules" = "pg8000==1.29.1"
+    "--source-path"                      = "s3://${var.source_bucket}/"
+    "--destination-path"                 = "s3://${var.target_bucket}/"
+    "--job-name"                         = "topdevs-${var.environment}-${each.value}-job"
+    "--enable-metrics"                   = "true"
   }
 
   execution_property {
