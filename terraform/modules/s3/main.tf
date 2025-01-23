@@ -1,6 +1,5 @@
-# modules/s3/main.tf
+data "aws_caller_identity" "current" {}
 
-# Source Bucket
 resource "aws_s3_bucket" "source_bucket" {
   bucket              = "nexabrands-${var.environment}-${var.source_bucket}"
   force_destroy       = true
