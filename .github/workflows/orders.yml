@@ -87,7 +87,7 @@ jobs:
   deploy-glue:
     name: 'Deploy ETL Glue Job Script'
     runs-on: ubuntu-latest
-    environment: prod
+    environment: production
     needs: test
     defaults:
       run:
