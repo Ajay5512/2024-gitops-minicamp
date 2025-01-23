@@ -1,6 +1,5 @@
-# modules/s3/main.tf
+data "aws_caller_identity" "current" {}
 
-# Source Bucket
 resource "aws_s3_bucket" "source_bucket" {
   bucket              = "nexabrands-${var.environment}-${var.source_bucket}"
   force_destroy       = true
@@ -72,7 +71,6 @@ resource "aws_s3_object" "code_files" {
 
 # KMS Key for Server-Side Encryption
 # modules/s3/main.tf
-
 resource "aws_kms_key" "s3_kms_key" {
   description             = "KMS key for S3 bucket encryption"
   deletion_window_in_days = var.kms_deletion_window
@@ -91,6 +89,16 @@ resource "aws_kms_key" "s3_kms_key" {
           "kms:Encrypt",
           "kms:GenerateDataKey",
           "kms:DescribeKey"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        }
+        Action = [
+          "kms:*"
         ]
         Resource = "*"
       }
