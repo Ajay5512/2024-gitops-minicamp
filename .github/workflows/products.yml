@@ -40,7 +40,7 @@ jobs:
         run: |
           export PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE/terraform/modules/scripts
           cd terraform/modules/tests
-          pytest test_orders.py -v --cov=../scripts --cov-report=xml:coverage.xml --cov-report=html:coverage_html --alluredir=allure-results
+          pytest test_products.py -v --cov=../scripts --cov-report=xml:coverage.xml --cov-report=html:coverage_html --alluredir=allure-results
 
       - name: Upload Coverage Report (HTML)
         uses: actions/upload-artifact@v3
@@ -119,9 +119,22 @@ jobs:
 
       - name: Upload Glue Script to S3
         run: |
-          aws s3 cp terraform/modules/scripts/orders.py "s3://nexabrands-'${ENVIRONMENT}'-'${SOURCE_BUCKET}/scripts/orders.py"
+          aws s3 cp terraform/modules/scripts/products.py "s3://nexabrands-'${ENVIRONMENT}'-'${SOURCE_BUCKET}/scripts/products.py"
         env:
           CODE_BUCKET: ${{ secrets.CODE_BUCKET }}
+
+      - name: Trigger Glue Job (Optional)
+        run: |
+          aws glue start-job-run \
+            --job-name "topdevs-${ENVIRONMENT}-orders-job" \
+            --arguments '{
+              "--enable-auto-scaling": "true",
+              "--enable-continuous-cloudwatch-log": "true",
+              "--enable-metrics": "true",
+              "--source-path": "s3://nexabrands-'${ENVIRONMENT}'-'${SOURCE_BUCKET}'/data/products.py.csv",
+              "--destination-path": "s3://nexabrands-'${ENVIRONMENT}'-'${TARGET_BUCKET}'/products/"
+            }'
+        env:
           ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
           SOURCE_BUCKET: ${{ secrets.SOURCE_BUCKET }}
           TARGET_BUCKET: ${{ secrets.TARGET_BUCKET }}
