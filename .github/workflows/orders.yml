@@ -131,8 +131,8 @@ jobs:
               "--enable-auto-scaling": "true",
               "--enable-continuous-cloudwatch-log": "true",
               "--enable-metrics": "true",
-              "--source-path": "s3://'${SOURCE_BUCKET}'/data/orders.csv",
-              "--destination-path": "s3://'${TARGET_BUCKET}'/orders/"
+              "--source-path": "s3://nexabrands-'${ENVIRONMENT}'-'${SOURCE_BUCKET}'/data/orders.csv",
+              "--destination-path": "s3://nexabrands-'${ENVIRONMENT}'-'${TARGET_BUCKET}'/orders/"
             }'
         env:
           ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
