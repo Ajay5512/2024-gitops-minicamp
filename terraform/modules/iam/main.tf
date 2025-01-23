@@ -1,8 +1,6 @@
 # Add this at the top of your file
 data "aws_caller_identity" "current" {}
 
-# modules/iam/main.tf
-
 # Glue Service Role
 resource "aws_iam_role" "glue_service_role" {
   name = "topdevs-${var.environment}-glue-service-role"
@@ -25,6 +23,7 @@ resource "aws_iam_role" "glue_service_role" {
   }
 }
 
+# Glue Service Role Policy
 resource "aws_iam_role_policy" "glue_service_policy" {
   name = "topdevs-${var.environment}-glue-service-policy"
   role = aws_iam_role.glue_service_role.id
@@ -76,6 +75,7 @@ resource "aws_iam_role_policy" "glue_service_policy" {
     ]
   })
 }
+
 # Redshift Serverless Role
 resource "aws_iam_role" "redshift-serverless-role" {
   name = "topdevs-${var.environment}-redshift-serverless-role"
@@ -364,89 +364,6 @@ resource "aws_iam_role_policy" "ec2_policy" {
           aws_iam_role.glue_service_role.arn,
           "arn:aws:iam::872515289435:role/topdevs-*-redshift-serverless-role",
           "arn:aws:iam::872515289435:role/topdevs-*-glue-service-role"
-        ]
-      }
-    ]
-  })
-}
-
-resource "aws_s3_bucket_policy" "source_bucket_policy" {
-  bucket = aws_s3_bucket.source_bucket.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          AWS = aws_iam_role.glue_service_role.arn
-        }
-        Action = [
-          "s3:GetBucketLocation",
-          "s3:ListBucket",
-          "s3:GetObject",
-          "s3:PutObject",
-          "s3:DeleteObject"
-        ]
-        Resource = [
-          "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}",
-          "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}/*"
-        ]
-      }
-    ]
-  })
-}
-
-
-resource "aws_s3_bucket_policy" "target_bucket_policy" {
-  bucket = aws_s3_bucket.target_bucket.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          AWS = aws_iam_role.glue_service_role.arn
-        }
-        Action = [
-          "s3:GetBucketLocation",
-          "s3:ListBucket",
-          "s3:GetObject",
-          "s3:PutObject",
-          "s3:DeleteObject"
-        ]
-        Resource = [
-          "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}",
-          "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}/*"
-        ]
-      }
-    ]
-  })
-}
-
-
-resource "aws_s3_bucket_policy" "code_bucket_policy" {
-  bucket = aws_s3_bucket.code_bucket.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          AWS = aws_iam_role.glue_service_role.arn
-        }
-        Action = [
-          "s3:GetBucketLocation",
-          "s3:ListBucket",
-          "s3:GetObject",
-          "s3:PutObject",
-          "s3:DeleteObject"
-        ]
-        Resource = [
-          "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}",
-          "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}/*"
         ]
       }
     ]
