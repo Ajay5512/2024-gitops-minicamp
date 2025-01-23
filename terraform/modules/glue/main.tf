@@ -40,13 +40,13 @@ resource "aws_glue_crawler" "crawler" {
 # Local variable for Glue Jobs
 locals {
   jobs = {
-    products_etl        = "products_etl"
-    orders              = "orders_etl"
-    order_lines         = "order_lines_etl"
-    order_fulfillment   = "order_fulfillment_etl"
-    dates               = "dates_etl"
-    customers           = "customers_etl"
-    customer_targets    = "customer_targets_etl"
+    products_etl        = "products"
+    orders              = "orders"
+    order_lines         = "order_lines"
+    order_fulfillment   = "order_fulfillment"
+    dates               = "dates"
+    customers           = "customers"
+    customer_targets    = "customer_targets"
   }
 }
 # Glue ETL Jobs
