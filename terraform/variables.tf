@@ -212,10 +212,3 @@ variable "code_files" {
   }
 }
 
-########################
-## Glue - Variables ##
-########################
-variable "glue_role_arn" {
-  description = "ARN of the IAM role for Glue services"
-  type        = string
-}
