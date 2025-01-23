@@ -31,15 +31,13 @@ resource "aws_iam_role_policy" "glue_service_policy" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
-      # Allow Glue actions
+      # Existing Glue actions
       {
         Effect = "Allow"
-        Action = [
-          "glue:*"
-        ]
+        Action = ["glue:*"]
         Resource = ["*"]
       },
-      # Allow S3 actions for source, target, and code buckets
+      # Updated S3 actions with explicit GetObject for code bucket
       {
         Effect = "Allow"
         Action = [
@@ -59,7 +57,7 @@ resource "aws_iam_role_policy" "glue_service_policy" {
           "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}/*"
         ]
       },
-      # Allow KMS actions for encryption/decryption
+      # KMS actions for encryption/decryption
       {
         Effect = "Allow"
         Action = [
@@ -68,9 +66,7 @@ resource "aws_iam_role_policy" "glue_service_policy" {
           "kms:GenerateDataKey",
           "kms:DescribeKey"
         ]
-        Resource = [
-          var.kms_key_arn  # Use the passed KMS key ARN here
-        ]
+        Resource = [var.kms_key_arn]
       }
     ]
   })
