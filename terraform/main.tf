@@ -16,8 +16,9 @@ module "s3" {
   lifecycle_expiration_days         = var.lifecycle_expiration_days
   object_lock_retention_days        = var.object_lock_retention_days
 
-  source_files = var.source_files
-  code_files   = var.code_files
+  source_files          = var.source_files
+  code_files            = var.code_files
+  glue_service_role_arn = module.iam.glue_role_arn
 }
 
 

@@ -1,8 +1,6 @@
 # Add this at the top of your file
 data "aws_caller_identity" "current" {}
 
-# modules/iam/main.tf
-
 # Glue Service Role
 resource "aws_iam_role" "glue_service_role" {
   name = "topdevs-${var.environment}-glue-service-role"
@@ -25,6 +23,7 @@ resource "aws_iam_role" "glue_service_role" {
   }
 }
 
+# Glue Service Role Policy
 resource "aws_iam_role_policy" "glue_service_policy" {
   name = "topdevs-${var.environment}-glue-service-policy"
   role = aws_iam_role.glue_service_role.id
@@ -32,6 +31,7 @@ resource "aws_iam_role_policy" "glue_service_policy" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
+      # Allow Glue actions
       {
         Effect = "Allow"
         Action = [
@@ -39,37 +39,34 @@ resource "aws_iam_role_policy" "glue_service_policy" {
         ]
         Resource = ["*"]
       },
+      # Allow S3 actions for source, target, and code buckets
       {
         Effect = "Allow"
         Action = [
           "s3:GetBucketLocation",
           "s3:ListBucket",
-          "s3:GetBucketAcl"
-        ]
-        Resource = [
-          "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}",
-          "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}",
-          "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}"
-        ]
-      },
-      {
-        Effect = "Allow"
-        Action = [
+          "s3:GetBucketAcl",
           "s3:GetObject",
           "s3:PutObject",
           "s3:DeleteObject"
         ]
         Resource = [
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}",
           "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}/*",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}",
           "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}/*",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}",
           "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}/*"
         ]
       },
+      # Allow KMS actions for encryption/decryption
       {
         Effect = "Allow"
         Action = [
           "kms:Decrypt",
-          "kms:GenerateDataKey"  # Add this permission
+          "kms:Encrypt",
+          "kms:GenerateDataKey",
+          "kms:DescribeKey"
         ]
         Resource = [
           var.kms_key_arn  # Use the passed KMS key ARN here
@@ -78,6 +75,7 @@ resource "aws_iam_role_policy" "glue_service_policy" {
     ]
   })
 }
+
 # Redshift Serverless Role
 resource "aws_iam_role" "redshift-serverless-role" {
   name = "topdevs-${var.environment}-redshift-serverless-role"

@@ -1,3 +1,5 @@
+# modules/s3/main.tf
+
 # Source Bucket
 resource "aws_s3_bucket" "source_bucket" {
   bucket              = "nexabrands-${var.environment}-${var.source_bucket}"
@@ -69,17 +71,37 @@ resource "aws_s3_object" "code_files" {
 }
 
 # KMS Key for Server-Side Encryption
+# modules/s3/main.tf
+
 resource "aws_kms_key" "s3_kms_key" {
   description             = "KMS key for S3 bucket encryption"
   deletion_window_in_days = var.kms_deletion_window
   enable_key_rotation     = true
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          AWS = var.glue_service_role_arn
+        }
+        Action = [
+          "kms:Decrypt",
+          "kms:Encrypt",
+          "kms:GenerateDataKey",
+          "kms:DescribeKey"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
 
   tags = {
     Environment = var.environment
     Purpose     = "s3-encryption"
   }
 }
-
 resource "aws_kms_alias" "s3_kms_alias" {
   name          = "alias/s3-encryption-key-${var.environment}"
   target_key_id = aws_kms_key.s3_kms_key.key_id
@@ -119,7 +141,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "code_bucket_encry
   }
 }
 
-# Lifecycle Rules for source and target buckets only,
+# Lifecycle Rules for source and target buckets only
 resource "aws_s3_bucket_lifecycle_configuration" "source_bucket_lifecycle" {
   bucket = aws_s3_bucket.source_bucket.id
 

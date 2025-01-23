@@ -57,3 +57,8 @@ variable "code_files" {
   description = "Map of code files to upload"
   type        = map(string)
 }
+
+variable "glue_service_role_arn" {
+  description = "ARN of the Glue service role"
+  type        = string
+}
