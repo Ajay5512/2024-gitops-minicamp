@@ -30,6 +30,17 @@ module "iam" {
   sns_topic_arn = module.sns.topic_arn
   kms_key_arn   = module.s3.kms_key_arn
 }
+
+module "glue" {
+  source = "./modules/glue"
+
+  # Required Variables
+  environment   = var.environment
+  source_bucket = var.source_bucket
+  target_bucket = var.target_bucket
+  code_bucket   = var.code_bucket
+  glue_role_arn = module.iam.glue_role_arn
+}
 module "sns" {
   source      = "./modules/sns"
   environment = var.environment
@@ -47,18 +58,7 @@ module "vpc" {
 }
 
 
-# Root module (main.tf)
 
-module "glue" {
-  source = "./modules/glue"
-
-  # Required Variables
-  environment   = var.environment
-  source_bucket = var.source_bucket
-  target_bucket = var.target_bucket
-  code_bucket   = var.code_bucket
-  glue_role_arn = aws_iam_role.glue_role.arn
-}
 module "redshift" {
   source = "./modules/redshift"
 
