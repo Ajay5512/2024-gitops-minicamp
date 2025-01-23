@@ -45,22 +45,20 @@ module "vpc" {
   app_name                          = var.app_name
   public_key                        = var.public_key
 }
-#
+
+
+# Root module (main.tf)
+
 module "glue" {
   source = "./modules/glue"
 
-  environment             = var.environment
-  source_bucket           = module.s3.source_bucket_id
-  target_bucket           = module.s3.target_bucket_id
-  code_bucket             = module.s3.code_bucket_id
-  glue_role_arn           = module.iam.glue_role_arn
-  redshift_database       = var.redshift_serverless_database_name
-  redshift_schema         = "tickit_dbt"
-  redshift_workgroup_name = var.redshift_serverless_workgroup_name
-
-  depends_on = [module.s3, module.iam, module.sns]
+  # Required Variables
+  environment   = var.environment
+  source_bucket = var.source_bucket
+  target_bucket = var.target_bucket
+  code_bucket   = var.code_bucket
+  glue_role_arn = var.glue_role_arn
 }
-
 module "redshift" {
   source = "./modules/redshift"
 

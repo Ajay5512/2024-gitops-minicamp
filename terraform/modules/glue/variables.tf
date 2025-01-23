@@ -1,6 +1,3 @@
-# modules/glue/variables.tf
-
-# Environment and Infrastructure Variables
 variable "environment" {
   description = "Environment name (e.g., dev, staging, prod)"
   type        = string
@@ -21,7 +18,6 @@ variable "code_bucket" {
   type        = string
 }
 
-# IAM Role for Glue
 variable "glue_role_arn" {
   description = "ARN of the IAM role for Glue services"
   type        = string

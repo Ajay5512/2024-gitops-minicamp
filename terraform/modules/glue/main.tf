@@ -1,15 +1,21 @@
+# modules/glue/main.tf
+
+# Get the current AWS account ID
 data "aws_caller_identity" "current" {}
 
+# Glue Catalog Database for Reports
 resource "aws_glue_catalog_database" "database" {
   name        = "topdevs-${var.environment}-report"
   description = "Database for ${var.environment} environment organization reports"
 }
 
+# External Glue Catalog Database
 resource "aws_glue_catalog_database" "external" {
   name        = "nexabrands_dbt"
   description = "External database for Redshift Spectrum tables"
 }
 
+# Glue Crawler
 resource "aws_glue_crawler" "crawler" {
   name          = "topdevs-${var.environment}-org-report-crawler"
   database_name = aws_glue_catalog_database.database.name
@@ -31,6 +37,7 @@ resource "aws_glue_crawler" "crawler" {
   })
 }
 
+# Local variable for Glue Jobs
 locals {
   jobs = {
     products_etl        = "products_etl"
@@ -43,6 +50,7 @@ locals {
   }
 }
 
+# Glue ETL Jobs
 resource "aws_glue_job" "etl_jobs" {
   for_each = local.jobs
 
