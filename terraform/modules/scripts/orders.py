@@ -35,7 +35,7 @@ def clean_orders_data(df: DataFrame) -> DataFrame:
     - Filters out rows with unwanted values in any column.
     - Cleans and standardizes the `order_id` column.
     - Validates and converts the `customer_id` column to an integer type.
-    - Parses and cleans the `order_placement_date` column.
+    - Parses and cleans the `order_placement_date` column
     - Drops rows with null values and removes duplicates.
 
     Args:
