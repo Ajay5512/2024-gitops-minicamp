@@ -71,6 +71,8 @@ resource "aws_s3_object" "code_files" {
 }
 
 # KMS Key for Server-Side Encryption
+# modules/s3/main.tf
+
 resource "aws_kms_key" "s3_kms_key" {
   description             = "KMS key for S3 bucket encryption"
   deletion_window_in_days = var.kms_deletion_window
@@ -100,7 +102,6 @@ resource "aws_kms_key" "s3_kms_key" {
     Purpose     = "s3-encryption"
   }
 }
-
 resource "aws_kms_alias" "s3_kms_alias" {
   name          = "alias/s3-encryption-key-${var.environment}"
   target_key_id = aws_kms_key.s3_kms_key.key_id
