@@ -69,10 +69,42 @@ resource "aws_s3_object" "code_files" {
 }
 
 # KMS Key for Server-Side Encryption
+# resource "aws_kms_key" "s3_kms_key" {
+#   description             = "KMS key for S3 bucket encryption"
+#   deletion_window_in_days = var.kms_deletion_window
+#   enable_key_rotation     = true
+
+#   tags = {
+#     Environment = var.environment
+#     Purpose     = "s3-encryption"
+#   }
+# }
+
+
+# KMS Key for Server-Side Encryption
 resource "aws_kms_key" "s3_kms_key" {
   description             = "KMS key for S3 bucket encryption"
   deletion_window_in_days = var.kms_deletion_window
   enable_key_rotation     = true
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          AWS = aws_iam_role.glue_service_role.arn
+        }
+        Action = [
+          "kms:Decrypt",
+          "kms:Encrypt",
+          "kms:GenerateDataKey",
+          "kms:DescribeKey"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
 
   tags = {
     Environment = var.environment

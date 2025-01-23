@@ -32,6 +32,7 @@ resource "aws_iam_role_policy" "glue_service_policy" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
+      # Allow Glue actions
       {
         Effect = "Allow"
         Action = [
@@ -39,37 +40,34 @@ resource "aws_iam_role_policy" "glue_service_policy" {
         ]
         Resource = ["*"]
       },
+      # Allow S3 actions for source, target, and code buckets
       {
         Effect = "Allow"
         Action = [
           "s3:GetBucketLocation",
           "s3:ListBucket",
-          "s3:GetBucketAcl"
-        ]
-        Resource = [
-          "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}",
-          "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}",
-          "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}"
-        ]
-      },
-      {
-        Effect = "Allow"
-        Action = [
+          "s3:GetBucketAcl",
           "s3:GetObject",
           "s3:PutObject",
           "s3:DeleteObject"
         ]
         Resource = [
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}",
           "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}/*",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}",
           "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}/*",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}",
           "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}/*"
         ]
       },
+      # Allow KMS actions for encryption/decryption
       {
         Effect = "Allow"
         Action = [
           "kms:Decrypt",
-          "kms:GenerateDataKey"  # Add this permission
+          "kms:Encrypt",
+          "kms:GenerateDataKey",
+          "kms:DescribeKey"
         ]
         Resource = [
           var.kms_key_arn  # Use the passed KMS key ARN here
@@ -366,6 +364,89 @@ resource "aws_iam_role_policy" "ec2_policy" {
           aws_iam_role.glue_service_role.arn,
           "arn:aws:iam::872515289435:role/topdevs-*-redshift-serverless-role",
           "arn:aws:iam::872515289435:role/topdevs-*-glue-service-role"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_s3_bucket_policy" "source_bucket_policy" {
+  bucket = aws_s3_bucket.source_bucket.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          AWS = aws_iam_role.glue_service_role.arn
+        }
+        Action = [
+          "s3:GetBucketLocation",
+          "s3:ListBucket",
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+        Resource = [
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}/*"
+        ]
+      }
+    ]
+  })
+}
+
+
+resource "aws_s3_bucket_policy" "target_bucket_policy" {
+  bucket = aws_s3_bucket.target_bucket.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          AWS = aws_iam_role.glue_service_role.arn
+        }
+        Action = [
+          "s3:GetBucketLocation",
+          "s3:ListBucket",
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+        Resource = [
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}/*"
+        ]
+      }
+    ]
+  })
+}
+
+
+resource "aws_s3_bucket_policy" "code_bucket_policy" {
+  bucket = aws_s3_bucket.code_bucket.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          AWS = aws_iam_role.glue_service_role.arn
+        }
+        Action = [
+          "s3:GetBucketLocation",
+          "s3:ListBucket",
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject"
+        ]
+        Resource = [
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}",
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}/*"
         ]
       }
     ]
