@@ -21,7 +21,6 @@ module "s3" {
   glue_service_role_arn = module.iam.glue_role_arn
 }
 
-
 module "iam" {
   source        = "./modules/iam"
   environment   = var.environment
