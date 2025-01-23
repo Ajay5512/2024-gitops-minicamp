@@ -49,7 +49,6 @@ locals {
     customer_targets    = "customer_targets_etl"
   }
 }
-
 # Glue ETL Jobs
 resource "aws_glue_job" "etl_jobs" {
   for_each = local.jobs
@@ -65,17 +64,17 @@ resource "aws_glue_job" "etl_jobs" {
   command {
     name            = "glueetl"
     python_version  = "3"
-    script_location = "s3://${var.code_bucket}/scripts/${each.value}.py"
+    script_location = "s3://nexabrands-${var.environment}-${var.code_bucket}/scripts/${each.value}.py"
   }
 
-  default_arguments = {
-    "--enable-auto-scaling"              = "true"
-    "--enable-continuous-cloudwatch-log" = "true"
-    "--source-path"                      = "s3://${var.source_bucket}/"
-    "--destination-path"                 = "s3://${var.target_bucket}/"
-    "--job-name"                         = "topdevs-${var.environment}-${each.value}-job"
-    "--enable-metrics"                   = "true"
-  }
+ default_arguments = {
+  "--enable-auto-scaling"              = "true"
+  "--enable-continuous-cloudwatch-log" = "true"
+  "--source-path"                      = "s3://nexabrands-${var.environment}-${var.source_bucket}/"
+  "--destination-path"                 = "s3://nexabrands-${var.environment}-${var.target_bucket}/"
+  "--job-name"                         = "topdevs-${var.environment}-${each.value}-job"
+  "--enable-metrics"                   = "true"
+}
 
   execution_property {
     max_concurrent_runs = 1
