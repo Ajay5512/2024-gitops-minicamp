@@ -1,5 +1,5 @@
-
 # modules/glue/outputs.tf
+
 output "glue_database_name" {
   description = "Name of the created Glue catalog database"
   value       = aws_glue_catalog_database.database.name
@@ -15,12 +15,12 @@ output "glue_crawler_name" {
   value       = aws_glue_crawler.crawler.name
 }
 
-output "glue_etl_job_name" {
-  description = "Name of the main ETL Glue job"
-  value       = aws_glue_job.etl_job.name
+output "glue_job_names" {
+  description = "Names of the created Glue ETL jobs"
+  value       = { for k, v in aws_glue_job.etl_jobs : k => v.name }
 }
 
-output "glue_s3_to_redshift_job_name" {
-  description = "Name of the S3 to Redshift Glue job"
-  value       = aws_glue_job.s3_to_redshift_job.name
+output "glue_job_arns" {
+  description = "ARNs of the created Glue ETL jobs"
+  value       = { for k, v in aws_glue_job.etl_jobs : k => v.arn }
 }

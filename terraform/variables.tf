@@ -185,7 +185,9 @@ variable "glue_database_name" {
   default     = "tickit_dbt"
 }
 
-
+########################
+## S3 Files - Variables ##
+########################
 variable "source_files" {
   description = "Map of source files to upload to S3"
   type        = map(string)

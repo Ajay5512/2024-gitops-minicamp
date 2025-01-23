@@ -25,10 +25,6 @@ output "glue_crawler_name" {
   value       = module.glue.glue_crawler_name
 }
 
-output "glue_etl_job_name" {
-  description = "Name of the Glue ETL job"
-  value       = module.glue.glue_etl_job_name
-}
 
 output "redshift_endpoint" {
   description = "Endpoint for Redshift Serverless workgroup"

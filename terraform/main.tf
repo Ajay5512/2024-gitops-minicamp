@@ -30,6 +30,17 @@ module "iam" {
   sns_topic_arn = module.sns.topic_arn
   kms_key_arn   = module.s3.kms_key_arn
 }
+
+module "glue" {
+  source = "./modules/glue"
+
+  # Required Variables
+  environment   = var.environment
+  source_bucket = var.source_bucket
+  target_bucket = var.target_bucket
+  code_bucket   = var.code_bucket
+  glue_role_arn = module.iam.glue_role_arn
+}
 module "sns" {
   source      = "./modules/sns"
   environment = var.environment
@@ -45,21 +56,8 @@ module "vpc" {
   app_name                          = var.app_name
   public_key                        = var.public_key
 }
-#
-module "glue" {
-  source = "./modules/glue"
 
-  environment             = var.environment
-  source_bucket           = module.s3.source_bucket_id
-  target_bucket           = module.s3.target_bucket_id
-  code_bucket             = module.s3.code_bucket_id
-  glue_role_arn           = module.iam.glue_role_arn
-  redshift_database       = var.redshift_serverless_database_name
-  redshift_schema         = "tickit_dbt"
-  redshift_workgroup_name = var.redshift_serverless_workgroup_name
 
-  depends_on = [module.s3, module.iam, module.sns]
-}
 
 module "redshift" {
   source = "./modules/redshift"
