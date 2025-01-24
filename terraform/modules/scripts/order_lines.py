@@ -1,5 +1,3 @@
-# aws glue spark
-
 from awsglue.context import GlueContext
 from awsglue.job import Job
 from pyspark.sql import DataFrame, SparkSession
