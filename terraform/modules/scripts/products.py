@@ -1,5 +1,6 @@
 import sys
 
+# AWS GLUE
 import boto3
 from awsglue.context import GlueContext
 from awsglue.transforms import *
