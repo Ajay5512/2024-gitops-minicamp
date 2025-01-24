@@ -79,7 +79,7 @@ def test_clean_products_data(spark_session):
 @patch("boto3.client")
 @patch("pyspark.context.SparkContext")
 @patch("awsglue.context.GlueContext")
-def test_main_with_mocked_glue(
+def test_main_with_mocked_s3(
     mock_glue_context, mock_spark_context, mock_boto_client, spark_session
 ):
     """Test the main function with mocked GlueContext and S3."""
@@ -107,9 +107,9 @@ def test_main_with_mocked_glue(
         # Call the main function
         main()
 
-    # Verify GlueContext and SparkContext calls
+    # Verify S3 and Spark interactions
     mock_spark_context.assert_called_once()
     mock_glue_context.assert_called_once()
-    mock_s3.list_objects_v2.assert_called()
-    mock_s3.copy_object.assert_called()
-    mock_s3.delete_object.assert_called()
+    mock_s3.list_objects_v2.assert_called_once()
+    mock_s3.copy_object.assert_called_once()
+    mock_s3.delete_object.assert_called_once()
