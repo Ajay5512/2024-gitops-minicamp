@@ -143,7 +143,7 @@ if __name__ == "__main__":
     spark = SparkSession.builder.appName("OrderLinesDataProcessing").getOrCreate()
     glue_context = GlueContext(spark.sparkContext)
     job = Job(glue_context)
-    job.init("order-lines-job")  # Initialize the Glue job
+    job.init("order-lines-job")
 
     # S3 paths
     s3_input_path = "s3a://nexabrands-prod-source/data/order_lines.csv"  # Replace with your S3 input path
