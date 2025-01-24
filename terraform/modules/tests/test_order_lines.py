@@ -1,3 +1,4 @@
+# test_order_lines.py
 import sys
 from unittest.mock import MagicMock, patch
 
@@ -55,11 +56,15 @@ def test_load_order_lines_data(spark_session):
             "DELIVERY_QTY",
         ],
     )
-    with patch(
-        "order_lines.glue_context.spark_session.read.format.return_value.option.return_value.schema.return_value.load",
-        return_value=mock_df,
-    ):
-        df = load_order_lines_data(MagicMock(), "s3a://test-bucket/test.csv")
+
+    # Mock the GlueContext and its spark_session
+    mock_glue_context = MagicMock()
+    mock_glue_context.spark_session.read.format.return_value.option.return_value.schema.return_value.load.return_value = (
+        mock_df
+    )
+
+    with patch("order_lines.GlueContext", return_value=mock_glue_context):
+        df = load_order_lines_data(mock_glue_context, "s3a://test-bucket/test.csv")
         assert isinstance(df, DataFrame)
         assert df.columns == [
             "ORDER_ID",
