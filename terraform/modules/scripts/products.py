@@ -1,6 +1,6 @@
 # products.py
 from pyspark.sql import DataFrame, SparkSession
-from pyspark.sql.functions import col, regexp_replace, trim, upper, when
+from pyspark.sql.functions import col, regexp_replace, trim, when
 from pyspark.sql.types import IntegerType, StringType, StructField, StructType
 
 
@@ -51,44 +51,43 @@ def clean_products_data(df: DataFrame) -> DataFrame:
         "category",
     )
 
+    # Define unwanted values
     unwanted_values = ["NA", "none", "NULL", "N/A", "Unknown"]
 
+    # Filter out rows with unwanted values
     for column in products_df.columns:
         products_df = products_df.filter(~trim(col(column)).isin(unwanted_values))
 
+    # Clean and standardize the `product_id` column
     products_df = products_df.withColumn(
         "product_id",
-        when(
-            (col("product_id").isin("N/A", "Unknown", "null", "None", None))
-            | (col("product_id").rlike("[^0-9]")),
-            None,
-        ).otherwise(
-            regexp_replace(col("product_id"), " units", "").cast(IntegerType())
-        ),
+        regexp_replace(col("product_id"), " units", "").cast(IntegerType()),
     )
 
-    products_df = products_df.withColumn(
-        "product_name",
-        when(
-            (col("product_name").isNull())
-            | (col("product_name").isin("Unknown", "null", "None", None))
-            | (col("product_name").rlike("[^a-zA-Z0-9\\s]")),
-            None,
-        ).otherwise(trim(col("product_name"))),
-    )
+    # Clean and standardize the `product_name` and `category` columns
+    for column in ["product_name", "category"]:
+        products_df = products_df.withColumn(
+            column,
+            when(
+                (col(column).isNull()) | (trim(col(column)).isin(unwanted_values)),
+                None,
+            ).otherwise(trim(col(column))),
+        )
 
-    products_df = products_df.withColumn(
-        "category",
-        when(
-            (col("category").isNull())
-            | (col("category").isin("Unknown", "null", "None", None))
-            | (col("category").rlike("[^a-zA-Z0-9\\s]")),
-            None,
-        ).otherwise(trim(col("category"))),
-    )
+    # Remove special characters from `product_name` and `category`
+    for column in ["product_name", "category"]:
+        products_df = products_df.withColumn(
+            column,
+            regexp_replace(col(column), r"[|#@$]", ""),
+        )
 
+    # Drop rows with null values
     products_df = products_df.dropna()
-    return products_df.dropDuplicates()
+
+    # Remove duplicates
+    products_df = products_df.dropDuplicates()
+
+    return products_df
 
 
 if __name__ == "__main__":
