@@ -1,10 +1,24 @@
+import sys
 from unittest.mock import MagicMock, patch
 
 import pytest
-from products import clean_products_data, main
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import col
 from pyspark.sql.types import StringType, StructField, StructType
+
+# Mock the awsglue module
+sys.modules["awsglue"] = MagicMock()
+sys.modules["awsglue.context"] = MagicMock()
+sys.modules["awsglue.utils"] = MagicMock()
+sys.modules["awsglue.transforms"] = MagicMock()
+
+# Mock the getResolvedOptions function
+from awsglue.utils import getResolvedOptions
+
+getResolvedOptions = MagicMock(return_value={"JOB_NAME": "test-job"})
+
+# Import the module to test after mocking
+from products import clean_products_data, load_products_data, main
 
 
 @pytest.fixture(scope="session")
@@ -15,6 +29,14 @@ def spark_session():
     )
     yield spark
     spark.stop()
+
+
+def test_load_products_data(spark_session):
+    """Test loading products data from a CSV file."""
+    file_path = "s3a://nexabrands-prod-source/data/products.csv"
+    df = load_products_data(file_path)
+    assert isinstance(df, DataFrame)
+    assert df.columns == ["PRODUCT_ID", "product.name", "category"]
 
 
 def test_clean_products_data(spark_session):
@@ -44,22 +66,31 @@ def test_clean_products_data(spark_session):
     assert cleaned_df.filter(col("category") == "Category 1").count() == 1
 
 
-@patch("awsglue.context.GlueContext")
+@patch("boto3.client")
 @patch("pyspark.context.SparkContext")
-def test_main_with_mocked_glue(mock_spark_context, mock_glue_context, spark_session):
-    """Test the main function with mocked GlueContext."""
+@patch("awsglue.context.GlueContext")
+def test_main_with_mocked_glue(
+    mock_glue_context, mock_spark_context, mock_boto_client, spark_session
+):
+    """Test the main function with mocked GlueContext and S3."""
     # Mock GlueContext and SparkContext
     mock_glue_context.return_value = MagicMock()
     mock_spark_context.return_value = MagicMock()
 
-    # Mock the getResolvedOptions function
-    with patch(
-        "awsglue.utils.getResolvedOptions",
-        return_value={"table_name": "products", "load_type": "full"},
-    ):
-        # Call the main function
-        main()
+    # Mock S3 client
+    mock_s3 = mock_boto_client.return_value
+    mock_s3.list_objects_v2.return_value = {
+        "CommonPrefixes": [{"Prefix": "products/temp/category=1/"}]
+    }
+    mock_s3.copy_object.return_value = {}
+    mock_s3.delete_object.return_value = {}
+
+    # Call the main function
+    main()
 
     # Verify GlueContext and SparkContext calls
     mock_spark_context.assert_called_once()
     mock_glue_context.assert_called_once()
+    mock_s3.list_objects_v2.assert_called()
+    mock_s3.copy_object.assert_called()
+    mock_s3.delete_object.assert_called()
