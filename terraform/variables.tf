@@ -206,7 +206,7 @@ variable "code_files" {
   description = "Map of code file names to their local paths"
   type        = map(string)
   default = {
-    "orders.py" = "./modules/scripts/orders.py"
+    "orders.py"   = "./modules/scripts/orders.py"
     "products.py" = "./modules/scripts/products.py"
 
   }
