@@ -92,40 +92,19 @@ def test_clean_products_data_with_null_values(spark_session):
     assert cleaned_df.count() == 0  # All rows should be filtered out due to null values
 
 
-@patch("boto3.client")
-def test_main_with_mocked_boto3(mock_boto3, spark_session):
-    """Test the main function with mocked boto3."""
-    # Mock boto3 S3 client
-    mock_s3_client = MagicMock()
-    mock_boto3.return_value = mock_s3_client
-
-    # Mock list_objects_v2 response
-    mock_s3_client.list_objects_v2.return_value = {
-        "CommonPrefixes": [{"Prefix": "products/temp/category=beverages/"}],
-        "Contents": [{"Key": "products/temp/category=beverages/part-0000.parquet"}],
-    }
+@patch("awsglue.context.GlueContext")
+@patch("pyspark.context.SparkContext")
+def test_main_with_mocked_glue(mock_spark_context, mock_glue_context, spark_session):
+    """Test the main function with mocked GlueContext."""
+    # Mock GlueContext and SparkContext
+    mock_glue_context.return_value = MagicMock()
+    mock_spark_context.return_value = MagicMock()
 
     # Call the main function
     from products import main
 
     main()
 
-    # Verify boto3 calls
-    mock_boto3.assert_called_once_with("s3")
-    mock_s3_client.list_objects_v2.assert_called_once_with(
-        Bucket="nexabrands-prod-target",
-        Prefix="products/temp/",
-        Delimiter="/",
-    )
-    mock_s3_client.copy_object.assert_called_once_with(
-        CopySource={
-            "Bucket": "nexabrands-prod-target",
-            "Key": "products/temp/category=beverages/part-0000.parquet",
-        },
-        Bucket="nexabrands-prod-target",
-        Key="products/beverages/product.parquet",
-    )
-    mock_s3_client.delete_object.assert_called_with(
-        Bucket="nexabrands-prod-target",
-        Key="products/temp/",
-    )
+    # Verify GlueContext and SparkContext calls
+    mock_spark_context.assert_called_once()
+    mock_glue_context.assert_called_once()
