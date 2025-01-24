@@ -1,7 +1,7 @@
-# test_products.py
 import pytest
 from products import clean_products_data, load_products_data
 from pyspark.sql import DataFrame, SparkSession
+from pyspark.sql.functions import col
 from pyspark.sql.types import IntegerType, StringType, StructField, StructType
 
 
@@ -16,7 +16,7 @@ def spark_session():
 
 
 def test_load_products_data(spark_session):
-    """Test loading products data."""
+    """Test loading products data from a CSV file."""
     schema = StructType(
         [
             StructField("PRODUCT_ID", StringType(), True),
@@ -35,7 +35,7 @@ def test_load_products_data(spark_session):
     df.write.mode("overwrite").option("header", True).csv(test_csv_path)
 
     # Load data using the function
-    loaded_df = load_products_data(spark_session, test_csv_path)
+    loaded_df = load_products_data(test_csv_path)
 
     # Assertions
     assert loaded_df.count() == 2
@@ -43,7 +43,7 @@ def test_load_products_data(spark_session):
 
 
 def test_clean_products_data(spark_session):
-    """Test cleaning products data."""
+    """Test cleaning and transforming products data."""
     schema = StructType(
         [
             StructField("PRODUCT_ID", StringType(), True),
