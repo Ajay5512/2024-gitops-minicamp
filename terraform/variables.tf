@@ -207,6 +207,7 @@ variable "code_files" {
   type        = map(string)
   default = {
     "orders.py" = "./modules/scripts/orders.py"
+    "products.py" = "./modules/scripts/products.py"
 
   }
 }
