@@ -34,9 +34,19 @@ def spark_session():
 def test_load_products_data(spark_session):
     """Test loading products data from a CSV file."""
     file_path = "s3a://nexabrands-prod-source/data/products.csv"
-    df = load_products_data(file_path)
-    assert isinstance(df, DataFrame)
-    assert df.columns == ["PRODUCT_ID", "product.name", "category"]
+
+    # Mock the Spark read chain
+    mock_df = spark_session.createDataFrame(
+        [("123 units", "Product A", "Category 1")],
+        schema=["PRODUCT_ID", "product.name", "category"],
+    )
+    with patch(
+        "products.spark.read.format.return_value.option.return_value.schema.return_value.load",
+        return_value=mock_df,
+    ):
+        df = load_products_data(file_path)
+        assert isinstance(df, DataFrame)
+        assert df.columns == ["PRODUCT_ID", "product.name", "category"]
 
 
 def test_clean_products_data(spark_session):
@@ -74,7 +84,7 @@ def test_main_with_mocked_glue(
 ):
     """Test the main function with mocked GlueContext and S3."""
     # Mock GlueContext and SparkContext
-    mock_glue_context.return_value = MagicMock()
+    mock_glue_context.return_value.spark_session = spark_session
     mock_spark_context.return_value = MagicMock()
 
     # Mock S3 client
@@ -85,8 +95,17 @@ def test_main_with_mocked_glue(
     mock_s3.copy_object.return_value = {}
     mock_s3.delete_object.return_value = {}
 
-    # Call the main function
-    main()
+    # Mock the Spark read chain
+    mock_df = spark_session.createDataFrame(
+        [("123 units", "Product A", "Category 1")],
+        schema=["PRODUCT_ID", "product.name", "category"],
+    )
+    with patch(
+        "products.spark.read.format.return_value.option.return_value.schema.return_value.load",
+        return_value=mock_df,
+    ):
+        # Call the main function
+        main()
 
     # Verify GlueContext and SparkContext calls
     mock_spark_context.assert_called_once()
