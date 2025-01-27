@@ -60,7 +60,8 @@ def transform_metrics(df: DataFrame) -> DataFrame:
             when(col(column) == -1, 1)
             .when(col(column) == 1, 1)
             .when(col(column) <= 0.5, 0)
-            .otherwise(lit(None))
+            .when(col(column) > 1, lit(None))  # Only values > 1 become null
+            .otherwise(1)  # Values between 0.5 and 1 become 1
             .cast(IntegerType()),
         )
     return df
