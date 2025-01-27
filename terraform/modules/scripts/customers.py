@@ -1,4 +1,3 @@
-# customers.py
 import boto3
 from awsglue.context import GlueContext
 from awsglue.job import Job
@@ -74,7 +73,6 @@ def clean_customer_data(df: DataFrame) -> DataFrame:
 
 def write_transformed_data(df: DataFrame, s3_output_path: str) -> None:
     """Write the transformed data to an S3 bucket as a single Parquet file."""
-    # Coalesce the DataFrame into a single partition to ensure one output file
     df.coalesce(1).write.mode("overwrite").format("parquet").save(s3_output_path)
 
 
