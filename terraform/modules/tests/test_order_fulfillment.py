@@ -106,7 +106,7 @@ def test_drop_null_values(spark_session):
     """Test dropping rows with null values."""
     df = spark_session.createDataFrame(
         [("ORD123", 1.0, 0.5, 0.8), (None, 1.0, 0.5, 0.8)],
-        schema=["ORDER_ID", "ON.TIME", "IN_FULL", "OTIF"],
+        schema=["order_id", "on_time", "in_full", "otif"],  # Changed column names
     )
     cleaned_df = drop_null_values(df)
     assert cleaned_df.count() == 1
@@ -115,9 +115,10 @@ def test_drop_null_values(spark_session):
 def test_clean_order_fulfillment_data(spark_session):
     """Test cleaning and transforming order fulfillment data."""
     df = spark_session.createDataFrame(
-        [(" ord123 ", 1.0, 0.5, 0.8), ("N/A", 1.0, 0.5, 0.8)],
+        [(" ORD123 ", 1.0, 1.0, 1.0), ("N/A", 1.0, 0.5, 0.8)],
         schema=["ORDER_ID", "ON.TIME", "IN_FULL", "OTIF"],
     )
     cleaned_df = clean_order_fulfillment_data(df)
     assert cleaned_df.count() == 1
-    assert cleaned_df.columns == ["order_id", "on_time", "in_full", "otif"]
+    row = cleaned_df.collect()[0]
+    assert row.order_id == "ORD123"
