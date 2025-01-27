@@ -1,4 +1,4 @@
-#
+# AWS
 from awsglue.context import GlueContext
 from awsglue.job import Job
 from pyspark.sql import DataFrame, SparkSession
@@ -58,7 +58,8 @@ def transform_metrics(df: DataFrame) -> DataFrame:
         df = df.withColumn(
             column,
             when(col(column) == -1, 1)
-            .when((col(column) == 1) | (col(column) == 0), col(column))
+            .when((col(column) == 1), 1)
+            .when((col(column) == 0) | (col(column) < 0.5), 0)
             .otherwise(lit(None))
             .cast(IntegerType()),
         )
@@ -73,10 +74,10 @@ def drop_null_values(df: DataFrame) -> DataFrame:
 def clean_order_fulfillment_data(df: DataFrame) -> DataFrame:
     """Clean and transform order fulfillment data."""
     df = rename_columns(df)
+    df = drop_null_values(df)
     df = clean_order_id(df)
     df = filter_invalid_order_ids(df)
     df = transform_metrics(df)
-    df = drop_null_values(df)
     return df
 
 
