@@ -1,3 +1,4 @@
+# customers.py
 import boto3
 from awsglue.context import GlueContext
 from awsglue.job import Job
@@ -43,7 +44,13 @@ def clean_customer_id(df: DataFrame) -> DataFrame:
             regexp_replace(col("CUSTOMER_ID").cast("string"), r"[^0-9]", ""),
         )
         .withColumn("CUSTOMER_ID", col("CUSTOMER_ID").cast("int"))
-        .filter((col("CUSTOMER_ID").isNotNull()) & (col("CUSTOMER_ID") > 0))
+        .filter(
+            (col("CUSTOMER_ID").isNotNull())
+            & (col("CUSTOMER_ID") > 0)
+            & (
+                col("CUSTOMER_ID").cast("int") == col("CUSTOMER_ID")
+            )  # Ensure it's a whole number
+        )
     )
 
 
@@ -51,7 +58,16 @@ def clean_string_columns(df: DataFrame, columns: list) -> DataFrame:
     """Clean and format string columns."""
     for column in columns:
         df = df.withColumn(
-            column, initcap(regexp_replace(col(column), r"[^a-zA-Z0-9\s]", ""))
+            column,
+            initcap(  # First apply initcap
+                regexp_replace(  # Then replace special characters with spaces
+                    regexp_replace(
+                        col(column), r"[^a-zA-Z0-9\s]", " "
+                    ),  # Replace special chars with space
+                    r"\s+",  # Replace multiple spaces with single space
+                    " ",
+                )
+            ),
         )
     return df
 

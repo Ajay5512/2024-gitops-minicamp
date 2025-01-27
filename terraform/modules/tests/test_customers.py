@@ -1,3 +1,4 @@
+# test_customers.py
 import sys
 from unittest.mock import MagicMock, patch
 
@@ -82,7 +83,7 @@ def test_clean_customer_id(spark_session):
         [
             (1.0, "John Doe", "New York"),
             (2.0, "Jane Doe", "Chicago"),
-        ],  # Use valid integers
+        ],
         schema=["CUSTOMER_ID", "customer_name", "city"],
     )
     cleaned_df = clean_customer_id(df)
