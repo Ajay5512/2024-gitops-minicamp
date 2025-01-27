@@ -58,8 +58,8 @@ def transform_metrics(df: DataFrame) -> DataFrame:
         df = df.withColumn(
             column,
             when(col(column) == -1, 1)
-            .when((col(column) == 1), 1)
-            .when((col(column) == 0) | (col(column) < 0.5), 0)
+            .when(col(column) == 1, 1)
+            .when(col(column) <= 0.5, 0)
             .otherwise(lit(None))
             .cast(IntegerType()),
         )
