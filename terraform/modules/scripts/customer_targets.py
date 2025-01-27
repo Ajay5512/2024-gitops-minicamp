@@ -1,3 +1,4 @@
+# customer_targets.py
 import boto3
 from awsglue.context import GlueContext
 from awsglue.job import Job
@@ -44,6 +45,8 @@ def handle_negative_values(df: DataFrame) -> DataFrame:
 
 def drop_invalid_rows(df: DataFrame) -> DataFrame:
     """Drop rows with invalid values."""
+    # First clean the CUSTOMER_ID
+    df = clean_customer_id(df)
     return df.dropna().filter(
         (col("ontime_target%") > 0)
         & (col("infull_target%") > 0)
@@ -53,8 +56,8 @@ def drop_invalid_rows(df: DataFrame) -> DataFrame:
 
 
 def rename_columns_to_lowercase(df: DataFrame) -> DataFrame:
-    """Rename columns to lowercase."""
-    return df.select([col(c).alias(c.lower()) for c in df.columns])
+    """Rename columns to lowercase and remove special characters."""
+    return df.select([col(c).alias(c.lower().replace("%", "")) for c in df.columns])
 
 
 def clean_customer_targets_data(df: DataFrame) -> DataFrame:

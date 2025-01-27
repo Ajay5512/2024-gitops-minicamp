@@ -96,9 +96,9 @@ def test_rename_columns_to_lowercase(spark_session):
     renamed_df = rename_columns_to_lowercase(df)
     assert renamed_df.columns == [
         "customer_id",
-        "ontime_target%",
-        "infull_target%",
-        "otif_target%",
+        "ontime_target",
+        "infull_target",
+        "otif_target",
     ]
 
 
