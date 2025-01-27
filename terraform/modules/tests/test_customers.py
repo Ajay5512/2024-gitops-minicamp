@@ -79,7 +79,10 @@ def test_trim_string_columns(spark_session):
 def test_clean_customer_id(spark_session):
     """Test cleaning the 'CUSTOMER_ID' column."""
     df = spark_session.createDataFrame(
-        [(1.0, "John Doe", "New York"), (2.5, "Jane Doe", "Chicago")],
+        [
+            (1.0, "John Doe", "New York"),
+            (2.0, "Jane Doe", "Chicago"),
+        ],  # Use valid integers
         schema=["CUSTOMER_ID", "customer_name", "city"],
     )
     cleaned_df = clean_customer_id(df)
@@ -109,7 +112,10 @@ def test_rename_columns_to_lowercase(spark_session):
 def test_clean_customer_data(spark_session):
     """Test cleaning and transforming customer data."""
     df = spark_session.createDataFrame(
-        [(1.0, " john-doe ", " new_york "), (2.5, "Jane Doe", "Chicago")],
+        [
+            (1.0, " john-doe ", " new_york "),
+            (2.5, "Jane Doe", "Chicago"),
+        ],  # Second row should be filtered out
         schema=["CUSTOMER_ID", "customer_name", "city"],
     )
     cleaned_df = clean_customer_data(df)
