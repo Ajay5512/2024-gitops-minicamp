@@ -41,16 +41,18 @@ def clean_customer_id(df: DataFrame) -> DataFrame:
     return (
         df.withColumn(
             "CUSTOMER_ID",
-            regexp_replace(col("CUSTOMER_ID").cast("string"), r"[^0-9]", ""),
+            col("CUSTOMER_ID").cast("double"),  # First ensure it's a double
         )
-        .withColumn("CUSTOMER_ID", col("CUSTOMER_ID").cast("int"))
         .filter(
             (col("CUSTOMER_ID").isNotNull())
             & (col("CUSTOMER_ID") > 0)
             & (
-                col("CUSTOMER_ID").cast("int") == col("CUSTOMER_ID")
-            )  # Ensure it's a whole number
+                col("CUSTOMER_ID") == col("CUSTOMER_ID").cast("int").cast("double")
+            )  # Check if it's a whole number
         )
+        .withColumn(
+            "CUSTOMER_ID", col("CUSTOMER_ID").cast("int")
+        )  # Finally cast to int
     )
 
 
@@ -79,9 +81,11 @@ def rename_columns_to_lowercase(df: DataFrame) -> DataFrame:
 
 def clean_customer_data(df: DataFrame) -> DataFrame:
     """Clean and transform customers data."""
+    # First clean customer ID to filter out invalid IDs
+    df = clean_customer_id(df)
+    # Then proceed with other cleaning steps
     df = drop_na_and_duplicates(df)
     df = trim_string_columns(df)
-    df = clean_customer_id(df)
     df = clean_string_columns(df, ["customer_name", "city"])
     df = rename_columns_to_lowercase(df)
     return df
