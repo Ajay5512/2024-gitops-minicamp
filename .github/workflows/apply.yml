@@ -15,7 +15,7 @@ jobs:
     env:
       TF_VAR_public_key: ${{ secrets.EC2_SSH_PUBLIC_KEY }}
     steps:
-    # Checkout the repository to the GitHub Actions runner
+    # Checkout the repository to the GitHub Actions runner.
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
