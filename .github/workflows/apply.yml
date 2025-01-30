@@ -7,7 +7,7 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    environment: prod
+    environment: production
     defaults:
       run:
         shell: bash
