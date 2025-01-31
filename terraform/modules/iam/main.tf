@@ -2,6 +2,29 @@
 data "aws_caller_identity" "current" {}
 
 # Glue Service Role
+# resource "aws_iam_role" "glue_service_role" {
+#   name = "topdevs-${var.environment}-glue-service-role"
+
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [
+#       {
+#         Effect = "Allow"
+#         Principal = {
+#           Service = "glue.amazonaws.com"
+#         }
+#         Action = "sts:AssumeRole"
+#       }
+#     ]
+#   })
+
+#   tags = {
+#     Name = "topdevs-${var.environment}-glue-service-role"
+#   }
+# }
+
+
+
 resource "aws_iam_role" "glue_service_role" {
   name = "topdevs-${var.environment}-glue-service-role"
 
@@ -12,6 +35,7 @@ resource "aws_iam_role" "glue_service_role" {
         Effect = "Allow"
         Principal = {
           Service = "glue.amazonaws.com"
+          AWS = [aws_iam_role.ec2_role.arn]  # Add this line
         }
         Action = "sts:AssumeRole"
       }
@@ -23,6 +47,8 @@ resource "aws_iam_role" "glue_service_role" {
   }
 }
 
+
+# Glue Service Role Policy
 # Glue Service Role Policy
 resource "aws_iam_role_policy" "glue_service_policy" {
   name = "topdevs-${var.environment}-glue-service-policy"
@@ -55,6 +81,22 @@ resource "aws_iam_role_policy" "glue_service_policy" {
           "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}/*",
           "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}",
           "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}/*"
+        ]
+      },
+      # Add this new statement for Glue and logs bucket access
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:ListBucket",
+          "s3:GetBucketLocation",
+          "s3:GetBucketAcl"
+        ]
+        Resource = [
+          "arn:aws:s3:::aws-glue-*",
+          "arn:aws:s3:::aws-glue-*/*",
+          "arn:aws:s3:::*aws-logs*",
+          "arn:aws:s3:::*aws-logs*/*"
         ]
       },
       # KMS actions for encryption/decryption
