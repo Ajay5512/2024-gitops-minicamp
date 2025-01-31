@@ -126,6 +126,7 @@ resource "aws_iam_role_policy" "redshift-glue-access-policy" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
+      # Existing Glue permissions
       {
         Effect = "Allow"
         Action = [
@@ -165,6 +166,46 @@ resource "aws_iam_role_policy" "redshift-glue-access-policy" {
           "arn:aws:glue:*:${data.aws_caller_identity.current.account_id}:table/*",
           "arn:aws:glue:*:${data.aws_caller_identity.current.account_id}:connection/*"
         ]
+      },
+      # New Redshift Query Editor Full Access Permissions
+      {
+        Effect = "Allow"
+        Action = [
+          # Redshift Query Editor V2 Specific Permissions
+          "redshift:DescribeQueryEditorV2",
+          "redshift:GetQueryEditorV2Results",
+          "redshift:CreateQueryEditorV2Favorites",
+          "redshift:DeleteQueryEditorV2Favorites",
+          "redshift:ListQueryEditorV2Favorites",
+          "redshift:BatchExecuteQueryEditorQuery",
+          "redshift:UpdateQueryEditorV2Favorites",
+          
+          # Additional Query and Cluster Interaction Permissions
+          "redshift:BatchModifyClusterIamRoles",
+          "redshift:CancelQuery",
+          "redshift:CancelQuerySession",
+          "redshift:ConnectToCluster",
+          "redshift:CreateClusterUser",
+          "redshift:CreateScheduledAction",
+          "redshift:DeleteScheduledAction",
+          "redshift:DescribeQuery",
+          "redshift:DescribeQuerySessions",
+          "redshift:DescribeScheduledActions",
+          "redshift:ExecuteQuery",
+          "redshift:GetClusterCredentialsWithIAM",
+          "redshift:ListDatabases",
+          "redshift:ListQueries",
+          "redshift:ListQuerySessions",
+          "redshift:ListSchemas",
+          "redshift:ListTables",
+          "redshift:ModifyScheduledAction",
+          "redshift:PauseCluster",
+          "redshift:ResumeCluster",
+          
+          # Comprehensive Redshift Serverless Permissions
+          "redshift-serverless:*"
+        ]
+        Resource = ["*"]
       }
     ]
   })
@@ -263,6 +304,7 @@ resource "aws_iam_role_policy" "ec2_policy" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
+      # Existing S3 permissions
       {
         Effect = "Allow"
         Action = [
@@ -280,6 +322,7 @@ resource "aws_iam_role_policy" "ec2_policy" {
           "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}/*"
         ]
       },
+      # Existing Glue permissions
       {
         Effect = "Allow"
         Action = [
@@ -315,15 +358,47 @@ resource "aws_iam_role_policy" "ec2_policy" {
         ]
         Resource = ["*"]
       },
+      # Expanded Redshift permissions including Query Editor full access
       {
         Effect = "Allow"
         Action = [
+          # Existing Redshift permissions
           "redshift:*",
           "redshift-data:*",
-          "redshift-serverless:*"
+          "redshift-serverless:*",
+          
+          # Redshift Query Editor specific permissions
+          "redshift:DescribeQueryEditorV2",
+          "redshift:GetQueryEditorV2Results",
+          "redshift:CreateQueryEditorV2Favorites",
+          "redshift:DeleteQueryEditorV2Favorites",
+          "redshift:ListQueryEditorV2Favorites",
+          "redshift:BatchExecuteQueryEditorQuery",
+          "redshift:BatchModifyClusterIamRoles",
+          "redshift:CancelQuery",
+          "redshift:CancelQuerySession",
+          "redshift:ConnectToCluster",
+          "redshift:CreateClusterUser",
+          "redshift:CreateScheduledAction",
+          "redshift:DeleteScheduledAction",
+          "redshift:DescribeQuery",
+          "redshift:DescribeQuerySessions",
+          "redshift:DescribeScheduledActions",
+          "redshift:ExecuteQuery",
+          "redshift:GetClusterCredentialsWithIAM",
+          "redshift:ListDatabases",
+          "redshift:ListQueries",
+          "redshift:ListQuerySessions",
+          "redshift:ListSchemas",
+          "redshift:ListTables",
+          "redshift:ModifyScheduledAction",
+          "redshift:PauseCluster",
+          "redshift:ResumeCluster",
+          "redshift:UpdateQueryEditorV2Favorites"
         ]
         Resource = ["*"]
       },
+      # Existing CloudWatch Logs permissions
       {
         Effect = "Allow"
         Action = [
@@ -333,6 +408,7 @@ resource "aws_iam_role_policy" "ec2_policy" {
         ]
         Resource = ["arn:aws:logs:*:*:*"]
       },
+      # Existing IAM PassRole permissions
       {
         Effect = "Allow"
         Action = "iam:PassRole"
@@ -351,6 +427,7 @@ resource "aws_iam_role_policy" "ec2_policy" {
           }
         }
       },
+      # Existing CloudWatch Logs query permissions
       {
         Effect = "Allow"
         Action = [
@@ -368,6 +445,7 @@ resource "aws_iam_role_policy" "ec2_policy" {
           "arn:aws:logs:us-east-1:872515289435:log-group:/aws-glue/jobs/output:*"
         ]
       },
+      # Existing STS and AssumeRole permissions
       {
         Effect = "Allow"
         Action = [
@@ -381,6 +459,7 @@ resource "aws_iam_role_policy" "ec2_policy" {
           "arn:aws:iam::872515289435:role/topdevs-*-glue-service-role"
         ]
       },
+      # Existing Redshift Serverless statement permissions
       {
         Effect = "Allow"
         Action = [
