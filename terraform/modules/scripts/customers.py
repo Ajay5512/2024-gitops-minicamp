@@ -104,8 +104,8 @@ if __name__ == "__main__":
     job.init("customers-data-processing-job")
 
     # S3 paths
-    s3_input_path = "s3://your-source-bucket/data/customers.csv"  # Input file path
-    s3_output_folder = "s3://your-target-bucket/customers/"  # Output folder
+    s3_input_path = "s3://nexabrands-prod-source/data/customers.csv"  # Input file path
+    s3_output_folder = "s3://nexabrands-prod-target/customers/"  # Output folder
     s3_temp_output_path = f"{s3_output_folder}temp/"  # Temporary output path
 
     # Load and clean data
@@ -117,7 +117,7 @@ if __name__ == "__main__":
 
     # Use boto3 to rename the file to `customers.parquet`
     s3_client = boto3.client("s3")
-    bucket_name = "your-target-bucket"  # Output bucket name
+    bucket_name = "nexabrands-prod-target"  # Output bucket name
 
     # Find the generated Parquet file in the temporary folder
     response = s3_client.list_objects_v2(Bucket=bucket_name, Prefix="customers/temp/")
