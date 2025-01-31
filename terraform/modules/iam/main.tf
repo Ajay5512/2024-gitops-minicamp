@@ -1,30 +1,6 @@
 # Add this at the top of your file
 data "aws_caller_identity" "current" {}
 
-# Glue Service Role
-# resource "aws_iam_role" "glue_service_role" {
-#   name = "topdevs-${var.environment}-glue-service-role"
-
-#   assume_role_policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [
-#       {
-#         Effect = "Allow"
-#         Principal = {
-#           Service = "glue.amazonaws.com"
-#         }
-#         Action = "sts:AssumeRole"
-#       }
-#     ]
-#   })
-
-#   tags = {
-#     Name = "topdevs-${var.environment}-glue-service-role"
-#   }
-# }
-
-
-
 resource "aws_iam_role" "glue_service_role" {
   name = "topdevs-${var.environment}-glue-service-role"
 
