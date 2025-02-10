@@ -143,14 +143,14 @@ def main():
         redshift_data_client,
         database_name,
         workgroup_name,
-        "SELECT 1 FROM pg_namespace WHERE nspname = 'tickit_external'",
+        "SELECT 1 FROM pg_namespace WHERE nspname = 'nexabrands_external'",
     )
 
     dbt_schema_exists = check_object_exists(
         redshift_data_client,
         database_name,
         workgroup_name,
-        "SELECT 1 FROM pg_namespace WHERE nspname = 'tickit_dbt'",
+        "SELECT 1 FROM pg_namespace WHERE nspname = 'nexabrands_dbt'",
     )
 
     public_schema_exists = check_object_exists(
@@ -174,16 +174,16 @@ def main():
     if not external_schema_exists:
         sql_statements.append(
             f"""
-            CREATE EXTERNAL SCHEMA tickit_external
+            CREATE EXTERNAL SCHEMA nexabrands_external
             FROM DATA CATALOG
-            DATABASE 'tickit_dbt'
+            DATABASE 'nexabrands_dbt'
             IAM_ROLE '{iam_role_arn}'
             CREATE EXTERNAL DATABASE IF NOT EXISTS;
         """
         )
 
     if not dbt_schema_exists:
-        sql_statements.append("CREATE SCHEMA tickit_dbt;")
+        sql_statements.append("CREATE SCHEMA nexabrands_dbt;")
 
     if public_schema_exists:
         sql_statements.append("DROP SCHEMA public CASCADE;")
@@ -204,17 +204,17 @@ def main():
     # Always apply grants (these are idempotent)
     sql_statements.extend(
         [
-            # Grants on tickit_external schema
-            "GRANT USAGE ON SCHEMA tickit_external TO GROUP dbt;",
-            "GRANT CREATE ON SCHEMA tickit_external TO GROUP dbt;",
-            "GRANT ALL ON ALL TABLES IN SCHEMA tickit_external TO GROUP dbt;",
-            # Grants on tickit_dbt schema
-            "GRANT USAGE ON SCHEMA tickit_dbt TO GROUP dbt;",
-            "GRANT CREATE ON SCHEMA tickit_dbt TO GROUP dbt;",
-            "GRANT ALL ON ALL TABLES IN SCHEMA tickit_dbt TO GROUP dbt;",
+            # Grants on nexabrands_external schema
+            "GRANT USAGE ON SCHEMA nexabrands_external TO GROUP dbt;",
+            "GRANT CREATE ON SCHEMA nexabrands_external TO GROUP dbt;",
+            "GRANT ALL ON ALL TABLES IN SCHEMA nexabrands_external TO GROUP dbt;",
+            # Grants on nexabrands_dbt schema
+            "GRANT USAGE ON SCHEMA nexabrands_dbt TO GROUP dbt;",
+            "GRANT CREATE ON SCHEMA nexabrands_dbt TO GROUP dbt;",
+            "GRANT ALL ON ALL TABLES IN SCHEMA nexabrands_dbt TO GROUP dbt;",
             # Reassign schema ownership
-            "ALTER SCHEMA tickit_dbt OWNER TO dbt;",
-            "ALTER SCHEMA tickit_external OWNER TO dbt;",
+            "ALTER SCHEMA nexabrands_dbt OWNER TO dbt;",
+            "ALTER SCHEMA nexabrands_external OWNER TO dbt;",
         ]
     )
 
