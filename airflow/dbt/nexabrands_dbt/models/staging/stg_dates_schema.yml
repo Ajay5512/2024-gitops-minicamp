@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: stg_dates     # Changed from 'dates' to match your staging model name
+    description: "Date dimension table for time-based analysis"
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+      - dbt_expectations.expect_table_columns_to_match_set:
+          column_list: ["date"]
+  
+
+    columns:
+      - name: date
+        data_type: date
+        description: "Date value in YYYY-MM-DD format"
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_value_lengths_to_equal:
+              value: 10  # YYYY-MM-DD is always 10 characters

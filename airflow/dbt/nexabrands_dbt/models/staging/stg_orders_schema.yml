@@ -1,0 +1,50 @@
+version: 2
+
+models:
+  - name: stg_orders
+    description: "Staged order data containing basic order information"
+    columns:
+      - name: order_id
+        description: "The primary key for the orders table"
+        data_type: text
+        tests:
+          - primary_key:
+              severity: error
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 1
+              max_value: 50
+
+      - name: customer_id
+        description: "Foreign key to the customers table"
+        data_type: text
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_value_lengths_to_be_between:
+              min_value: 1
+              max_value: 50
+
+      
+      - name: order_placement_date
+        description: "The date when the order was placed"
+        data_type: date
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: "'2024-01-01'"  # Adjust based on your expected date range
+              max_value: "current_date"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+
+    # Table-level tests
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+          max_value: 10000000  # Adjust based on your expected order volume
+      
+      - dbt_expectations.expect_table_columns_to_match_ordered_list:
+          column_list: ['order_id', 'customer_id', 'order_placement_date']
+      
+      
+      # Test for no duplicate orders per customer per day
+      - dbt_expectations.expect_compound_columns_to_be_unique:
+          column_list: ['customer_id', 'order_placement_date', 'order_id']
