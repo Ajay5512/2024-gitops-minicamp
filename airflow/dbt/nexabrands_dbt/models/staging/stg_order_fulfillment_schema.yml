@@ -1,0 +1,55 @@
+version: 2
+
+models:
+  - name: stg_order_fulfillment
+    description: "Staging table for order fulfillment metrics including on-time and in-full delivery status"
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 1
+      - dbt_expectations.expect_table_columns_to_match_set:
+          column_list: ["order_id", "on_time", "in_full", "ontime_in_full"]
+
+    columns:
+      - name: order_id
+        data_type: text
+        description: "Unique identifier for each order"
+        tests:
+          - primary_key:
+              severity: error
+          - dbt_expectations.expect_column_values_to_match_regex:
+              regex: '^[A-Za-z0-9\-_]+$'
+
+      - name: on_time
+        data_type: integer
+        description: "Binary indicator for whether the order was delivered on time (1) or not (0)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [
+               0,1
+              ]
+              quote: true
+        
+      - name: in_full
+        data_type: integer
+        description: "Binary indicator for whether the order was delivered in full (1) or not (0)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [
+               0,1
+              ]
+              quote: true
+
+      - name: ontime_in_full
+        data_type: integer
+        description: "Binary indicator for whether the order was both on time and in full (1) or not (0)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [
+               0,1
+              ]
+              quote: true
+
+  

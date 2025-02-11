@@ -1,0 +1,34 @@
+version: 2
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: customer_targets
+        identifier: customer_targets
+        
+      - name: date
+        identifier: dates
+        
+      - name: customers
+        identifier: customers
+        
+      - name: order_lines
+        identifier: order_lines
+        loaded_at_field: "CAST(actual_delivery_date AS TIMESTAMP)"
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 24, period: hour}
+        
+      - name: orders
+        identifier: orders
+        loaded_at_field: "CAST(order_placement_date AS TIMESTAMP)"
+        freshness:
+          warn_after: {count: 1, period: hour}
+          error_after: {count: 24, period: hour}
+        
+      - name: products
+        identifier: products
+
+              
+      - name: order_fulfillment
+        identifier: order_fulfillment

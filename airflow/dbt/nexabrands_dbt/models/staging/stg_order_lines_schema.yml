@@ -1,0 +1,56 @@
+name: stg_order_lines
+description: "Staging table for order line items"
+columns:
+  - name: order_id
+    tests:
+      - not_null
+      - relationships:
+          to: ref('stg_orders')
+          field: order_id
+      - dbt_expectations.expect_column_values_to_match_regex:
+          regex: '^[A-Za-z0-9_-]+$'
+  - name: product_id
+    tests:
+      - not_null
+      - relationships:
+          to: ref('stg_products')
+          field: product_id
+      - dbt_expectations.expect_column_values_to_match_regex:
+          regex: '^[A-Za-z0-9_-]+$'
+  - name: order_qty
+    tests:
+      - not_null
+      - dbt_expectations.expect_column_values_to_be_between:
+          min_value: 1
+  - name: agreed_delivery_date
+    tests:
+      - not_null
+      - dbt_expectations.expect_column_values_to_be_between:
+          min_value: "'2024-01-01'"
+          max_value: "current_date"
+  - name: actual_delivery_date
+    tests:
+      - dbt_expectations.expect_column_values_to_be_between:
+          min_value: "'2024-01-01'"
+          max_value: "current_date"
+  - name: delivery_qty
+    tests:
+      - dbt_expectations.expect_column_values_to_be_between:
+          min_value: 0
+      # Fixed the column pair test by moving it to model-level tests
+  - name: order_line_id
+    tests:
+      - not_null
+      - unique
+      - dbt_expectations.expect_column_values_to_match_regex:
+          regex: '^[A-Za-z0-9_-]+$'
+tests:
+  - dbt_expectations.expect_compound_columns_to_be_unique:
+      column_list: ["order_id", "order_line_id"]
+  - dbt_expectations.expect_table_row_count_to_be_between:
+      min_value: 1
+  # Added the column pair test here at the model level
+  - dbt_expectations.expect_column_pair_values_A_to_be_greater_than_B:
+      column_A: order_qty
+      column_B: delivery_qty
+      or_equal: true

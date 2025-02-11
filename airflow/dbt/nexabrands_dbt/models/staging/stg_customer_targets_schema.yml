@@ -1,0 +1,78 @@
+version: 2
+models:
+  - name: stg_customer_targets
+    description: "Customer performance targets for on-time, in-full, and OTIF metrics."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_be_greater_than_or_equal:
+          value: 1
+      - dbt_expectations.expect_table_columns_to_match_set:
+          column_list:
+            - customer_id
+            - ontime_target
+            - infull_target
+            - otif_target
+    columns:
+      - name: customer_id
+        data_type: bigint
+        description: "Unique identifier for each customer."
+        tests:
+          - unique
+          - not_null
+      - name: dummy_variable
+        description: "Dummy variable with a constant value of 1."
+        
+      - name: ontime_target
+        data_type: real
+        description: "Percentage of orders delivered on time based on the target."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+      - name: infull_target
+        data_type: real
+        description: "Percentage of orders delivered in full based on the target."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+      - name: otif_target
+        data_type: real
+        description: "Percentage of orders meeting both on-time and in-full (OTIF) requirements based on the target."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              max_value: 100
+    tests:
+      - dbt_expectations.expect_column_pair_values_A_to_be_greater_than_B:
+          column_A: ontime_target
+          column_B: otif_target
+          or_equal: true
+      - dbt_expectations.expect_column_pair_values_A_to_be_greater_than_B:
+          column_A: infull_target
+          column_B: otif_target
+          or_equal: true
+
+data_tests:
+  - elementary.volume_anomalies:
+      tags: ["elementary"]
+  - elementary.freshness_anomalies:
+      timestamp_column: "modifieddate"
+      tags: ["elementary"]
+      config:
+        severity: warn
+  - elementary.volume_anomalies:
+      anomaly_sensitivity: 2.5
+      tags: ["elementary"]
+  - elementary.dimension_anomalies:
+      dimensions:
+        - customer_id
+      tags: ["elementary"]
+  - elementary.schema_changes:
+      tags: ["elementary"]
+      config:
+        severity: "critical"
+  - elementary.schema_changes_frombaseline:
+      tags: ["elementary"]
