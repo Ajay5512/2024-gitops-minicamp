@@ -25,4 +25,4 @@ ami_id        = "ami-0e2c8caa4b6378d8c"
 instance_type = "t3.xlarge"
 # Add these to your terraform.tfvars
 dbt_password       = "YourSecurePassword123!" # Consider using AWS Secrets Manager
-glue_database_name = "tickit_dbt"
+glue_database_name = "nexabrands_dbt"
