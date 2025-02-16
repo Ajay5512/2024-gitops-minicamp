@@ -57,7 +57,15 @@ def drop_invalid_rows(df: DataFrame) -> DataFrame:
 
 def rename_columns_to_lowercase(df: DataFrame) -> DataFrame:
     """Rename columns to lowercase and remove special characters."""
-    return df.select([col(c).alias(c.lower().replace("%", "")) for c in df.columns])
+    column_mapping = {
+        "CUSTOMER_ID": "customer_id",
+        "ontime_target%": "ontime_target",
+        "infull_target%": "infull_target",
+        "OTIF_TARGET%": "otif_target",
+    }
+    for old_name, new_name in column_mapping.items():
+        df = df.withColumnRenamed(old_name, new_name)
+    return df
 
 
 def clean_customer_targets_data(df: DataFrame) -> DataFrame:
