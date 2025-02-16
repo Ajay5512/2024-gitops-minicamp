@@ -474,3 +474,24 @@ resource "aws_iam_role_policy" "ec2_policy" {
     ]
   })
 }
+
+# Add this new policy for Redshift KMS access
+resource "aws_iam_role_policy" "redshift-kms-access-policy" {
+  name = "topdevs-${var.environment}-redshift-serverless-role-kms-policy"
+  role = aws_iam_role.redshift-serverless-role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "kms:Decrypt",
+          "kms:GenerateDataKey",
+          "kms:DescribeKey"
+        ]
+        Resource = [var.kms_key_arn]  # Make sure to pass this variable
+      }
+    ]
+  })
+}
