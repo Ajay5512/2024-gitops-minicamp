@@ -1,4 +1,3 @@
-# customer_targets.py
 import boto3
 from awsglue.context import GlueContext
 from awsglue.job import Job
@@ -57,7 +56,15 @@ def drop_invalid_rows(df: DataFrame) -> DataFrame:
 
 def rename_columns_to_lowercase(df: DataFrame) -> DataFrame:
     """Rename columns to lowercase and remove special characters."""
-    return df.select([col(c).alias(c.lower().replace("%", "")) for c in df.columns])
+    column_mapping = {
+        "CUSTOMER_ID": "customer_id",
+        "ontime_target%": "ontime_target",
+        "infull_target%": "infull_target",
+        "OTIF_TARGET%": "otif_target",
+    }
+    for old_name, new_name in column_mapping.items():
+        df = df.withColumnRenamed(old_name, new_name)
+    return df
 
 
 def clean_customer_targets_data(df: DataFrame) -> DataFrame:
@@ -70,9 +77,11 @@ def clean_customer_targets_data(df: DataFrame) -> DataFrame:
 
 
 def write_transformed_data(df: DataFrame, s3_output_path: str) -> None:
-    """Write the transformed data to an S3 bucket as a single Parquet file."""
+    """Write the transformed data to an S3 bucket as a single CSV file."""
     # Coalesce the DataFrame into a single partition to ensure one output file
-    df.coalesce(1).write.mode("overwrite").format("parquet").save(s3_output_path)
+    df.coalesce(1).write.mode("overwrite").format("csv").option("header", "true").save(
+        s3_output_path
+    )
 
 
 if __name__ == "__main__":
@@ -93,23 +102,23 @@ if __name__ == "__main__":
     customer_targets_df = load_customer_targets_data(glue_context, s3_input_path)
     cleaned_customer_targets = clean_customer_targets_data(customer_targets_df)
 
-    # Save the cleaned data to S3 as a single Parquet file in a temporary folder
+    # Save the cleaned data to S3 as a single CSV file in a temporary folder
     write_transformed_data(cleaned_customer_targets, s3_temp_output_path)
 
-    # Use boto3 to rename the file to `customer_targets.parquet`
+    # Use boto3 to rename the file to `customer_targets.csv`
     s3_client = boto3.client("s3")
     bucket_name = "nexabrands-prod-target"  # Output bucket name
 
-    # Find the generated Parquet file in the temporary folder
+    # Find the generated CSV file in the temporary folder
     response = s3_client.list_objects_v2(
         Bucket=bucket_name, Prefix="customer_targets/temp/"
     )
     if "Contents" in response:
         for obj in response["Contents"]:
-            if obj["Key"].endswith(".parquet"):
+            if obj["Key"].endswith(".csv"):
                 source_key = obj["Key"]
                 # Construct the destination key
-                destination_key = "customer_targets/customer_targets.parquet"
+                destination_key = "customer_targets/customer_targets.csv"
                 # Copy the file to the new location
                 copy_source = {"Bucket": bucket_name, "Key": source_key}
                 s3_client.copy_object(
