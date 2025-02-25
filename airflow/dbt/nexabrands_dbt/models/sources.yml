@@ -1,34 +1,144 @@
 version: 2
+
 sources:
-  - name: raw
-    schema: raw
+  - name: nexabrands_datawarehouse
+    database: nexabrands_datawarehouse
+    schema: nexabrands_external
+    loader: s3
     tables:
       - name: customer_targets
         identifier: customer_targets
-        
+        external:
+          location: "s3://nexabrands-prod-target/customer_targets/"
+          row_format: >
+             serde 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+             with serdeproperties (
+              'separatorChar'=',')
+          table_properties: "('skip.header.line.count'='1')"
+        columns:
+          - name: customer_id
+            data_type: bigint
+          - name: ontime_target
+            data_type: real
+          - name: infull_target
+            data_type: real
+          - name: otif_target
+            data_type: real
+
       - name: date
         identifier: dates
-        
+        external:
+          location: "s3://nexabrands-prod-target/dates/"
+          row_format: >
+            serde 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+            with serdeproperties (
+              'separatorChar'=',')
+          table_properties: "('skip.header.line.count'='1')"
+        columns:
+          - name: date
+            data_type: date
+          - name: mmm_yy
+            data_type: integer
+          - name: week_no
+            data_type: integer
+
       - name: customers
         identifier: customers
-        
+        external:
+          location: "s3://nexabrands-prod-target/customers/"
+          row_format: >
+            serde 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+            with serdeproperties (
+              'separatorChar'=',')
+          table_properties: "('skip.header.line.count'='1')"
+        columns:
+          - name: customer_id
+            data_type: integer
+          - name: customer_name
+            data_type: varchar(100)
+          - name: city
+            data_type: varchar(50)
+
       - name: order_lines
         identifier: order_lines
-        loaded_at_field: "CAST(actual_delivery_date AS TIMESTAMP)"
-        freshness:
-          warn_after: {count: 12, period: hour}
-          error_after: {count: 24, period: hour}
-        
+        external:
+          location: "s3://nexabrands-prod-target/order_lines/"
+          row_format: >
+            serde 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+            with serdeproperties (
+              'separatorChar'=',')
+          table_properties: "('skip.header.line.count'='1')"
+          loaded_at_field: "CAST(actual_delivery_date AS TIMESTAMP)"
+          freshness:
+            warn_after: {count: 12, period: hour}
+            error_after: {count: 24, period: hour}
+        columns:
+          - name: order_id
+            data_type: varchar(100)
+          - name: product_id
+            data_type: varchar(100)
+          - name: order_qty
+            data_type: integer
+          - name: agreed_delivery_date
+            data_type: date
+          - name: actual_delivery_date
+            data_type: date
+          - name: delivery_qty
+            data_type: integer
+
       - name: orders
         identifier: orders
-        loaded_at_field: "CAST(order_placement_date AS TIMESTAMP)"
-        freshness:
-          warn_after: {count: 1, period: hour}
-          error_after: {count: 24, period: hour}
-        
+        external:
+          location: "s3://nexabrands-prod-target/orders/"
+          row_format: >
+            serde 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+            with serdeproperties (
+              'separatorChar'=',')
+          table_properties: "('skip.header.line.count'='1')"
+          loaded_at_field: "CAST(order_placement_date AS TIMESTAMP)"
+          freshness:
+            warn_after: {count: 1, period: hour}
+            error_after: {count: 24, period: hour}
+        columns:
+          - name: order_id
+            data_type: varchar(100)
+          - name: customer_id
+            data_type: integer
+          - name: order_placement_date
+            data_type: date
+
       - name: products
         identifier: products
+        external:
+          location: "s3://nexabrands-prod-target/products/"
+          row_format: >
+            serde 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+            with serdeproperties (
+              'separatorChar'=',')
+          table_properties: "('skip.header.line.count'='1')"
+        columns:
+          - name: product_id
+            data_type: varchar(100)
+          - name: product_name
+            data_type: varchar(100)
+          - name: category
+            data_type: varchar(50)
 
-              
       - name: order_fulfillment
         identifier: order_fulfillment
+        external:
+          location: "s3://nexabrands-prod-target/order_fulfillment/"
+          row_format: >
+            serde 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+            with serdeproperties (
+              'separatorChar'=',')
+          table_properties: "('skip.header.line.count'='1')"
+        columns:
+          - name: order_id
+            data_type: varchar(100)
+          - name: on_time
+            data_type: integer
+          - name: in_full
+            data_type: integer
+          - name: otif
+            data_type: integer

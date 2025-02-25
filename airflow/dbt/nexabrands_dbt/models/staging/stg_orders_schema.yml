@@ -8,8 +8,8 @@ models:
         description: "The primary key for the orders table"
         data_type: text
         tests:
-          - primary_key:
-              severity: error
+          - unique
+          - not_null
           - dbt_expectations.expect_column_value_lengths_to_be_between:
               min_value: 1
               max_value: 50

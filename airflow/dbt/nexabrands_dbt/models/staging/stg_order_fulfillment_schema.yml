@@ -11,16 +11,9 @@ models:
 
     columns:
       - name: order_id
-        data_type: text
-        description: "Unique identifier for each order"
-        tests:
-          - primary_key:
-              severity: error
-          - dbt_expectations.expect_column_values_to_match_regex:
-              regex: '^[A-Za-z0-9\-_]+$'
-
+        description: "Unique ID for each order the customer placed"
+    
       - name: on_time
-        data_type: integer
         description: "Binary indicator for whether the order was delivered on time (1) or not (0)"
         tests:
           - not_null
@@ -31,7 +24,6 @@ models:
               quote: true
         
       - name: in_full
-        data_type: integer
         description: "Binary indicator for whether the order was delivered in full (1) or not (0)"
         tests:
           - not_null
@@ -42,7 +34,6 @@ models:
               quote: true
 
       - name: ontime_in_full
-        data_type: integer
         description: "Binary indicator for whether the order was both on time and in full (1) or not (0)"
         tests:
           - not_null

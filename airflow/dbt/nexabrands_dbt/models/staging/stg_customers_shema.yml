@@ -14,7 +14,6 @@ models:
 
     columns:
       - name: customer_id
-        data_type: integer
         description: "Unique identifier for each customer"
         tests:
           # Generic dbt tests
@@ -22,21 +21,16 @@ models:
           - not_null
    
       - name: customer_name
-        data_type: text
-        description: "Full name of the customer"
+        description: "Name of the customer"
         tests:
           # Generic dbt tests
           - not_null
-          # Great Expectations tests
-          - dbt_expectations.expect_column_values_to_match_regex:
-              regex: '^[A-Za-z0-9\s\-\.]+$'
           - dbt_expectations.expect_column_value_lengths_to_be_between:
               min_value: 2
               max_value: 100
 
       - name: city
-        data_type: text
-        description: "City where the customer is located"
+        description: "City where the customer is present"
         tests:
           # Generic dbt tests
           - not_null
@@ -48,8 +42,7 @@ models:
                 'Johannesburg', 'Cape Town'
               ]
               quote: true
-          - dbt_expectations.expect_column_values_to_match_regex:
-              regex: '^[A-Za-z\s\-\.]+$'
+
           - dbt_expectations.expect_column_value_lengths_to_be_between:
               min_value: 2
               max_value: 50

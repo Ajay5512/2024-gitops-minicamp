@@ -12,7 +12,6 @@ models:
 
     columns:
       - name: date
-        data_type: date
         description: "Date value in YYYY-MM-DD format"
         tests:
           - not_null

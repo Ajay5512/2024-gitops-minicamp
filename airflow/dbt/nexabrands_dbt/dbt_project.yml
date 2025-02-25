@@ -1,38 +1,24 @@
-
-# Name your project! Project names should contain only lowercase characters
-# and underscores. A good package name should reflect your organization's
-# name or the intended use of these models
 name: 'nexabrands_dbt'
 version: '1.0.0'
 
-
 vars:
   dbt_date:
-    time_zone: "UTC" 
-# This setting configures which "profile" dbt uses for this project.
+    time_zone: "UTC"
+
 profile: 'nexabrands_dbt'
 
-# These configurations specify where dbt should look for different types of files.
-# The `model-paths` config, for example, states that models in this project can be
-# found in the "models/" directory. You probably won't need to change these!
 model-paths: ["models"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
 seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
+asset-paths: ["assets"]
 
-clean-targets:         # directories to be removed by `dbt clean`
+clean-targets:
   - "target"
   - "dbt_packages"
 
-
-# Configuring models
-# Full documentation: https://docs.getdbt.com/docs/configuring-models
-
-# In this example config, we tell dbt to build all models in the example/
-# directory as views. These settings can be overridden in the individual model
-# files using the `{{ config(...) }}` macro.
 models:
   nexabrands_dbt:
     +materialized: view
@@ -40,29 +26,27 @@ models:
       relation: true
       columns: true
     +hours_to_expiration: 168
-    intermediate:
-      +materialized: table
-      +schema: intermediate
-    staging:                             
+    +schema: nexabrands_dbt
+    staging:
       +materialized: table
       +schema: staging
+      # Updated configuration for CSV external sources
+      +external_location: "s3://nexabrands-prod-target/"
+      +file_format: csv
+      +row_format: >
+       serde 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+       with serdeproperties (
+              'separatorChar'=','
+            )
+      +table_properties: "('skip.header.line.count'='1')"
     marts:
-      +materialized: table  
+      +materialized: table
       +schema: marts
   elementary:
-      +schema: elementary
+    +schema: elementary
+
 tests:
-   nexabrands_dbt:
+  nexabrands_dbt:
     +severity: warn
     marts:
       +severity: error
-
-
-
-
- 
-
-
-
-
-   

@@ -1,7 +1,7 @@
 {% snapshot scd_customers %}
 {{
     config(
-        target_schema='raw',
+        target_schema='nexabrands_external',
         unique_key='customer_id',
         strategy='check',
         check_cols='all',
@@ -10,6 +10,6 @@
 }}
 
 select *
-FROM  {{ source('raw', 'customers') }}
+FROM  {{ source('nexabrands_datawarehouse', 'customers') }}
 
 {% endsnapshot %}

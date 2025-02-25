@@ -21,7 +21,7 @@ profile_config = ProfileConfig(
 )
 
 # Project configuration
-dbt_project_path = f"{os.environ['AIRFLOW_HOME']}/dbt/jaffle_shop"
+dbt_project_path = f"{os.environ['AIRFLOW_HOME']}/dbt/nexabrands_dbt"
 dbt_executable_path = f"{os.environ['AIRFLOW_HOME']}/dbt_venv/bin/dbt"
 
 project_config = ProjectConfig(
@@ -58,7 +58,7 @@ default_args = {
     max_active_tasks=5,
     default_args=default_args
 )
-def jaffle_shop_full_refresh_dag() -> None:
+def nexabrands_dbt_full_refresh_dag() -> None:
     """
     Full refresh DBT DAG for complete data reprocessing
     """
@@ -135,4 +135,4 @@ def jaffle_shop_full_refresh_dag() -> None:
 
     pre_dbt_workflow >> source_freshness >> snapshots >> staging_models >> marts_models >> core_models >> post_dbt_workflow
 
-dag = jaffle_shop_full_refresh_dag()
+dag = nexabrands_dbt_full_refresh_dag()

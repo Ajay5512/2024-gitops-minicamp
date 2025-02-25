@@ -1,7 +1,7 @@
 {% snapshot scd_orders %}
 {{
     config(
-        target_schema='raw',
+        target_schema='nexabrands_external',
         unique_key='order_id',  
         strategy='timestamp',
         updated_at='order_placement_date', 
@@ -10,6 +10,6 @@
 }}
 
 select *
-FROM  {{ source('raw', 'orders') }}
+FROM  {{ source('nexabrands_datawarehouse', 'orders') }}
 
 {% endsnapshot %}

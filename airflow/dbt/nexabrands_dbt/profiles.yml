@@ -1,0 +1,30 @@
+# nexabrands_dbt:
+#   target: dev
+#   outputs:
+#     dev:
+#       type: redshift
+#       host: 
+#       user: admin
+#       password: Password123!
+#       port: 5439
+#       dbname: nexabrands_datawarehouse
+#       schema: nexabrands_external
+#       threads: 4
+
+nexabrands_dbt:
+  outputs:
+    dev:
+      type: redshift
+      host: nexabrands-redshift-workgroup.043309357116.us-east-1.redshift-serverless.amazonaws.com
+      user: dbt
+      password: YourSecurePassword123!
+      port: 5439
+      dbname: nexabrands_datawarehouse
+      schema: nexabrands_dbt
+      threads: 4
+      keepalives_idle: 0
+      connect_timeout: 10
+  target: dev
+    
+
+    

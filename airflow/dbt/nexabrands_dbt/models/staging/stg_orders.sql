@@ -1,7 +1,7 @@
 
 -- models/staging/stg_orders.sql
 WITH source AS (
-    SELECT * FROM {{ source('raw', 'orders') }}
+    SELECT * FROM {{ source('nexabrands_datawarehouse', 'orders') }}
 ),
 staged AS (
     SELECT

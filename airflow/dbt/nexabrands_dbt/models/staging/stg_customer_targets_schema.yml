@@ -13,16 +13,12 @@ models:
             - otif_target
     columns:
       - name: customer_id
-        data_type: bigint
         description: "Unique identifier for each customer."
         tests:
           - unique
           - not_null
-      - name: dummy_variable
-        description: "Dummy variable with a constant value of 1."
-        
+    
       - name: ontime_target
-        data_type: real
         description: "Percentage of orders delivered on time based on the target."
         tests:
           - not_null
@@ -30,7 +26,6 @@ models:
               min_value: 0
               max_value: 100
       - name: infull_target
-        data_type: real
         description: "Percentage of orders delivered in full based on the target."
         tests:
           - not_null
@@ -38,7 +33,6 @@ models:
               min_value: 0
               max_value: 100
       - name: otif_target
-        data_type: real
         description: "Percentage of orders meeting both on-time and in-full (OTIF) requirements based on the target."
         tests:
           - not_null

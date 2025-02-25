@@ -1,10 +1,11 @@
-
--- models/marts/dim_customer.sql
+-- models/dim_customers.sql
 WITH customers AS (
-    SELECT * FROM {{ ref('stg_customers') }}
+    SELECT *
+    FROM {{ ref('stg_customers') }}
 ),
 customer_targets AS (
-    SELECT * FROM {{ ref('stg_customer_targets') }}
+    SELECT *
+    FROM {{ ref('stg_customer_targets') }}
 )
 SELECT
     c.customer_id,
@@ -14,4 +15,5 @@ SELECT
     ct.infull_target,
     ct.otif_target
 FROM customers c
-LEFT JOIN customer_targets ct ON c.customer_id = ct.customer_id
+LEFT JOIN customer_targets ct
+    ON c.customer_id = ct.customer_id
