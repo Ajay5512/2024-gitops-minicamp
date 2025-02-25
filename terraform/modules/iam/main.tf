@@ -470,6 +470,15 @@ resource "aws_iam_role_policy" "ec2_policy" {
           "redshift-serverless:ListStatements"
         ]
         Resource = "*"
+      },
+      # New KMS permissions for S3
+      {
+        Effect = "Allow"
+        Action = [
+          "kms:GenerateDataKey",
+          "kms:Decrypt"
+        ]
+        Resource = "arn:aws:kms:us-east-1:043309357116:key/a673ca7a-2eba-4f19-bf1b-3c475c1a92e7"
       }
     ]
   })
