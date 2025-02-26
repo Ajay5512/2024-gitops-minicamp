@@ -26,6 +26,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
+      - name: Validate required secrets
+        run: |
+          missing_secrets=()
+          
+          # Check if EC2_HOST is set
+          if [ -z "${{ env.EC2_HOST }}" ]; then
+            missing_secrets+=("EC2_HOST")
+          fi
+          
+          # Check if EC2_USERNAME is set
+          if [ -z "${{ env.EC2_USERNAME }}" ]; then
+            missing_secrets+=("EC2_USERNAME")
+          fi
+          
+          # Check if SSH_PRIVATE_KEY is set
+          if [ -z "${{ secrets.EC2_SSH_PRIVATE_KEY }}" ]; then
+            missing_secrets+=("EC2_SSH_PRIVATE_KEY")
+          fi
+          
+          # If any secrets are missing, fail the workflow
+          if [ ${#missing_secrets[@]} -gt 0 ]; then
+            echo "Error: The following required secrets are missing:"
+            printf "  - %s\n" "${missing_secrets[@]}"
+            echo "Please add these secrets to your GitHub repository before running this workflow."
+            exit 1
+          fi
+      
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -38,10 +65,38 @@ jobs:
       
       - name: Set up SSH key
         run: |
+          # Print some diagnostic information (without revealing secrets)
+          echo "Setting up SSH connection to ${{ env.EC2_HOST }} as ${{ env.EC2_USERNAME }}"
+          
+          # Create SSH directory
           mkdir -p ~/.ssh
+          
+          # Add private key (with error checking)
+          if [ -z "${{ secrets.EC2_SSH_PRIVATE_KEY }}" ]; then
+            echo "Error: EC2_SSH_PRIVATE_KEY is empty"
+            exit 1
+          fi
+          
           echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/ec2_key
           chmod 600 ~/.ssh/ec2_key
-          ssh-keyscan -H ${{ env.EC2_HOST }} >> ~/.ssh/known_hosts
+          
+          # Add host to known_hosts (with error checking)
+          if [ -z "${{ env.EC2_HOST }}" ]; then
+            echo "Error: EC2_HOST is empty"
+            exit 1
+          fi
+          
+          ssh-keyscan -H "${{ env.EC2_HOST }}" >> ~/.ssh/known_hosts || {
+            echo "Error: Failed to scan host keys for ${{ env.EC2_HOST }}"
+            exit 1
+          }
+          
+          # Test SSH connection
+          echo "Testing SSH connection..."
+          ssh -i ~/.ssh/ec2_key -o ConnectTimeout=10 -o BatchMode=yes -o StrictHostKeyChecking=accept-new ${{ env.EC2_USERNAME }}@${{ env.EC2_HOST }} "echo 'SSH connection successful'" || {
+            echo "Error: Failed to connect to ${{ env.EC2_HOST }} as ${{ env.EC2_USERNAME }}"
+            exit 1
+          }
       
       - name: Check EC2 connectivity
         run: |
