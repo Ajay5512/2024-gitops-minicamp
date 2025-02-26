@@ -1,9 +1,10 @@
-name: dbt_CD_action
+name: dbt_CD_action_via_EC2_Docker
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   CD_job:
@@ -16,51 +17,149 @@ jobs:
     env:
       S3_BUCKET_MANIFEST: ${{ secrets.S3_BUCKET_MANIFEST }}
       S3_PATH_MANIFEST: ${{ secrets.S3_PATH_MANIFEST }}
-      DBT_ENV_SECRET_REDSHIFT_HOST: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }}
-      DBT_ENV_SECRET_REDSHIFT_DATABASE: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_DATABASE }}
-      DBT_ENV_SECRET_REDSHIFT_USER: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_USER }}
-      DBT_ENV_SECRET_REDSHIFT_PASSWORD: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PASSWORD }}
-      DBT_ENV_SECRET_REDSHIFT_PORT: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }}
-      DBT_ENV_SECRET_REDSHIFT_SCHEMA: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_SCHEMA }}
-    
+      EC2_HOST: ${{ secrets.EC2_HOST }}
+      EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
+      SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+      REPO_URL: ${{ github.server_url }}/${{ github.repository }}.git
+      
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-    
-    - name: Set up Python
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.12'
-    
-    - name: Install dependencies
-      run: pip install -r airflow/requirements_dbt_venv.txt
-    
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
-        aws-region: us-east-1
-    
-    
-    - name: Copy manifest.json from S3
-      run: |
-        aws s3 cp s3://${{ env.S3_BUCKET_MANIFEST }}/${{ env.S3_PATH_MANIFEST }}/manifest.json ./ || echo "Manifest not found"
-    
-    - name: Run dbt debug
-      run: dbt debug --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt --target prod
-    
-    - name: Run dbt deps
-      run: dbt deps --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt --target prod
-    
-    - name: Run dbt build with timeout
-      timeout-minutes: 30
-      run: |
-        if [ -f "./manifest.json" ]; then
-          dbt build -s 'state:modified+' --state ./ --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt --target prod
-        else
-          dbt build --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt --target prod
-        fi
-    
-    - name: Copy new manifest.json to S3
-      run: |
-        aws s3 cp ./target/manifest.json s3://${{ env.S3_BUCKET_MANIFEST }}/${{ env.S3_PATH_MANIFEST }}/
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+      
+      - name: Copy manifest.json from S3
+        run: |
+          aws s3 cp s3://${{ env.S3_BUCKET_MANIFEST }}/${{ env.S3_PATH_MANIFEST }}/manifest.json ./ || echo "Manifest not found"
+      
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/ec2_key
+          chmod 600 ~/.ssh/ec2_key
+          ssh-keyscan -H ${{ env.EC2_HOST }} >> ~/.ssh/known_hosts
+      
+      - name: Check EC2 connectivity
+        run: |
+          ssh -i ~/.ssh/ec2_key -o ConnectTimeout=10 ${{ env.EC2_USERNAME }}@${{ env.EC2_HOST }} "echo 'Connection successful'"
+      
+      - name: Setup repository on EC2
+        run: |
+          ssh -i ~/.ssh/ec2_key ${{ env.EC2_USERNAME }}@${{ env.EC2_HOST }} << 'EOF'
+            # Create project directory if it doesn't exist
+            mkdir -p ~/dbt_project
+            
+            # Clone or update repository
+            if [ -d "~/dbt_project/repo" ]; then
+              cd ~/dbt_project/repo
+              git fetch
+              git reset --hard origin/main
+            else
+              git clone ${{ env.REPO_URL }} ~/dbt_project/repo
+            fi
+          EOF
+      
+      - name: Transfer manifest file to EC2
+        run: |
+          if [ -f "./manifest.json" ]; then
+            scp -i ~/.ssh/ec2_key manifest.json ${{ env.EC2_USERNAME }}@${{ env.EC2_HOST }}:~/dbt_project/manifest.json
+          fi
+      
+      - name: Create dbt profiles on EC2
+        run: |
+          ssh -i ~/.ssh/ec2_key ${{ env.EC2_USERNAME }}@${{ env.EC2_HOST }} << EOF
+            mkdir -p ~/dbt_project/profiles
+            cat > ~/dbt_project/profiles/profiles.yml << 'PROFILES'
+            nexabrands_dbt:
+              target: prod
+              outputs:
+                prod:
+                  type: redshift
+                  host: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }}
+                  user: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_USER }}
+                  password: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PASSWORD }}
+                  port: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }}
+                  dbname: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_DATABASE }}
+                  schema: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_SCHEMA }}
+                  threads: 4
+                  connect_timeout: 120
+                  sslmode: prefer
+            PROFILES
+            
+            # Secure the profiles file
+            chmod 600 ~/dbt_project/profiles/profiles.yml
+          EOF
+      
+      - name: Build and run Docker container on EC2
+        timeout-minutes: 40
+        run: |
+          ssh -i ~/.ssh/ec2_key ${{ env.EC2_USERNAME }}@${{ env.EC2_HOST }} << 'EOF'
+            cd ~/dbt_project/repo
+            
+            # Ensure the target directory exists for the manifest output
+            mkdir -p ~/dbt_project/target
+            
+            # Check if manifest exists and copy to working directory if it does
+            if [ -f ~/dbt_project/manifest.json ]; then
+              cp ~/dbt_project/manifest.json ./manifest.json
+            fi
+            
+            # Run dbt commands in Docker
+            docker run --rm \
+              -v $(pwd):/workspace \
+              -v ~/dbt_project/profiles:/root/.dbt \
+              -v ~/dbt_project/target:/output \
+              -w /workspace \
+              -e DBT_ENV_SECRET_REDSHIFT_HOST=${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }} \
+              -e DBT_ENV_SECRET_REDSHIFT_DATABASE=${{ secrets.DBT_ENV_SECRET_REDSHIFT_DATABASE }} \
+              -e DBT_ENV_SECRET_REDSHIFT_USER=${{ secrets.DBT_ENV_SECRET_REDSHIFT_USER }} \
+              -e DBT_ENV_SECRET_REDSHIFT_PASSWORD=${{ secrets.DBT_ENV_SECRET_REDSHIFT_PASSWORD }} \
+              -e DBT_ENV_SECRET_REDSHIFT_PORT=${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }} \
+              -e DBT_ENV_SECRET_REDSHIFT_SCHEMA=${{ secrets.DBT_ENV_SECRET_REDSHIFT_SCHEMA }} \
+              apache/airflow:2.9.2-python3.12 bash -c "
+                # Activate the dbt virtual environment in the container
+                . dbt_venv/bin/activate && \
+                
+                # Debug step
+                dbt debug --profiles-dir /root/.dbt --project-dir airflow/dbt/nexabrands_dbt --target prod && \
+                
+                # Install dependencies
+                dbt deps --profiles-dir /root/.dbt --project-dir airflow/dbt/nexabrands_dbt --target prod && \
+                
+                # Run dbt build
+                if [ -f ./manifest.json ]; then
+                  dbt build -s 'state:modified+' --state ./ --profiles-dir /root/.dbt --project-dir airflow/dbt/nexabrands_dbt --target prod
+                else
+                  dbt build --profiles-dir /root/.dbt --project-dir airflow/dbt/nexabrands_dbt --target prod
+                fi && \
+                
+                # Copy the manifest to output volume
+                cp airflow/dbt/nexabrands_dbt/target/manifest.json /output/manifest.json
+              "
+            
+            # Check if manifest was generated
+            if [ -f ~/dbt_project/target/manifest.json ]; then
+              echo "Manifest file generated successfully"
+            else
+              echo "Failed to generate manifest file"
+              exit 1
+            fi
+          EOF
+      
+      - name: Retrieve manifest from EC2
+        run: |
+          mkdir -p target
+          scp -i ~/.ssh/ec2_key ${{ env.EC2_USERNAME }}@${{ env.EC2_HOST }}:~/dbt_project/target/manifest.json ./target/manifest.json || echo "Failed to copy manifest file"
+      
+      - name: Copy new manifest.json to S3
+        run: |
+          if [ -f "./target/manifest.json" ]; then
+            aws s3 cp ./target/manifest.json s3://${{ env.S3_BUCKET_MANIFEST }}/${{ env.S3_PATH_MANIFEST }}/
+          else
+            echo "Manifest file not found, skipping S3 upload"
+            exit 1
+          fi

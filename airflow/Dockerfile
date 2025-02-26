@@ -18,7 +18,6 @@ USER airflow
 
 # Install Airflow providers and dependencies
 RUN pip install --no-cache-dir \
-    apache-airflow-providers-mongo \
     apache-airflow[amazon] \
     apache-airflow-providers-slack \
     apache-airflow[statsd] \
