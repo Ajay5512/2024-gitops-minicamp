@@ -8,6 +8,7 @@ on:
 jobs:
   CD_job:
     runs-on: ubuntu-latest
+    environment: production
     permissions:
       id-token: write
       contents: read
