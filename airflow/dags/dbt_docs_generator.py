@@ -95,7 +95,7 @@ def upload_docs_to_s3():
     s3_bucket = "nexabrands-prod-target"
     s3_key_prefix = "dbt-docs/"
     
-    # Create S3Hook without specifying connection ID to use instance role
+    # Create S3Hook without specifying connection ID to use instance role.
     s3_hook = S3Hook()
     
     # Make sure the directory exists
