@@ -41,6 +41,11 @@ jobs:
         role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
         aws-region: us-east-1
 
+    - name: Test network connectivity to Redshift
+      run: |
+        apt-get update && apt-get install -y netcat
+        nc -zv ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }} ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }} -w 10
+
     - name: Copy manifest.json from S3
       run: |
         aws s3 cp s3://${{ env.S3_BUCKET_MANIFEST }}/${{ env.S3_PATH_MANIFEST }}/manifest.json ./ || echo "Manifest not found"
