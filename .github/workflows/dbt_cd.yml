@@ -19,7 +19,7 @@ jobs:
       S3_PATH_MANIFEST: ${{ secrets.S3_PATH_MANIFEST }}
       EC2_HOST: ${{ secrets.EC2_HOST }}
       EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
-      SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+      SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PUBLIC_KEY }}
       REPO_URL: ${{ github.server_url }}/${{ github.repository }}.git
       
     steps:
@@ -41,8 +41,8 @@ jobs:
           fi
           
           # Check if SSH_PRIVATE_KEY is set
-          if [ -z "${{ secrets.EC2_SSH_PRIVATE_KEY }}" ]; then
-            missing_secrets+=("EC2_SSH_PRIVATE_KEY")
+          if [ -z "${{ secrets.EC2_SSH_PUBLIC_KEY }}" ]; then
+            missing_secrets+=("EC2_SSH_PUBLIC_KEY")
           fi
           
           # If any secrets are missing, fail the workflow
@@ -72,12 +72,12 @@ jobs:
           mkdir -p ~/.ssh
           
           # Add private key (with error checking)
-          if [ -z "${{ secrets.EC2_SSH_PRIVATE_KEY }}" ]; then
-            echo "Error: EC2_SSH_PRIVATE_KEY is empty"
+          if [ -z "${{ secrets.EC2_SSH_PUBLIC_KEY }}" ]; then
+            echo "Error: EC2_SSH_PUBLIC_KEY is empty"
             exit 1
           fi
           
-          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/ec2_key
+          echo "${{ secrets.EC2_SSH_PUBLIC_KEY }}" > ~/.ssh/ec2_key
           chmod 600 ~/.ssh/ec2_key
           
           # Add host to known_hosts (with error checking)
