@@ -1,0 +1,65 @@
+name: dbt_CI_action
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  CI_job:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    env:
+      S3_BUCKET_MANIFEST: ${{ secrets.S3_BUCKET_MANIFEST }}
+      S3_PATH_MANIFEST: ${{ secrets.S3_PATH_MANIFEST }}
+      DBT_ENV_SECRET_REDSHIFT_HOST: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }}
+      DBT_ENV_SECRET_REDSHIFT_DATABASE: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_DATABASE }}
+      DBT_ENV_SECRET_REDSHIFT_USER: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_USER }}
+      DBT_ENV_SECRET_REDSHIFT_PASSWORD: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PASSWORD }}
+      DBT_ENV_SECRET_REDSHIFT_PORT: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }}
+      DBT_ENV_SECRET_REDSHIFT_SCHEMA: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_SCHEMA }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.12'
+
+    - name: Install dependencies
+      run: pip install -r dbt-requirements.txt
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Copy manifest.json from S3
+      run: |
+        aws s3 cp s3://${{ env.S3_BUCKET_MANIFEST }}/${{ env.S3_PATH_MANIFEST }}/manifest.json ./ || echo "Manifest not found"
+    
+    - name: Get Schema ID
+      id: schema_id
+      run: echo "SCHEMA_ID=${{ github.event.pull_request.number }}__${{ github.sha }}" >> $GITHUB_ENV
+
+    - name: Run dbt debug
+      run: |
+        dbt debug --target pr --vars "schema_id: $SCHEMA_ID"
+
+    - name: Run dbt deps
+      run: |
+        dbt deps --target pr --vars "schema_id: $SCHEMA_ID"
+
+    - name: Run dbt build
+      run: |
+        if [ -f "./manifest.json" ]; then
+          dbt build -s 'state:modified+' --defer --state ./ --target pr --vars "schema_id: $SCHEMA_ID"
+        else
+          dbt build --target pr --vars "schema_id: $SCHEMA_ID"
+        fi

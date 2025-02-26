@@ -1,0 +1,51 @@
+name: dbt CI schema teardown on PR close
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  CI_TEARDOWN_job:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    env:
+      S3_BUCKET_MANIFEST: ${{ secrets.S3_BUCKET_MANIFEST }}
+      S3_PATH_MANIFEST: ${{ secrets.S3_PATH_MANIFEST }}
+      DBT_ENV_SECRET_REDSHIFT_HOST: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }}
+      DBT_ENV_SECRET_REDSHIFT_DATABASE: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_DATABASE }}
+      DBT_ENV_SECRET_REDSHIFT_USER: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_USER }}
+      DBT_ENV_SECRET_REDSHIFT_PASSWORD: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PASSWORD }}
+      DBT_ENV_SECRET_REDSHIFT_PORT: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }}
+      DBT_ENV_SECRET_REDSHIFT_SCHEMA: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_SCHEMA }}
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.12'
+
+    - name: Install dependencies
+      run: pip install -r dbt-requirements.txt
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Get PR NUM
+      id: schema_id
+      run: echo "PR_NUM=${{ github.event.number }}" >> $GITHUB_ENV
+
+    - name: dbt deps
+      run: dbt deps
+
+    - name: drop PR schemas
+      run: dbt run-operation drop_pr_staging_schemas --args "{'database'":" '${DBT_ENV_SECRET_REDSHIFT_DATABASE}', 'PR_number'":" '${PR_NUM}' }" --profiles-dir ./
