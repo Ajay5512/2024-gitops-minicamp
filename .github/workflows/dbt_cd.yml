@@ -32,7 +32,7 @@ jobs:
         python-version: '3.12'
 
     - name: Install dependencies
-      run: pip install -r requirements_dbt_venv.txt
+      run: pip install -r airflow/requirements_dbt_venv.txt
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
