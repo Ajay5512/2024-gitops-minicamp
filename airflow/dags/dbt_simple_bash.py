@@ -24,7 +24,7 @@ def dbt_bash_dag():
     """
     Example of using BashOperator for running dbt
     """
-    # Define the dbt run command using BashOperator
+    # Define the dbt run command using BashOperator.
     dbt_seed_task = BashOperator(
         task_id='dbt_seed_task',
         bash_command='source $AIRFLOW_HOME/dbt_venv/bin/activate && cd /$AIRFLOW_HOME/dbt/nexabrands_dbt && dbt seed',
