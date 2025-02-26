@@ -13,18 +13,18 @@
 
 nexabrands_dbt:
   outputs:
-    dev:
+    prod:
       type: redshift
-      host: nexabrands-redshift-workgroup.043309357116.us-east-1.redshift-serverless.amazonaws.com
-      user: dbt
-      password: YourSecurePassword123!
+      host: "{{ env_var('DBT_ENV_SECRET_REDSHIFT_HOST') }}"  
+      user: "{{ env_var('DBT_ENV_SECRET_REDSHIFT_USER') }}" 
+      password: "{{ env_var('DBT_ENV_SECRET_REDSHIFT_PASSWORD') }}"    
       port: 5439
-      dbname: nexabrands_datawarehouse
-      schema: nexabrands_dbt
+      dbname: "{{ env_var('DBT_ENV_SECRET_REDSHIFT_DATABASE') }}"   
+      schema: "{{ env_var('DBT_ENV_SECRET_REDSHIFT_SCHEMA') }}" 
       threads: 4
       keepalives_idle: 0
       connect_timeout: 10
-  target: dev
+  target: prod
     
 
     
