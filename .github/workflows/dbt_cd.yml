@@ -46,17 +46,17 @@ jobs:
         aws s3 cp s3://${{ env.S3_BUCKET_MANIFEST }}/${{ env.S3_PATH_MANIFEST }}/manifest.json ./ || echo "Manifest not found"
 
     - name: Run dbt debug
-      run: dbt debug --target prod
+      run: dbt debug --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt --target prod
 
     - name: Run dbt deps
-      run: dbt deps --target prod
+      run: dbt deps --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt --target prod
 
     - name: Run dbt build
       run: |
         if [ -f "./manifest.json" ]; then
-          dbt build -s 'state:modified+' --state ./ --target prod
+          dbt build -s 'state:modified+' --state ./ --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt --target prod
         else
-          dbt build --target prod
+          dbt build --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt --target prod
         fi
 
     - name: Copy new manifest.json to S3

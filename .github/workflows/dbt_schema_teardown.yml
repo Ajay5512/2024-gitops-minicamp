@@ -46,7 +46,7 @@ jobs:
       run: echo "PR_NUM=${{ github.event.number }}" >> $GITHUB_ENV
 
     - name: dbt deps
-      run: dbt deps
+      run: dbt deps --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt
 
     - name: drop PR schemas
-      run: dbt run-operation drop_pr_staging_schemas --args "{'database'":" '${DBT_ENV_SECRET_REDSHIFT_DATABASE}', 'PR_number'":" '${PR_NUM}' }" --profiles-dir ./
+      run: dbt run-operation drop_pr_staging_schemas --args "{'database': '${DBT_ENV_SECRET_REDSHIFT_DATABASE}', 'PR_number': '${PR_NUM}'}" --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt

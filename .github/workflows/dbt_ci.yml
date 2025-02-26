@@ -51,16 +51,16 @@ jobs:
 
     - name: Run dbt debug
       run: |
-        dbt debug --target pr --vars "schema_id: $SCHEMA_ID"
+        dbt debug --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt --target pr --vars "schema_id: $SCHEMA_ID"
 
     - name: Run dbt deps
       run: |
-        dbt deps --target pr --vars "schema_id: $SCHEMA_ID"
+        dbt deps --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt --target pr --vars "schema_id: $SCHEMA_ID"
 
     - name: Run dbt build
       run: |
         if [ -f "./manifest.json" ]; then
-          dbt build -s 'state:modified+' --defer --state ./ --target pr --vars "schema_id: $SCHEMA_ID"
+          dbt build -s 'state:modified+' --defer --state ./ --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt --target pr --vars "schema_id: $SCHEMA_ID"
         else
-          dbt build --target pr --vars "schema_id: $SCHEMA_ID"
+          dbt build --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt --target pr --vars "schema_id: $SCHEMA_ID"
         fi
