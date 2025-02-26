@@ -41,17 +41,6 @@ jobs:
         role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
         aws-region: us-east-1
     
-    - name: Test AWS connectivity
-      run: |
-        aws sts get-caller-identity
-        aws redshift-serverless list-workgroups
-        aws s3 ls s3://${{ env.S3_BUCKET_MANIFEST }}/${{ env.S3_PATH_MANIFEST }}/
-    
-    - name: Test network connectivity to Redshift
-      run: |
-        sudo apt-get update && sudo apt-get install -y netcat
-        echo "Testing connection to ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }} on port ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }}"
-        timeout 30 nc -zv ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }} ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }} -w 10
     
     - name: Copy manifest.json from S3
       run: |
