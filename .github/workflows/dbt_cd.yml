@@ -12,7 +12,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-
+    
     env:
       S3_BUCKET_MANIFEST: ${{ secrets.S3_BUCKET_MANIFEST }}
       S3_PATH_MANIFEST: ${{ secrets.S3_PATH_MANIFEST }}
@@ -22,48 +22,56 @@ jobs:
       DBT_ENV_SECRET_REDSHIFT_PASSWORD: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PASSWORD }}
       DBT_ENV_SECRET_REDSHIFT_PORT: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }}
       DBT_ENV_SECRET_REDSHIFT_SCHEMA: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_SCHEMA }}
-
+    
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-
+    
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
         python-version: '3.12'
-
+    
     - name: Install dependencies
       run: pip install -r airflow/requirements_dbt_venv.txt
-
+    
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
         role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
         aws-region: us-east-1
-
+    
+    - name: Test AWS connectivity
+      run: |
+        aws sts get-caller-identity
+        aws redshift-serverless list-workgroups
+        aws s3 ls s3://${{ env.S3_BUCKET_MANIFEST }}/${{ env.S3_PATH_MANIFEST }}/
+    
     - name: Test network connectivity to Redshift
       run: |
-        apt-get update && apt-get install -y netcat
-        nc -zv ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }} ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }} -w 10
-
+        sudo apt-get update && sudo apt-get install -y netcat
+        echo "Testing connection to ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }} on port ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }}"
+        timeout 30 nc -zv ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }} ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }} -w 10
+    
     - name: Copy manifest.json from S3
       run: |
         aws s3 cp s3://${{ env.S3_BUCKET_MANIFEST }}/${{ env.S3_PATH_MANIFEST }}/manifest.json ./ || echo "Manifest not found"
-
+    
     - name: Run dbt debug
       run: dbt debug --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt --target prod
-
+    
     - name: Run dbt deps
       run: dbt deps --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt --target prod
-
-    - name: Run dbt build
+    
+    - name: Run dbt build with timeout
+      timeout-minutes: 30
       run: |
         if [ -f "./manifest.json" ]; then
           dbt build -s 'state:modified+' --state ./ --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt --target prod
         else
           dbt build --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt --target prod
         fi
-
+    
     - name: Copy new manifest.json to S3
       run: |
         aws s3 cp ./target/manifest.json s3://${{ env.S3_BUCKET_MANIFEST }}/${{ env.S3_PATH_MANIFEST }}/
