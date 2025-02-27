@@ -16,11 +16,6 @@ output "redshift_endpoint" {
 }
 
 
-output "redshift_endpoint" {
-  description = "Endpoint of the Redshift Serverless workgroup"
-  value       = aws_redshiftserverless_workgroup.serverless.endpoint
-}
-
 output "redshift_port" {
   description = "Port for Redshift connection"
   value       = "5439"
