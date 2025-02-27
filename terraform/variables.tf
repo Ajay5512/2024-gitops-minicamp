@@ -125,21 +125,6 @@ variable "redshift_serverless_publicly_accessible" {
   default     = true # Updated to true for public access
 }
 
-variable "public_subnet_id" {
-  type        = string
-  description = "The ID of the public subnet where the Redshift Serverless workgroup will be deployed."
-}
-
-variable "security_group_id" {
-  type        = string
-  description = "The ID of the security group for Redshift Serverless."
-}
-
-variable "redshift_role_arn" {
-  type        = string
-  description = "The ARN of the IAM role for Redshift Serverless."
-}
-
 variable "dbt_password" {
   type        = string
   sensitive   = true

@@ -66,7 +66,7 @@ module "redshift" {
   redshift_serverless_admin_password      = var.redshift_serverless_admin_password
   redshift_serverless_workgroup_name      = var.redshift_serverless_workgroup_name
   redshift_serverless_base_capacity       = var.redshift_serverless_base_capacity
-  redshift_serverless_publicly_accessible = true # Ensure this is set to true
+  redshift_serverless_publicly_accessible = var.redshift_serverless_publicly_accessible
   redshift_role_arn                       = module.iam.redshift_role_arn
   security_group_id                       = module.vpc.security_group_id
   public_subnet_id                        = module.vpc.public_subnet_az1_id # Use the public subnet ID
