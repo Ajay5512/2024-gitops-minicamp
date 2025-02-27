@@ -8,10 +8,24 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run against'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+        - production
+        - development
+      full_refresh:
+        description: 'Run with full refresh'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   dbt_ci_cd_job:
-    environment: production
+    environment: ${{ github.event.inputs.environment || 'production' }}
     runs-on: ubuntu-latest
     env:
       DBT_PROFILES_DIR: .
@@ -32,14 +46,14 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: '3.12'
 
       - name: Install dependencies
         run: |
           pip install -r airflow/requirements_dbt_venv.txt
-          pip install awscli psycopg2-binary
+          pip install dbt-redshift awscli psycopg2-binary
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -78,17 +92,36 @@ jobs:
                 retries: 3
             target: prod
           EOF
+          
+          # Debug - print the profiles.yml without credentials
+          cat profiles.yml | sed 's/\(password: \).*/\1***/'
       
-      - name: Navigate to DBT project directory
-        run: cd airflow/dbt/nexabrands_dbt
-        
       - name: Download previous manifest
         run: |
+          echo "Downloading manifest from s3://${{ secrets.CODE_BUCKET }}/dbt-docs/manifest.json"
           aws s3 cp s3://${{ secrets.CODE_BUCKET }}/dbt-docs/manifest.json ./manifest.json || echo "No previous manifest found"
+
+      - name: List dbt project files
+        run: |
+          echo "Listing dbt project directory contents:"
+          cd airflow/dbt/nexabrands_dbt
+          ls -la
+          echo "Checking for dbt_project.yml:"
+          if [ -f "dbt_project.yml" ]; then
+            echo "dbt_project.yml found"
+            cat dbt_project.yml | grep -i "name\|profile"
+          else
+            echo "dbt_project.yml NOT found"
+            find . -name "dbt_project.yml"
+          fi
 
       - name: Run dbt debug
         working-directory: airflow/dbt/nexabrands_dbt
-        run: dbt debug --target prod
+        run: |
+          # Print dbt version
+          dbt --version
+          # Run debug with verbose output
+          dbt debug --target prod
 
       - name: Run dbt deps
         working-directory: airflow/dbt/nexabrands_dbt
@@ -104,17 +137,22 @@ jobs:
             dbt test --target prod
           fi
 
-      - name: Run dbt build (main branch only)
-        if: github.ref == 'refs/heads/main'
+      - name: Run dbt build (main branch or manual dispatch)
+        if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
         working-directory: airflow/dbt/nexabrands_dbt
         run: |
-          if [ -f "../../manifest.json" ]; then
+          if [ "${{ github.event.inputs.full_refresh }}" == "true" ]; then
+            echo "Running with full refresh"
+            dbt build --full-refresh --target prod
+          elif [ -f "../../manifest.json" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "Running with state"
             dbt build -s 'state:modified+' --state ../../ --target prod
           else
+            echo "Running normal build"
             dbt build --target prod
           fi
 
-      - name: Copy new manifest to S3 (main branch only)
-        if: github.ref == 'refs/heads/main'
+      - name: Copy new manifest to S3 (main branch or manual dispatch)
+        if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
         run: |
           aws s3 cp airflow/dbt/nexabrands_dbt/target/manifest.json s3://${{ secrets.CODE_BUCKET }}/dbt-docs/
