@@ -19,7 +19,7 @@ redshift_serverless_admin_username      = "admin"
 redshift_serverless_admin_password      = "Password123!" # Move to AWS Secrets Manager
 redshift_serverless_workgroup_name      = "nexabrands-redshift-workgroup"
 redshift_serverless_base_capacity       = 32
-redshift_serverless_publicly_accessible = false
+redshift_serverless_publicly_accessible = true
 
 ami_id        = "ami-0e2c8caa4b6378d8c"
 instance_type = "t3.xlarge"
