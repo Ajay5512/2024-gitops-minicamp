@@ -120,3 +120,52 @@ resource "aws_vpc_endpoint" "s3_redshift" {
     Name = "${var.app_name}-s3-endpoint"
   }
 }
+
+
+# Add NAT Gateway for private subnets
+resource "aws_eip" "nat" {
+  domain = "vpc"
+  
+  tags = {
+    Name = "${var.app_name}-nat-eip"
+  }
+}
+
+resource "aws_nat_gateway" "main" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.public_subnet_az1.id
+  
+  tags = {
+    Name = "${var.app_name}-nat-gateway"
+  }
+}
+
+# Route table for private subnets
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.redshift-serverless-vpc.id
+  
+  route {
+    cidr_block = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.main.id
+  }
+  
+  tags = {
+    Name = "${var.app_name}-private-rt"
+  }
+}
+
+# Associate private subnets with private route table
+resource "aws_route_table_association" "private_az1" {
+  subnet_id      = aws_subnet.redshift-serverless-subnet-az1.id
+  route_table_id = aws_route_table.private.id
+}
+
+resource "aws_route_table_association" "private_az2" {
+  subnet_id      = aws_subnet.redshift-serverless-subnet-az2.id
+  route_table_id = aws_route_table.private.id
+}
+
+resource "aws_route_table_association" "private_az3" {
+  subnet_id      = aws_subnet.redshift-serverless-subnet-az3.id
+  route_table_id = aws_route_table.private.id
+}
