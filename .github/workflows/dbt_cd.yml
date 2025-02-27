@@ -4,15 +4,10 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   CD_job:
     runs-on: ubuntu-latest
-    environment: production
-    permissions:
-        id-token: write
-        contents: read
     env:
       S3_MANIFEST_BUCKET: "nexabrands-prod-target"
       S3_MANIFEST_KEY: "dbt-docs/manifest.json"
@@ -27,7 +22,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install -r airflow/requirements_dbt_venv.txt
+        run: pip install -r dbt-requirements.txt
 
       - name: Configure AWS Credentials using OIDC
         uses: aws-actions/configure-aws-credentials@v4
@@ -41,16 +36,20 @@ jobs:
           cp ./airflow/dbt/nexabrands_dbt/profiles.yml ~/.dbt/profiles.yml
 
       - name: Download manifest.json from S3
+        working-directory: airflow/dbt/nexabrands_dbt
         run: |
           aws s3 cp s3://${{ env.S3_MANIFEST_BUCKET }}/${{ env.S3_MANIFEST_KEY }} ./manifest.json || echo "Manifest not found"
 
       - name: Run dbt debug
+        working-directory: airflow/dbt/nexabrands_dbt
         run: dbt debug --target prod
 
       - name: Run dbt deps
+        working-directory: airflow/dbt/nexabrands_dbt
         run: dbt deps --target prod
 
       - name: Run dbt build
+        working-directory: airflow/dbt/nexabrands_dbt
         run: |
           if [ -f "./manifest.json" ]; then
             dbt build -s 'state:modified+' --state ./ --target prod
@@ -59,5 +58,6 @@ jobs:
           fi
 
       - name: Upload new manifest.json to S3
+        working-directory: airflow/dbt/nexabrands_dbt
         run: |
           aws s3 cp ./target/manifest.json s3://${{ env.S3_MANIFEST_BUCKET }}/${{ env.S3_MANIFEST_KEY }}
