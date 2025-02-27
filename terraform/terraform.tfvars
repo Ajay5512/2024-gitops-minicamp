@@ -1,4 +1,3 @@
-
 # terraform.tfvars
 aws_region    = "us-east-1"
 environment   = "prod"
@@ -19,10 +18,11 @@ redshift_serverless_admin_username      = "admin"
 redshift_serverless_admin_password      = "Password123!" # Move to AWS Secrets Manager
 redshift_serverless_workgroup_name      = "nexabrands-redshift-workgroup"
 redshift_serverless_base_capacity       = 32
-redshift_serverless_publicly_accessible = true
+redshift_serverless_publicly_accessible = true # Ensure this is set to true
 
 ami_id        = "ami-0e2c8caa4b6378d8c"
 instance_type = "t3.xlarge"
+
 # Add these to your terraform.tfvars
 dbt_password       = "YourSecurePassword123!" # Consider using AWS Secrets Manager
 glue_database_name = "nexabrands_dbt"

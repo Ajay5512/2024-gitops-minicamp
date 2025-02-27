@@ -80,33 +80,6 @@ variable "project_name" {
   default     = "nexabrands"
 }
 
-#########################
-## Network - Variables ##
-#########################
-variable "redshift_serverless_vpc_cidr" {
-  type        = string
-  description = "VPC IPv4 CIDR"
-  default     = "10.0.0.0/16"
-}
-
-variable "redshift_serverless_subnet_1_cidr" {
-  type        = string
-  description = "IPv4 CIDR for Redshift subnet 1"
-  default     = "10.0.1.0/24"
-}
-
-variable "redshift_serverless_subnet_2_cidr" {
-  type        = string
-  description = "IPv4 CIDR for Redshift subnet 2"
-  default     = "10.0.2.0/24"
-}
-
-variable "redshift_serverless_subnet_3_cidr" {
-  type        = string
-  description = "IPv4 CIDR for Redshift subnet 3"
-  default     = "10.0.3.0/24"
-}
-
 #####################################
 ## Redshift Serverless - Variables ##
 #####################################
@@ -149,7 +122,39 @@ variable "redshift_serverless_base_capacity" {
 variable "redshift_serverless_publicly_accessible" {
   type        = bool
   description = "Set the Redshift Serverless to be Publicly Accessible"
-  default     = false
+  default     = true # Updated to true for public access
+}
+
+variable "dbt_password" {
+  type        = string
+  sensitive   = true
+  description = "Password for the dbt user"
+}
+
+variable "glue_database_name" {
+  type        = string
+  description = "Name of the Glue database to connect to"
+  default     = "tickit_dbt"
+}
+
+variable "redshift_serverless_vpc_cidr" {
+  description = "CIDR block for the Redshift Serverless VPC"
+  type        = string
+}
+
+variable "redshift_serverless_subnet_1_cidr" {
+  description = "CIDR block for the first Redshift Serverless subnet"
+  type        = string
+}
+
+variable "redshift_serverless_subnet_2_cidr" {
+  description = "CIDR block for the second Redshift Serverless subnet"
+  type        = string
+}
+
+variable "redshift_serverless_subnet_3_cidr" {
+  description = "CIDR block for the third Redshift Serverless subnet"
+  type        = string
 }
 
 #######################
@@ -173,17 +178,6 @@ variable "public_key" {
   sensitive   = true
 }
 
-variable "dbt_password" {
-  type        = string
-  sensitive   = true
-  description = "Password for the dbt user"
-}
-
-variable "glue_database_name" {
-  type        = string
-  description = "Name of the Glue database to connect to"
-  default     = "tickit_dbt"
-}
 
 ########################
 ## S3 Files - Variables ##

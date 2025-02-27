@@ -57,8 +57,6 @@ module "vpc" {
   public_key                        = var.public_key
 }
 
-
-
 module "redshift" {
   source = "./modules/redshift"
 
@@ -68,18 +66,15 @@ module "redshift" {
   redshift_serverless_admin_password      = var.redshift_serverless_admin_password
   redshift_serverless_workgroup_name      = var.redshift_serverless_workgroup_name
   redshift_serverless_base_capacity       = var.redshift_serverless_base_capacity
-  redshift_serverless_publicly_accessible = var.redshift_serverless_publicly_accessible
   redshift_role_arn                       = module.iam.redshift_role_arn
   security_group_id                       = module.vpc.security_group_id
-  subnet_ids                              = module.vpc.subnet_ids
-
-  # SQL initialization variables
-  dbt_password       = var.dbt_password
-  glue_database_name = var.glue_database_name
+  public_subnet_id                        = module.vpc.public_subnet_az1_id
+  dbt_password                            = var.dbt_password
+  glue_database_name                      = var.glue_database_name                      # Add this line
+  redshift_serverless_publicly_accessible = var.redshift_serverless_publicly_accessible # Add this line
 
   depends_on = [module.vpc, module.iam, module.glue]
 }
-
 module "ec2" {
   source = "./modules/ec2"
 

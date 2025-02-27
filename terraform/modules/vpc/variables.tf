@@ -1,4 +1,3 @@
-# modules/vpc/variables.tf
 variable "redshift_serverless_vpc_cidr" {
   description = "CIDR block for the VPC"
   type        = string
@@ -25,6 +24,6 @@ variable "app_name" {
 }
 
 variable "public_key" {
-  description = "Public key for EC2 instances"
+  description = "Public key for SSH access"
   type        = string
 }
