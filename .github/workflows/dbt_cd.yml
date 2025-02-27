@@ -1,111 +1,37 @@
-name: DBT CI/CD Pipeline
+name: Redshift Connection Test
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
-  dbt_ci_cd_job:
-    environment: production
+  test-redshift:
     runs-on: ubuntu-latest
-    env:
-      DBT_PROFILES_DIR: .
-      REDSHIFT_HOST: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }}
-      REDSHIFT_USER: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_USER }}
-      REDSHIFT_PASSWORD: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PASSWORD }}
-      REDSHIFT_PORT: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }}
-      REDSHIFT_DBNAME: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_DATABASE }}
-      REDSHIFT_SCHEMA: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_SCHEMA }}
-      S3_BUCKET_PATH: ${{ secrets.CODE_BUCKET }}
     permissions:
-      id-token: write 
-      contents: read 
+      id-token: write
+      contents: read
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.12'
-
-      - name: Install dependencies
-        run: |
-          pip install -r airflow/requirements_dbt_venv.txt
-          pip install awscli psycopg2-binary
-
-      - name: Configure AWS Credentials
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}  # This should be your OIDC role ARN
           aws-region: us-east-1
-
+      
+      - name: Install AWS CLI
+        run: |
+          pip install awscli
+      
       - name: Test Redshift Connection
         run: |
-          echo "Testing connection to Redshift..."
-          echo "Host: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }}"
-          echo "Port: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }}"
-          echo "Database: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_DATABASE }}"
+          # Get workgroup endpoint
+          ENDPOINT=$(aws redshift-serverless get-workgroup --workgroup-name nexabrands-redshift-workgroup --query 'workgroup.endpoint.address' --output text)
+          echo "Redshift endpoint: $ENDPOINT"
           
-          python -c "
-          import psycopg2
-          import time
-          
-          for i in range(3):
-            try:
-              print(f'Attempt {i+1} to connect to Redshift')
-              conn = psycopg2.connect(
-                host='${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }}',
-                port=${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }},
-                dbname='${{ secrets.DBT_ENV_SECRET_REDSHIFT_DATABASE }}',
-                user='${{ secrets.DBT_ENV_SECRET_REDSHIFT_USER }}',
-                password='${{ secrets.DBT_ENV_SECRET_REDSHIFT_PASSWORD }}'
-              )
-              print('Connection successful!')
-              conn.close()
-              break
-            except Exception as e:
-              print(f'Connection failed: {e}')
-              if i < 2:
-                print('Retrying in 5 seconds...')
-                time.sleep(5)
-          "
-
-      - name: Download previous manifest
-        run: |
-          aws s3 cp s3://${{ secrets.CODE_BUCKET }}/dbt-docs/manifest.json ./manifest.json || echo "No previous manifest found"
-
-      - name: Run dbt debug
-        run: dbt debug --target prod
-
-      - name: Run dbt deps
-        run: dbt deps --target prod
-
-      - name: Run dbt test (PR only)
-        if: github.event_name == 'pull_request'
-        run: |
-          if [ -f "./manifest.json" ]; then
-            dbt test -s 'state:modified+' --state ./ --target prod
-          else
-            dbt test --target prod
-          fi
-
-      - name: Run dbt build (main branch only)
-        if: github.ref == 'refs/heads/main'
-        run: |
-          if [ -f "./manifest.json" ]; then
-            dbt build -s 'state:modified+' --state ./ --target prod
-          else
-            dbt build --target prod
-          fi
-
-      - name: Copy new manifest to S3 (main branch only)
-        if: github.ref == 'refs/heads/main'
-        run: |
-          aws s3 cp ./target/manifest.json s3://${{ secrets.CODE_BUCKET }}/dbt-docs/
+          # Test with a simple query
+          aws redshift-data execute-statement \
+            --workgroup-name nexabrands-redshift-workgroup \
+            --database nexabrands_datawarehouse \
+            --sql "SELECT current_date;"

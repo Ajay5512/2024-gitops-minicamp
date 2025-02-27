@@ -15,6 +15,7 @@ nexabrands_dbt:
   outputs:
     prod:
       type: redshift
+            nexabrands-redshift-workgroup.043309357116.us-east-1.redshift-serverless.amazonaws.com
       host: nexabrands-redshift-workgroup.043309357116.us-east-1.redshift-serverless.amazonaws.com
       user: dbt
       password: YourSecurePassword123!
