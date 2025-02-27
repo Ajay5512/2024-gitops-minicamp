@@ -64,3 +64,10 @@ variable "glue_database_name" {
   type        = string
   description = "Name of the Glue database to connect to"
 }
+
+
+variable "subnet_ids" {
+  description = "List of subnet IDs for Redshift Serverless workgroup"
+  type        = list(string)
+}
+
