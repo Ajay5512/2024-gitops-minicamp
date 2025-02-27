@@ -38,7 +38,7 @@ jobs:
       - name: Set up dbt profiles.yml
         run: |
           mkdir -p ~/.dbt
-          cp .airflow/dbt/nexabrands_dbt/profiles.yml ~/.dbt/profiles.yml
+          cp ./airflow/dbt/nexabrands_dbt/profiles.yml ~/.dbt/profiles.yml
 
       - name: Download manifest.json from S3
         run: |
