@@ -28,7 +28,6 @@ jobs:
     environment: ${{ github.event.inputs.environment || 'production' }}
     runs-on: ubuntu-latest
     env:
-      DBT_PROFILES_DIR: .
       S3_BUCKET_PATH: ${{ secrets.CODE_BUCKET }}
     permissions:
       id-token: write 
@@ -42,11 +41,20 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'  # Using 3.10 for better compatibility with dbt packages
+          python-version: '3.10'
+
+      - name: List repository structure
+        run: |
+          echo "Repository structure:"
+          find . -name "dbt_project.yml" -type f
+          find . -name "profiles.yml" -type f
+          find . -name "packages.yml" -type f
+          echo "---"
+          ls -la airflow/dbt/nexabrands_dbt/ || echo "Directory not found"
 
       - name: Install dependencies
         run: |
-          pip install -r airflow/requirements_dbt_venv.txt
+          pip install -r airflow/requirements_dbt_venv.txt || echo "Requirements file not found"
           pip install dbt-redshift==1.8.1 awscli psycopg2-binary
 
       - name: Configure AWS Credentials
@@ -62,9 +70,24 @@ jobs:
           echo "REDSHIFT_ENDPOINT=${ENDPOINT}" >> $GITHUB_ENV
           echo "Retrieved Redshift endpoint: ${ENDPOINT}"
 
+      - name: Find DBT project directory
+        id: find-dbt
+        run: |
+          DBT_PROJECT_DIR=$(find . -name "dbt_project.yml" -type f | xargs dirname | head -n 1)
+          if [ -z "$DBT_PROJECT_DIR" ]; then
+            echo "No dbt_project.yml found. Looking for folder structure..."
+            if [ -d "airflow/dbt/nexabrands_dbt" ]; then
+              DBT_PROJECT_DIR="airflow/dbt/nexabrands_dbt"
+            fi
+          fi
+          echo "DBT_PROJECT_DIR=${DBT_PROJECT_DIR}" >> $GITHUB_ENV
+          echo "Using DBT project directory: ${DBT_PROJECT_DIR}"
+          ls -la ${DBT_PROJECT_DIR} || echo "Directory not accessible"
+
       - name: Create profiles.yml
         run: |
-          cat > airflow/dbt/nexabrands_dbt/profiles.yml <<EOF
+          mkdir -p $DBT_PROJECT_DIR
+          cat > $DBT_PROJECT_DIR/profiles.yml <<EOF
           nexabrands_dbt:
             outputs:
               prod:
@@ -82,8 +105,11 @@ jobs:
             target: prod
           EOF
           
+          # Also copy to root for dbt debug
+          cp $DBT_PROJECT_DIR/profiles.yml ./profiles.yml
+          
           # Debug - print the profiles.yml without credentials
-          cat airflow/dbt/nexabrands_dbt/profiles.yml | sed 's/\(password: \).*/\1***/' | sed 's/\(host: \).*/\1***/'
+          cat $DBT_PROJECT_DIR/profiles.yml | sed 's/\(password: \).*/\1***/' | sed 's/\(host: \).*/\1***/'
       
       - name: Prepare S3 for dbt artifacts
         run: |
@@ -96,53 +122,64 @@ jobs:
           aws s3 cp s3://${{ secrets.CODE_BUCKET }}/dbt-docs/manifest.json ./manifest.json || echo "No previous manifest found"
 
       - name: Run dbt debug
-        working-directory: airflow/dbt/nexabrands_dbt
+        working-directory: ${{ env.DBT_PROJECT_DIR }}
+        env:
+          DBT_PROFILES_DIR: .
         run: |
           dbt --version
-          dbt debug --target prod
+          dbt debug --target prod --profiles-dir .
 
       - name: Run dbt deps
-        working-directory: airflow/dbt/nexabrands_dbt
-        run: dbt deps --target prod
+        working-directory: ${{ env.DBT_PROJECT_DIR }}
+        env:
+          DBT_PROFILES_DIR: .
+        run: dbt deps --target prod --profiles-dir .
 
       - name: Run dbt test (PR only - Slim CI)
         if: github.event_name == 'pull_request'
-        working-directory: airflow/dbt/nexabrands_dbt
+        working-directory: ${{ env.DBT_PROJECT_DIR }}
+        env:
+          DBT_PROFILES_DIR: .
         run: |
           if [ -f "../../manifest.json" ]; then
             echo "Running slim CI tests on modified models only"
-            dbt test --select state:modified+ --defer --state ../../ --target prod
+            dbt test --select state:modified+ --defer --state ../../ --target prod --profiles-dir .
           else
             echo "No previous manifest found, running all tests"
-            dbt test --target prod
+            dbt test --target prod --profiles-dir .
           fi
 
-      - name: Run dbt build (main branch or manual dispatch - Slim CI)
+      - name: Run dbt build (main branch or manual dispatch)
         if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
-        working-directory: airflow/dbt/nexabrands_dbt
+        working-directory: ${{ env.DBT_PROJECT_DIR }}
+        env:
+          DBT_PROFILES_DIR: .
         run: |
           if [ "${{ github.event.inputs.full_refresh }}" == "true" ]; then
             echo "Running with full refresh"
-            dbt build --full-refresh --target prod
+            dbt build --full-refresh --target prod --profiles-dir .
           elif [ -f "../../manifest.json" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
             echo "Running slim CI build on modified models only"
-            dbt build --select state:modified+ --defer --state ../../ --target prod
+            dbt build --select state:modified+ --defer --state ../../ --target prod --profiles-dir .
           else
             echo "Running normal build"
-            dbt build --target prod
+            dbt build --target prod --profiles-dir .
           fi
 
       - name: Generate dbt docs
         if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
-        working-directory: airflow/dbt/nexabrands_dbt
-        run: dbt docs generate --target prod
+        working-directory: ${{ env.DBT_PROJECT_DIR }}
+        env:
+          DBT_PROFILES_DIR: .
+        run: dbt docs generate --target prod --profiles-dir .
 
       - name: Upload manifest and docs to S3
         if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
         run: |
-          aws s3 cp airflow/dbt/nexabrands_dbt/target/manifest.json s3://${{ secrets.CODE_BUCKET }}/dbt-docs/
-          aws s3 cp airflow/dbt/nexabrands_dbt/target/catalog.json s3://${{ secrets.CODE_BUCKET }}/dbt-docs/
-          aws s3 cp airflow/dbt/nexabrands_dbt/target/index.html s3://${{ secrets.CODE_BUCKET }}/dbt-docs/
+          aws s3 cp $DBT_PROJECT_DIR/target/manifest.json s3://${{ secrets.CODE_BUCKET }}/dbt-docs/ || echo "No manifest.json found"
+          aws s3 cp $DBT_PROJECT_DIR/target/catalog.json s3://${{ secrets.CODE_BUCKET }}/dbt-docs/ || echo "No catalog.json found"
+          aws s3 cp $DBT_PROJECT_DIR/target/index.html s3://${{ secrets.CODE_BUCKET }}/dbt-docs/ || echo "No index.html found"
+          echo "Uploaded documentation to S3"
           
       - name: Verify uploads
         if: (github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch') && success()
