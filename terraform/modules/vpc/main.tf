@@ -88,14 +88,16 @@ resource "aws_security_group" "redshift-serverless-security-group" {
   description = "${var.app_name}-redshift-serverless-security-group"
   vpc_id      = aws_vpc.redshift-serverless-vpc.id
 
+  # Specific ingress rule for Redshift port
   ingress {
-    description = "all traffic"
-    from_port   = 0
-    to_port     = 65535
+    description = "Redshift port access"
+    from_port   = 5439
+    to_port     = 5439
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"] # For GitHub Actions to connect
   }
 
+  # Keep your existing egress rule
   egress {
     from_port   = 0
     to_port     = 0
