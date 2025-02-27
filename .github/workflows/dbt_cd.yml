@@ -9,7 +9,8 @@ on:
       - main
 
 jobs:
-  dbt_ci_cd:
+  dbt_ci_cd_job:
+    environment: production
     runs-on: ubuntu-latest
     env:
       DBT_PROFILES_DIR: .
