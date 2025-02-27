@@ -25,7 +25,7 @@ resource "aws_redshiftserverless_workgroup" "serverless" {
   base_capacity       = var.redshift_serverless_base_capacity
   security_group_ids  = [var.security_group_id]
   subnet_ids          = [var.public_subnet_id] # Use the public subnet ID
-  publicly_accessible = true # Ensure the workgroup is publicly accessible
+  publicly_accessible = var.redshift_serverless_publicly_accessible
 
   tags = {
     Name = var.redshift_serverless_workgroup_name

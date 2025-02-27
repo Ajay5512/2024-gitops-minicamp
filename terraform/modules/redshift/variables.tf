@@ -52,3 +52,15 @@ variable "dbt_password" {
   sensitive   = true
 }
 
+
+
+variable "redshift_serverless_publicly_accessible" {
+  type        = bool
+  description = "Whether the Redshift Serverless workgroup should be publicly accessible"
+  default     = true
+}
+
+variable "glue_database_name" {
+  type        = string
+  description = "Name of the Glue database to connect to"
+}
