@@ -152,6 +152,26 @@ variable "glue_database_name" {
   default     = "tickit_dbt"
 }
 
+variable "redshift_serverless_vpc_cidr" {
+  description = "CIDR block for the Redshift Serverless VPC"
+  type        = string
+}
+
+variable "redshift_serverless_subnet_1_cidr" {
+  description = "CIDR block for the first Redshift Serverless subnet"
+  type        = string
+}
+
+variable "redshift_serverless_subnet_2_cidr" {
+  description = "CIDR block for the second Redshift Serverless subnet"
+  type        = string
+}
+
+variable "redshift_serverless_subnet_3_cidr" {
+  description = "CIDR block for the third Redshift Serverless subnet"
+  type        = string
+}
+
 #######################
 ## EC2 - Variables ##
 #######################
@@ -173,17 +193,6 @@ variable "public_key" {
   sensitive   = true
 }
 
-variable "dbt_password" {
-  type        = string
-  sensitive   = true
-  description = "Password for the dbt user"
-}
-
-variable "glue_database_name" {
-  type        = string
-  description = "Name of the Glue database to connect to"
-  default     = "tickit_dbt"
-}
 
 ########################
 ## S3 Files - Variables ##

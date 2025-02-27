@@ -52,7 +52,3 @@ variable "dbt_password" {
   sensitive   = true
 }
 
-variable "public_subnet_id" {
-  description = "The ID of the public subnet where the Redshift Serverless workgroup will be deployed."
-  type        = string
-}
