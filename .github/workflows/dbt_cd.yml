@@ -9,7 +9,8 @@ on:
       - main
 
 jobs:
-  dbt_ci_cd:
+  dbt_ci_cd_job:
+    environment: production
     runs-on: ubuntu-latest
     env:
       DBT_PROFILES_DIR: .
@@ -21,13 +22,13 @@ jobs:
       REDSHIFT_SCHEMA: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_SCHEMA }}
       S3_BUCKET_PATH: ${{ secrets.CODE_BUCKET }}
     permissions:
-      id-token: write # Required for OIDC authentication
-      contents: read # Required to checkout the repository
+      id-token: write 
+      contents: read 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch all history for proper state comparison
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v3
