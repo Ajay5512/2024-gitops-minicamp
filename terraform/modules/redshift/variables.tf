@@ -65,5 +65,7 @@ variable "dbt_password" {
 variable "glue_database_name" {
   type        = string
   description = "Name of the Glue database to connect to"
-  default     = "tickit_dbt"
+  default     = "nexabrands_dbt"
 }
+
+
