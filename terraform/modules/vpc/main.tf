@@ -169,3 +169,8 @@ resource "aws_route_table_association" "private_az3" {
   subnet_id      = aws_subnet.redshift-serverless-subnet-az3.id
   route_table_id = aws_route_table.private.id
 }
+
+
+
+
+
