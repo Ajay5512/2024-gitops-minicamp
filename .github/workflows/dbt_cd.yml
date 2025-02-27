@@ -61,26 +61,39 @@ jobs:
           role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
           aws-region: us-east-1
           
+      - name: Verify S3 permissions
+        run: |
+          echo "Checking S3 permissions..."
+          aws s3 ls s3://${{ secrets.CODE_BUCKET }}/ || echo "Cannot list bucket contents, check permissions"
+          
+      - name: Ensure S3 paths exist
+        run: |
+          aws s3api head-bucket --bucket ${{ secrets.CODE_BUCKET }} || aws s3 mb s3://${{ secrets.CODE_BUCKET }}
+          aws s3 ls s3://${{ secrets.CODE_BUCKET }}/dbt-docs/ || aws s3api put-object --bucket ${{ secrets.CODE_BUCKET }} --key dbt-docs/
+
       - name: Test Redshift Connection
         run: |
-            # Get workgroup endpoint
-            ENDPOINT=$(aws redshift-serverless get-workgroup --workgroup-name nexabrands-redshift-workgroup --query 'workgroup.endpoint.address' --output text)
-            echo "Redshift endpoint: $ENDPOINT"
-            
-            # Test with a simple query
-            aws redshift-data execute-statement \
-              --workgroup-name nexabrands-redshift-workgroup \
-              --database nexabrands_datawarehouse \
-              --sql "SELECT current_date;"
+          # Get workgroup endpoint
+          ENDPOINT=$(aws redshift-serverless get-workgroup --workgroup-name nexabrands-redshift-workgroup --query 'workgroup.endpoint.address' --output text)
+          echo "Redshift endpoint: ${ENDPOINT}"
+          
+          # Test with a simple query
+          aws redshift-data execute-statement \
+            --workgroup-name nexabrands-redshift-workgroup \
+            --database nexabrands_datawarehouse \
+            --sql "SELECT current_date;"
 
       - name: Create profiles.yml
         run: |
+          # Get workgroup endpoint first
+          ENDPOINT=$(aws redshift-serverless get-workgroup --workgroup-name nexabrands-redshift-workgroup --query 'workgroup.endpoint.address' --output text)
+          
           cat > profiles.yml <<EOF
           nexabrands_dbt:
             outputs:
               prod:
                 type: redshift
-                host: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }}
+                host: ${ENDPOINT}
                 user: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_USER }}
                 password: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PASSWORD }}
                 port: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }}
@@ -94,7 +107,7 @@ jobs:
           EOF
           
           # Debug - print the profiles.yml without credentials
-          cat profiles.yml | sed 's/\(password: \).*/\1***/'
+          cat profiles.yml | sed 's/\(password: \).*/\1***/' | sed 's/\(host: \).*/\1***/'
       
       - name: Download previous manifest
         run: |
@@ -156,3 +169,9 @@ jobs:
         if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
         run: |
           aws s3 cp airflow/dbt/nexabrands_dbt/target/manifest.json s3://${{ secrets.CODE_BUCKET }}/dbt-docs/
+          
+      - name: Verify manifest upload (main branch or manual dispatch)
+        if: (github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch') && success()
+        run: |
+          echo "Verifying manifest upload..."
+          aws s3 ls s3://${{ secrets.CODE_BUCKET }}/dbt-docs/manifest.json || echo "Manifest upload failed!"
