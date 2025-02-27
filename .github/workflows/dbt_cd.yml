@@ -13,40 +13,38 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DBT_PROFILES_DIR: .
-      REDSHIFT_HOST: ${{ secrets.REDSHIFT_HOST }}
-      REDSHIFT_USER: ${{ secrets.REDSHIFT_USER }}
-      REDSHIFT_PASSWORD: ${{ secrets.REDSHIFT_PASSWORD }}
-      REDSHIFT_PORT: ${{ secrets.REDSHIFT_PORT }}
-      REDSHIFT_DBNAME: ${{ secrets.REDSHIFT_DBNAME }}
-      REDSHIFT_SCHEMA: ${{ secrets.REDSHIFT_SCHEMA }}
-      S3_BUCKET_PATH: ${{ secrets.S3_BUCKET_PATH }}
-    
+      REDSHIFT_HOST: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }}
+      REDSHIFT_USER: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_USER }}
+      REDSHIFT_PASSWORD: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PASSWORD }}
+      REDSHIFT_PORT: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }}
+      REDSHIFT_DBNAME: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_DATABASE }}
+      REDSHIFT_SCHEMA: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_SCHEMA }}
+      S3_BUCKET_PATH: ${{ secrets.CODE_BUCKET }}
     permissions:
       id-token: write # Required for OIDC authentication
       contents: read # Required to checkout the repository
-    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Fetch all history for proper state comparison
-      
+
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
           python-version: '3.12'
-      
+
       - name: Install dependencies
         run: |
           pip install -r airflow/requirements_dbt_venv.txt
           pip install awscli psycopg2-binary
-      
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
           aws-region: us-east-1
-      
+
       - name: Create profiles.yml
         run: |
           cat > profiles.yml <<EOF
@@ -65,7 +63,7 @@ jobs:
                 connect_timeout: 60
             target: prod
           EOF
-      
+
       - name: Verify Redshift Connection
         run: |
           python -c "
@@ -82,17 +80,17 @@ jobs:
           print(cur.fetchone())
           conn.close()
           "
-      
+
       - name: Download previous manifest
         run: |
           aws s3 cp s3://${{ env.S3_BUCKET_PATH }}/dbt-docs/manifest.json ./manifest.json || echo "No previous manifest found"
-      
+
       - name: Run dbt debug
         run: dbt debug --target prod
-      
+
       - name: Run dbt deps
         run: dbt deps --target prod
-      
+
       - name: Run dbt test (PR only)
         if: github.event_name == 'pull_request'
         run: |
@@ -101,7 +99,7 @@ jobs:
           else
             dbt test --target prod
           fi
-      
+
       - name: Run dbt build (main branch only)
         if: github.ref == 'refs/heads/main'
         run: |
@@ -110,7 +108,7 @@ jobs:
           else
             dbt build --target prod
           fi
-      
+
       - name: Copy new manifest to S3 (main branch only)
         if: github.ref == 'refs/heads/main'
         run: |
