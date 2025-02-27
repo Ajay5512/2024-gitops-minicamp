@@ -29,12 +29,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DBT_PROFILES_DIR: .
-      REDSHIFT_HOST: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }}
-      REDSHIFT_USER: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_USER }}
-      REDSHIFT_PASSWORD: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PASSWORD }}
-      REDSHIFT_PORT: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }}
-      REDSHIFT_DBNAME: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_DATABASE }}
-      REDSHIFT_SCHEMA: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_SCHEMA }}
       S3_BUCKET_PATH: ${{ secrets.CODE_BUCKET }}
     permissions:
       id-token: write 
@@ -48,12 +42,12 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
+          python-version: '3.10'  # Using 3.10 for better compatibility with dbt packages
 
       - name: Install dependencies
         run: |
           pip install -r airflow/requirements_dbt_venv.txt
-          pip install dbt-redshift awscli psycopg2-binary
+          pip install dbt-redshift==1.8.1 awscli psycopg2-binary
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -61,39 +55,21 @@ jobs:
           role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
           aws-region: us-east-1
           
-      - name: Verify S3 permissions
+      - name: Get Redshift Workgroup Endpoint
+        id: get-endpoint
         run: |
-          echo "Checking S3 permissions..."
-          aws s3 ls s3://${{ secrets.CODE_BUCKET }}/ || echo "Cannot list bucket contents, check permissions"
-          
-      - name: Ensure S3 paths exist
-        run: |
-          aws s3api head-bucket --bucket ${{ secrets.CODE_BUCKET }} || aws s3 mb s3://${{ secrets.CODE_BUCKET }}
-          aws s3 ls s3://${{ secrets.CODE_BUCKET }}/dbt-docs/ || aws s3api put-object --bucket ${{ secrets.CODE_BUCKET }} --key dbt-docs/
-
-      - name: Test Redshift Connection
-        run: |
-          # Get workgroup endpoint
           ENDPOINT=$(aws redshift-serverless get-workgroup --workgroup-name nexabrands-redshift-workgroup --query 'workgroup.endpoint.address' --output text)
-          echo "Redshift endpoint: ${ENDPOINT}"
-          
-          # Test with a simple query
-          aws redshift-data execute-statement \
-            --workgroup-name nexabrands-redshift-workgroup \
-            --database nexabrands_datawarehouse \
-            --sql "SELECT current_date;"
+          echo "REDSHIFT_ENDPOINT=${ENDPOINT}" >> $GITHUB_ENV
+          echo "Retrieved Redshift endpoint: ${ENDPOINT}"
 
       - name: Create profiles.yml
         run: |
-          # Get workgroup endpoint first
-          ENDPOINT=$(aws redshift-serverless get-workgroup --workgroup-name nexabrands-redshift-workgroup --query 'workgroup.endpoint.address' --output text)
-          
-          cat > profiles.yml <<EOF
+          cat > airflow/dbt/nexabrands_dbt/profiles.yml <<EOF
           nexabrands_dbt:
             outputs:
               prod:
                 type: redshift
-                host: ${ENDPOINT}
+                host: ${REDSHIFT_ENDPOINT}
                 user: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_USER }}
                 password: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PASSWORD }}
                 port: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }}
@@ -107,50 +83,41 @@ jobs:
           EOF
           
           # Debug - print the profiles.yml without credentials
-          cat profiles.yml | sed 's/\(password: \).*/\1***/' | sed 's/\(host: \).*/\1***/'
+          cat airflow/dbt/nexabrands_dbt/profiles.yml | sed 's/\(password: \).*/\1***/' | sed 's/\(host: \).*/\1***/'
       
-      - name: Download previous manifest
+      - name: Prepare S3 for dbt artifacts
+        run: |
+          aws s3api head-bucket --bucket ${{ secrets.CODE_BUCKET }} || aws s3 mb s3://${{ secrets.CODE_BUCKET }}
+          aws s3 ls s3://${{ secrets.CODE_BUCKET }}/dbt-docs/ || aws s3api put-object --bucket ${{ secrets.CODE_BUCKET }} --key dbt-docs/
+          
+      - name: Download previous manifest for slim CI
         run: |
           echo "Downloading manifest from s3://${{ secrets.CODE_BUCKET }}/dbt-docs/manifest.json"
           aws s3 cp s3://${{ secrets.CODE_BUCKET }}/dbt-docs/manifest.json ./manifest.json || echo "No previous manifest found"
 
-      - name: List dbt project files
-        run: |
-          echo "Listing dbt project directory contents:"
-          cd airflow/dbt/nexabrands_dbt
-          ls -la
-          echo "Checking for dbt_project.yml:"
-          if [ -f "dbt_project.yml" ]; then
-            echo "dbt_project.yml found"
-            cat dbt_project.yml | grep -i "name\|profile"
-          else
-            echo "dbt_project.yml NOT found"
-            find . -name "dbt_project.yml"
-          fi
-
       - name: Run dbt debug
         working-directory: airflow/dbt/nexabrands_dbt
         run: |
-          # Print dbt version
           dbt --version
-          # Run debug with verbose output
           dbt debug --target prod
 
       - name: Run dbt deps
         working-directory: airflow/dbt/nexabrands_dbt
         run: dbt deps --target prod
 
-      - name: Run dbt test (PR only)
+      - name: Run dbt test (PR only - Slim CI)
         if: github.event_name == 'pull_request'
         working-directory: airflow/dbt/nexabrands_dbt
         run: |
           if [ -f "../../manifest.json" ]; then
-            dbt test -s 'state:modified+' --state ../../ --target prod
+            echo "Running slim CI tests on modified models only"
+            dbt test --select state:modified+ --defer --state ../../ --target prod
           else
+            echo "No previous manifest found, running all tests"
             dbt test --target prod
           fi
 
-      - name: Run dbt build (main branch or manual dispatch)
+      - name: Run dbt build (main branch or manual dispatch - Slim CI)
         if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
         working-directory: airflow/dbt/nexabrands_dbt
         run: |
@@ -158,20 +125,27 @@ jobs:
             echo "Running with full refresh"
             dbt build --full-refresh --target prod
           elif [ -f "../../manifest.json" ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
-            echo "Running with state"
-            dbt build -s 'state:modified+' --state ../../ --target prod
+            echo "Running slim CI build on modified models only"
+            dbt build --select state:modified+ --defer --state ../../ --target prod
           else
             echo "Running normal build"
             dbt build --target prod
           fi
 
-      - name: Copy new manifest to S3 (main branch or manual dispatch)
+      - name: Generate dbt docs
+        if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+        working-directory: airflow/dbt/nexabrands_dbt
+        run: dbt docs generate --target prod
+
+      - name: Upload manifest and docs to S3
         if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
         run: |
           aws s3 cp airflow/dbt/nexabrands_dbt/target/manifest.json s3://${{ secrets.CODE_BUCKET }}/dbt-docs/
+          aws s3 cp airflow/dbt/nexabrands_dbt/target/catalog.json s3://${{ secrets.CODE_BUCKET }}/dbt-docs/
+          aws s3 cp airflow/dbt/nexabrands_dbt/target/index.html s3://${{ secrets.CODE_BUCKET }}/dbt-docs/
           
-      - name: Verify manifest upload (main branch or manual dispatch)
+      - name: Verify uploads
         if: (github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch') && success()
         run: |
-          echo "Verifying manifest upload..."
-          aws s3 ls s3://${{ secrets.CODE_BUCKET }}/dbt-docs/manifest.json || echo "Manifest upload failed!"
+          echo "Verifying uploads..."
+          aws s3 ls s3://${{ secrets.CODE_BUCKET }}/dbt-docs/ || echo "Upload verification failed!"
