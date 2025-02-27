@@ -52,12 +52,12 @@ jobs:
             outputs:
               prod:
                 type: redshift
-                host: ${{ env.REDSHIFT_HOST }}
-                user: ${{ env.REDSHIFT_USER }}
-                password: ${{ env.REDSHIFT_PASSWORD }}
-                port: ${{ env.REDSHIFT_PORT }}
-                dbname: ${{ env.REDSHIFT_DBNAME }}
-                schema: ${{ env.REDSHIFT_SCHEMA }}
+                host: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }}
+                user: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_USER }}
+                password: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PASSWORD }}
+                port: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }}
+                dbname: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_DATABASE }}
+                schema: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_SCHEMA }}
                 threads: 4
                 keepalives_idle: 0
                 connect_timeout: 60
@@ -69,11 +69,11 @@ jobs:
           python -c "
           import psycopg2
           conn = psycopg2.connect(
-              host='${{ env.REDSHIFT_HOST }}',
-              port=${{ env.REDSHIFT_PORT }},
-              dbname='${{ env.REDSHIFT_DBNAME }}',
-              user='${{ env.REDSHIFT_USER }}',
-              password='${{ env.REDSHIFT_PASSWORD }}'
+              host='${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }}',
+              port='${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }}',
+              dbname='${{ secrets.DBT_ENV_SECRET_REDSHIFT_DATABASE }}',
+              user='${{ secrets.DBT_ENV_SECRET_REDSHIFT_USER }}',
+              password='${{ secrets.DBT_ENV_SECRET_REDSHIFT_PASSWORD }}'
           )
           cur = conn.cursor()
           cur.execute('SELECT current_user, current_database()')
@@ -83,7 +83,7 @@ jobs:
 
       - name: Download previous manifest
         run: |
-          aws s3 cp s3://${{ env.S3_BUCKET_PATH }}/dbt-docs/manifest.json ./manifest.json || echo "No previous manifest found"
+          aws s3 cp s3://${{ secrets.CODE_BUCKET }}/dbt-docs/manifest.json ./manifest.json || echo "No previous manifest found"
 
       - name: Run dbt debug
         run: dbt debug --target prod
@@ -112,4 +112,4 @@ jobs:
       - name: Copy new manifest to S3 (main branch only)
         if: github.ref == 'refs/heads/main'
         run: |
-          aws s3 cp ./target/manifest.json s3://${{ env.S3_BUCKET_PATH }}dbt-docs/
+          aws s3 cp ./target/manifest.json s3://${{ secrets.CODE_BUCKET }}dbt-docs/
