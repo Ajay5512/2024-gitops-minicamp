@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   dbt_ci_cd_job:
@@ -58,7 +59,6 @@ jobs:
               --database nexabrands_datawarehouse \
               --sql "SELECT current_date;"
 
-
       - name: Create profiles.yml
         run: |
           cat > profiles.yml <<EOF
@@ -74,35 +74,42 @@ jobs:
                 schema: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_SCHEMA }}
                 threads: 4
                 keepalives_idle: 0
-                connect_timeout: 60
+                connect_timeout: 120
+                retries: 3
             target: prod
           EOF
-
       
+      - name: Navigate to DBT project directory
+        run: cd airflow/dbt/nexabrands_dbt
+        
       - name: Download previous manifest
         run: |
           aws s3 cp s3://${{ secrets.CODE_BUCKET }}/dbt-docs/manifest.json ./manifest.json || echo "No previous manifest found"
 
       - name: Run dbt debug
+        working-directory: airflow/dbt/nexabrands_dbt
         run: dbt debug --target prod
 
       - name: Run dbt deps
+        working-directory: airflow/dbt/nexabrands_dbt
         run: dbt deps --target prod
 
       - name: Run dbt test (PR only)
         if: github.event_name == 'pull_request'
+        working-directory: airflow/dbt/nexabrands_dbt
         run: |
-          if [ -f "./manifest.json" ]; then
-            dbt test -s 'state:modified+' --state ./ --target prod
+          if [ -f "../../manifest.json" ]; then
+            dbt test -s 'state:modified+' --state ../../ --target prod
           else
             dbt test --target prod
           fi
 
       - name: Run dbt build (main branch only)
         if: github.ref == 'refs/heads/main'
+        working-directory: airflow/dbt/nexabrands_dbt
         run: |
-          if [ -f "./manifest.json" ]; then
-            dbt build -s 'state:modified+' --state ./ --target prod
+          if [ -f "../../manifest.json" ]; then
+            dbt build -s 'state:modified+' --state ../../ --target prod
           else
             dbt build --target prod
           fi
@@ -110,4 +117,4 @@ jobs:
       - name: Copy new manifest to S3 (main branch only)
         if: github.ref == 'refs/heads/main'
         run: |
-          aws s3 cp ./target/manifest.json s3://${{ secrets.CODE_BUCKET }}dbt-docs/
+          aws s3 cp airflow/dbt/nexabrands_dbt/target/manifest.json s3://${{ secrets.CODE_BUCKET }}/dbt-docs/
