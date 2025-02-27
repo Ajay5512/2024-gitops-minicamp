@@ -62,3 +62,14 @@ variable "glue_service_role_arn" {
   description = "ARN of the Glue service role"
   type        = string
 }
+
+variable "glue_database_name" {
+  description = "Name of the Glue database"
+  type        = string
+}
+
+variable "redshift_serverless_publicly_accessible" {
+  description = "Boolean to indicate whether the Redshift serverless workgroup is publicly accessible"
+  type        = bool
+  default     = true
+}
