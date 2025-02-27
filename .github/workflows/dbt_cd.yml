@@ -44,7 +44,11 @@ jobs:
         working-directory: airflow/dbt/nexabrands_dbt
         run: |
           aws s3 cp s3://${{ env.S3_MANIFEST_BUCKET }}/${{ env.S3_MANIFEST_KEY }} ./manifest.json || echo "Manifest not found"
-
+       
+      - name: Test Redshift Connectivity
+        working-directory: airflow/dbt/nexabrands_dbt
+        run: nc -vz nexabrands-redshift-workgroup.043309357116.us-east-1.redshift-serverless.amazonaws.com 5439
+        
       - name: Run dbt debug
         working-directory: airflow/dbt/nexabrands_dbt
         run: dbt debug --target prod
