@@ -32,3 +32,4 @@ variable "redshift_cluster_arn" {
   description = "ARN of the Redshift Serverless workgroup"
   type        = string
 }
+
