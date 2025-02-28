@@ -90,10 +90,15 @@ resource "aws_subnet" "redshift-serverless-subnet-az3" {
 }
 
 # Security Group with Open Redshift Port
+# Replace the existing security group resource with this
 resource "aws_security_group" "redshift-serverless-security-group" {
-  name        = "${var.app_name}-redshift-serverless-security-group"
-  description = "Security group for publicly accessible Redshift Serverless"
+  name_prefix = "${var.app_name}-redshift-sg-"
+  description = "Security group for Redshift Serverless"
   vpc_id      = aws_vpc.redshift-serverless-vpc.id
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   ingress {
     description = "Redshift port access"
@@ -110,9 +115,10 @@ resource "aws_security_group" "redshift-serverless-security-group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = { Name = "${var.app_name}-redshift-serverless-security-group" }
+  tags = {
+    Name = "${var.app_name}-redshift-serverless-security-group"
+  }
 }
-
 # NAT Gateway Configuration (Original)
 resource "aws_eip" "nat" {
   domain = "vpc"
