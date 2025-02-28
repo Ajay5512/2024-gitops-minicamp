@@ -504,3 +504,24 @@ resource "aws_iam_role_policy" "redshift-kms-access-policy" {
     ]
   })
 }
+
+# modules/iam/main.tf (for GitHub Actions role)
+resource "aws_iam_role_policy" "github_redshift_access" {
+  name = "github-redshift-access"
+  role = aws_iam_role.github_actions_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "redshift-data:ExecuteStatement",
+          "redshift-serverless:ExecuteStatement",
+          "redshift:GetClusterCredentials"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
