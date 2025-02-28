@@ -1,8 +1,9 @@
-# Modified EC2 instance
-# EC2 instance with single root volume
+# modules/ec2/main.tf
+
+# Modified EC2 instance with explicit dependencies
 resource "aws_instance" "rag_cs_instance" {
   ami                         = var.ami_id
-  instance_type              = var.instance_type
+  instance_type               = var.instance_type
   vpc_security_group_ids     = [aws_security_group.rag_cs_sg.id]
   subnet_id                  = var.subnet_id
   iam_instance_profile       = var.ec2_instance_profile_name
@@ -22,20 +23,29 @@ resource "aws_instance" "rag_cs_instance" {
   tags = {
     Name = "${var.project_name}-RAG-CS-Instance"
   }
+
+  # Explicit dependency on security group
+  depends_on = [
+    aws_security_group.rag_cs_sg,
+    aws_key_pair.ec2_key_pair
+  ]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
-
-# Key pair for EC2 instance
-resource "aws_key_pair" "ec2_key_pair" {
-  key_name   = "${var.project_name}-key"
-  public_key = var.public_key
-}
-
+# Security group with proper lifecycle management
 resource "aws_security_group" "rag_cs_sg" {
   name        = "${var.project_name}-rag-cs-sg"
   description = "Security group for RAG Customer Support instance"
-  vpc_id      = var.vpc_id  # Use the vpc_id from variables
+  vpc_id      = var.vpc_id
 
+  lifecycle {
+    create_before_destroy = true
+    # Prevent destruction while instance exists (remove for production)
+    # prevent_destroy = true
+  }
 
   ingress {
     description = "SSH"
@@ -127,4 +137,10 @@ resource "aws_security_group" "rag_cs_sg" {
   tags = {
     Name = "${var.project_name}-rag-cs-sg"
   }
+}
+
+# Key pair remains unchanged
+resource "aws_key_pair" "ec2_key_pair" {
+  key_name   = "${var.project_name}-key"
+  public_key = var.public_key
 }
