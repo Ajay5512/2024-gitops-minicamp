@@ -122,19 +122,7 @@ variable "redshift_serverless_base_capacity" {
 variable "redshift_serverless_publicly_accessible" {
   type        = bool
   description = "Set the Redshift Serverless to be Publicly Accessible"
-  default     = true # Updated to true for public access
-}
-
-variable "dbt_password" {
-  type        = string
-  sensitive   = true
-  description = "Password for the dbt user"
-}
-
-variable "glue_database_name" {
-  type        = string
-  description = "Name of the Glue database to connect to"
-  default     = "tickit_dbt"
+  default     = true
 }
 
 variable "redshift_serverless_vpc_cidr" {
@@ -157,6 +145,18 @@ variable "redshift_serverless_subnet_3_cidr" {
   type        = string
 }
 
+variable "dbt_password" {
+  type        = string
+  sensitive   = true
+  description = "Password for the dbt user"
+}
+
+variable "glue_database_name" {
+  type        = string
+  description = "Name of the Glue database to connect to"
+  default     = "nexabrands_dbt" # Updated default to match your setup
+}
+
 #######################
 ## EC2 - Variables ##
 #######################
@@ -177,7 +177,6 @@ variable "public_key" {
   description = "Public SSH key for EC2 instance access"
   sensitive   = true
 }
-
 
 ########################
 ## S3 Files - Variables ##
@@ -207,8 +206,5 @@ variable "code_files" {
     "dates.py"             = "./modules/scripts/dates.py"
     "order_fulfillment.py" = "./modules/scripts/order_fulfillment.py"
     "order_lines.py"       = "./modules/scripts/order_lines.py"
-
-
   }
 }
-
