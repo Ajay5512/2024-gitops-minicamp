@@ -9,7 +9,7 @@ resource "aws_redshiftserverless_namespace" "serverless" {
   namespace_name      = var.redshift_serverless_namespace_name
   db_name             = var.redshift_serverless_database_name
   admin_username      = var.redshift_serverless_admin_username
-  admin_user_password_wo = var.redshift_serverless_admin_password
+  admin_user_password = var.redshift_serverless_admin_password
   iam_roles           = [var.redshift_role_arn]
 
   tags = {
