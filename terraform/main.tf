@@ -23,13 +23,14 @@ module "s3" {
 }
 
 module "iam" {
-  source        = "./modules/iam"
-  environment   = var.environment
-  source_bucket = var.source_bucket
-  target_bucket = var.target_bucket
-  code_bucket   = var.code_bucket
-  sns_topic_arn = module.sns.topic_arn
-  kms_key_arn   = module.s3.kms_key_arn
+  source               = "./modules/iam"
+  environment          = var.environment
+  source_bucket        = var.source_bucket
+  target_bucket        = var.target_bucket
+  code_bucket          = var.code_bucket
+  sns_topic_arn        = module.sns.topic_arn
+  kms_key_arn          = module.s3.kms_key_arn
+  redshift_cluster_arn = module.redshift.redshift_cluster_arn
 }
 
 module "glue" {
