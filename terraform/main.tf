@@ -1,8 +1,7 @@
-# main.tf (updated)
 provider "aws" {
   region = var.aws_region
 }
-
+# main.tf.
 module "s3" {
   source = "./modules/s3"
 
@@ -23,30 +22,30 @@ module "s3" {
 }
 
 module "iam" {
-  source               = "./modules/iam"
-  environment          = var.environment
-  source_bucket        = var.source_bucket
-  target_bucket        = var.target_bucket
-  code_bucket          = var.code_bucket
-  sns_topic_arn        = module.sns.topic_arn
-  kms_key_arn          = module.s3.kms_key_arn
-  redshift_cluster_arn = module.redshift.redshift_cluster_arn
+  source        = "./modules/iam"
+  environment   = var.environment
+  source_bucket = var.source_bucket
+  target_bucket = var.target_bucket
+  code_bucket   = var.code_bucket
+  sns_topic_arn = module.sns.topic_arn
+  kms_key_arn   = module.s3.kms_key_arn
 }
 
 module "glue" {
   source = "./modules/glue"
 
+  # Required Variables
   environment   = var.environment
   source_bucket = var.source_bucket
   target_bucket = var.target_bucket
   code_bucket   = var.code_bucket
   glue_role_arn = module.iam.glue_role_arn
 }
-
 module "sns" {
   source      = "./modules/sns"
   environment = var.environment
 }
+
 module "vpc" {
   source = "./modules/vpc"
 
@@ -56,8 +55,10 @@ module "vpc" {
   redshift_serverless_subnet_3_cidr = var.redshift_serverless_subnet_3_cidr
   app_name                          = var.app_name
   public_key                        = var.public_key
-  redshift_cluster_arn              = module.redshift.redshift_cluster_arn
 }
+
+
+
 module "redshift" {
   source = "./modules/redshift"
 
@@ -67,13 +68,14 @@ module "redshift" {
   redshift_serverless_admin_password      = var.redshift_serverless_admin_password
   redshift_serverless_workgroup_name      = var.redshift_serverless_workgroup_name
   redshift_serverless_base_capacity       = var.redshift_serverless_base_capacity
+  redshift_serverless_publicly_accessible = var.redshift_serverless_publicly_accessible
   redshift_role_arn                       = module.iam.redshift_role_arn
   security_group_id                       = module.vpc.security_group_id
   subnet_ids                              = module.vpc.subnet_ids
-  public_subnet_id                        = module.vpc.public_subnet_az1_id
-  dbt_password                            = var.dbt_password
-  glue_database_name                      = var.glue_database_name
-  redshift_serverless_publicly_accessible = var.redshift_serverless_publicly_accessible
+
+  # SQL initialization variables
+  dbt_password       = var.dbt_password
+  glue_database_name = var.glue_database_name
 
   depends_on = [module.vpc, module.iam, module.glue]
 }
@@ -85,7 +87,7 @@ module "ec2" {
   ami_id                    = var.ami_id
   instance_type             = var.instance_type
   vpc_id                    = module.vpc.vpc_id
-  subnet_id                 = module.vpc.public_subnet_az1_id
+  subnet_id                 = module.vpc.public_subnet_id
   ec2_instance_profile_name = module.iam.ec2_instance_profile_name
   public_key                = var.public_key
 
