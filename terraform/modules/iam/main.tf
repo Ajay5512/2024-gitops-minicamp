@@ -470,36 +470,6 @@ resource "aws_iam_role_policy" "ec2_policy" {
           "redshift-serverless:ListStatements"
         ]
         Resource = "*"
-      },
-      # New KMS permissions for S3
-      {
-        Effect = "Allow"
-        Action = [
-          "kms:GenerateDataKey",
-          "kms:Decrypt"
-        ]
-        Resource = "arn:aws:kms:us-east-1:043309357116:key/a673ca7a-2eba-4f19-bf1b-3c475c1a92e7"
-      }
-    ]
-  })
-}
-
-# Add this new policy for Redshift KMS access
-resource "aws_iam_role_policy" "redshift-kms-access-policy" {
-  name = "topdevs-${var.environment}-redshift-serverless-role-kms-policy"
-  role = aws_iam_role.redshift-serverless-role.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Action = [
-          "kms:Decrypt",
-          "kms:GenerateDataKey",
-          "kms:DescribeKey"
-        ]
-        Resource = [var.kms_key_arn]  # Make sure to pass this variable
       }
     ]
   })
