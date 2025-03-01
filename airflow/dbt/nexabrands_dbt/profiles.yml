@@ -4,7 +4,7 @@ prod:
   outputs:
     prod:
       type: redshift
-      host: "{{ env_var('REDSHIFT_HOST') }}"
+
       port: 5439
       dbname: nexabrands_datawarehouse
       user: "{{ env_var('REDSHIFT_USER') }}"
