@@ -4,6 +4,11 @@ prod:
   outputs:
     prod:
       type: redshift
+<<<<<<< HEAD
+=======
+
+      port: 5439
+>>>>>>> bcb789da417801eb7e7276fbc28528e1e937abda
       dbname: nexabrands_datawarehouse
       user: "{{ env_var('REDSHIFT_USER') }}"
       password: "{{ env_var('REDSHIFT_PASSWORD') }}"
