@@ -35,15 +35,11 @@ jobs:
           role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
           aws-region: us-east-1
 
-      - name: Get Redshift endpoint
-        id: redshift_endpoint
-        run: |
-          echo "REDSHIFT_ENDPOINT=$(terraform -chdir=terraform output -raw redshift_endpoint)" >> $GITHUB_ENV
 
       - name: Test Redshift Connectivity
         run: |
           echo "Testing connection to $REDSHIFT_ENDPOINT:5439"
-          nc -vz $REDSHIFT_ENDPOINT 5439
+          nc -vz nexabrands-redshift-workgroup.043309357116.us-east-1.redshift-serverless.amazonaws.com 5439
 
       - name: Set up dbt profiles.yml
         run: |
