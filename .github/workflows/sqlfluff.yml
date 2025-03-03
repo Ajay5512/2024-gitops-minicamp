@@ -1,0 +1,40 @@
+name: SQLFluff
+
+on:
+  pull_request:
+    paths:
+      - '**.sql'
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Install and run SQLFluff
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: ./.github/actions/setup-python
+
+      - name: Install SQLFluff
+        uses: ./.github/actions/install-python-dependencies
+        with:
+          dependencies: sqlfluff
+
+      - name: Lint SQL files on Pull Request
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+          CHANGED_FILES=$(git diff --diff-filter=d --name-only origin/main | grep '\.sql$' || true)
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "$CHANGED_FILES" | xargs sqlfluff lint
+          else
+            echo "No SQL files changed"
+          fi
+
+      - name: Lint all SQL files on Manual Trigger
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          find . -name '*.sql' -print0 | xargs -0 sqlfluff lint

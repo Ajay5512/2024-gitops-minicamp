@@ -1,52 +1,70 @@
-name: dbt CI schema teardown on PR close
+name: CI schema teardown on PR close
 
 on:
   pull_request:
     types:
       - closed
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   CI_TEARDOWN_job:
-    runs-on: ubuntu-latest
     environment: production
+    runs-on: ubuntu-latest
     permissions:
       id-token: write
       contents: read
-
     env:
-      S3_BUCKET_MANIFEST: ${{ secrets.S3_BUCKET_MANIFEST }}
-      S3_PATH_MANIFEST: ${{ secrets.S3_PATH_MANIFEST }}
-      DBT_ENV_SECRET_REDSHIFT_HOST: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_HOST }}
-      DBT_ENV_SECRET_REDSHIFT_DATABASE: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_DATABASE }}
-      DBT_ENV_SECRET_REDSHIFT_USER: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_USER }}
-      DBT_ENV_SECRET_REDSHIFT_PASSWORD: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PASSWORD }}
-      DBT_ENV_SECRET_REDSHIFT_PORT: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_PORT }}
-      DBT_ENV_SECRET_REDSHIFT_SCHEMA: ${{ secrets.DBT_ENV_SECRET_REDSHIFT_SCHEMA }}
-
+      S3_MANIFEST_BUCKET: "nexabrands-prod-target"
+      S3_MANIFEST_KEY: "dbt-docs/manifest.json"
     steps:
-    - name: checkout
+    - name: Checkout repository
       uses: actions/checkout@v3
-
+      
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
         python-version: '3.12'
-
+        
     - name: Install dependencies
       run: pip install -r airflow/requirements_dbt_venv.txt
-
-    - name: Configure AWS credentials
+      
+    - name: Configure AWS Credentials using OIDC
       uses: aws-actions/configure-aws-credentials@v4
       with:
         role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
         aws-region: us-east-1
-
-    - name: Get PR NUM
+    
+    - name: Download manifest.json from S3
+      run: |
+        aws s3 cp s3://${{ env.S3_MANIFEST_BUCKET }}/${{ env.S3_MANIFEST_KEY }} ./manifest.json || echo "Manifest not found"
+    
+    - name: Get Schema ID
       id: schema_id
-      run: echo "PR_NUM=${{ github.event.number }}" >> $GITHUB_ENV
-
-    - name: dbt deps
-      run: dbt deps --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt
-
-    - name: drop PR schemas
-      run: dbt run-operation drop_pr_staging_schemas --args "{'database': '${DBT_ENV_SECRET_REDSHIFT_DATABASE}', 'PR_number': '${PR_NUM}'}" --profiles-dir airflow/dbt/nexabrands_dbt --project-dir airflow/dbt/nexabrands_dbt
+      run: echo "SCHEMA_ID=${{ github.event.pull_request.number }}__${{ github.sha }}" >> $GITHUB_ENV
+    
+    - name: Test Redshift Connectivity
+      run: |
+        echo "Testing connection to Redshift"
+        nc -vz nexabrands-redshift-workgroup.043309357116.us-east-1.redshift-serverless.amazonaws.com 5439
+    
+    - name: Set up dbt profiles.yml
+      run: |
+        mkdir -p ~/.dbt
+        cp ./airflow/dbt/nexabrands_dbt/profiles.yml ~/.dbt/profiles.yml
+    
+    - name: Run dbt debug
+      working-directory: airflow/dbt/nexabrands_dbt
+      run: |
+        dbt debug --target pr --vars "schema_id: $SCHEMA_ID"
+    
+    - name: Run dbt deps
+      working-directory: airflow/dbt/nexabrands_dbt
+      run: |
+        dbt deps --target pr --vars "schema_id: $SCHEMA_ID"
+    
+    - name: Drop PR schemas
+      working-directory: airflow/dbt/nexabrands_dbt
+      run: |
+        dbt run-operation drop_pr_schemas --args "{'schema_id': '$SCHEMA_ID'}" --target pr
