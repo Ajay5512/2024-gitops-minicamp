@@ -1,0 +1,37 @@
+name: Yamllint
+
+on:
+  pull_request:
+    paths:
+      - '**.yaml'
+      - '**.yml'
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Install and run Yamllint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: ./.github/actions/setup-python
+
+      - name: Install Yamllint
+        uses: ./.github/actions/install-python-dependencies
+        with:
+          dependencies: "yamllint"
+
+      - name: Lint YAML files on Pull Request
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+          git ls-files --exclude-standard --cached --others -- '*.yaml' '*.yml' | xargs yamllint
+
+
+      - name: Lint all YAML files on Manual Trigger
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          find . -name '*.yaml' -or -name '*.yml' -print0 | xargs -0 yamllint
