@@ -1,4 +1,3 @@
-# customers.py
 import boto3
 from awsglue.context import GlueContext
 from awsglue.job import Job
@@ -92,8 +91,8 @@ def clean_customer_data(df: DataFrame) -> DataFrame:
 
 
 def write_transformed_data(df: DataFrame, s3_output_path: str) -> None:
-    """Write the transformed data to an S3 bucket as a single Parquet file."""
-    df.coalesce(1).write.mode("overwrite").format("parquet").save(s3_output_path)
+    """Write the transformed data to an S3 bucket as a single CSV file."""
+    df.coalesce(1).write.mode("overwrite").format("csv").option("header", "true").save(s3_output_path)
 
 
 if __name__ == "__main__":
@@ -112,21 +111,21 @@ if __name__ == "__main__":
     customers_df = load_customers_data(glue_context, s3_input_path)
     cleaned_customers = clean_customer_data(customers_df)
 
-    # Save the cleaned data to S3 as a single Parquet file in a temporary folder
+    # Save the cleaned data to S3 as a single CSV file in a temporary folder
     write_transformed_data(cleaned_customers, s3_temp_output_path)
 
-    # Use boto3 to rename the file to `customers.parquet`
+    # Use boto3 to rename the file to `customers.csv`
     s3_client = boto3.client("s3")
     bucket_name = "nexabrands-prod-target"  # Output bucket name
 
-    # Find the generated Parquet file in the temporary folder
+    # Find the generated CSV file in the temporary folder
     response = s3_client.list_objects_v2(Bucket=bucket_name, Prefix="customers/temp/")
     if "Contents" in response:
         for obj in response["Contents"]:
-            if obj["Key"].endswith(".parquet"):
+            if obj["Key"].endswith(".csv"):
                 source_key = obj["Key"]
                 # Construct the destination key
-                destination_key = "customers/customers.parquet"
+                destination_key = "customers/customers.csv"
                 # Copy the file to the new location
                 copy_source = {"Bucket": bucket_name, "Key": source_key}
                 s3_client.copy_object(
