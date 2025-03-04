@@ -83,62 +83,24 @@ def clean_products_data(df: DataFrame) -> DataFrame:
     )
 
 
-def rename_s3_file(bucket: str, old_key: str, new_key: str):
-    """
-    Rename a file in S3.
-
-    Args:
-        bucket (str): The name of the S3 bucket.
-        old_key (str): The current key of the file to be renamed.
-        new_key (str): The new key for the renamed file.
-
-    Returns:
-        None
-    """
-    s3_client = boto3.client("s3")
-    copy_source = {"Bucket": bucket, "Key": old_key}
-    s3_client.copy_object(CopySource=copy_source, Bucket=bucket, Key=new_key)
-    s3_client.delete_object(Bucket=bucket, Key=old_key)
-
-
 def main():
     input_path = "s3a://nexabrands-prod-source/data/products.csv"
     output_bucket = "nexabrands-prod-target"
-    output_prefix = "products/"
-    output_path = f"s3a://{output_bucket}/{output_prefix}"
-    temp_output_path = f"s3a://{output_bucket}/{output_prefix}temp/"
+    output_path = f"s3a://{output_bucket}/products/products.csv"
 
     products_df = load_products_data(input_path)
     cleaned_products = clean_products_data(products_df)
 
-    cleaned_products.write.mode("overwrite").partitionBy("category").parquet(
-        temp_output_path
-    )
-
-    s3_client = boto3.client("s3")
-    prefix = output_prefix + "temp/"
-
-    response = s3_client.list_objects_v2(
-        Bucket=output_bucket, Prefix=prefix, Delimiter="/"
-    )
-    for common_prefix in response.get("CommonPrefixes", []):
-        partition_path = common_prefix["Prefix"]
-        category = partition_path.split("=")[-1].rstrip("/")
-
-        partition_files = s3_client.list_objects_v2(
-            Bucket=output_bucket, Prefix=partition_path
-        )
-        for obj in partition_files.get("Contents", []):
-            if obj["Key"].endswith(".parquet"):
-                old_key = obj["Key"]
-                new_key = f"{output_prefix}{category}/product.parquet"
-                rename_s3_file(output_bucket, old_key, new_key)
-                break
-
-    s3_client.delete_object(Bucket=output_bucket, Key=prefix)
+    # Write as single CSV file
+    cleaned_products.coalesce(1).write \
+        .mode("overwrite") \
+        .option("header", "true") \
+        .option("quote", '"') \
+        .option("escape", '"') \
+        .csv(output_path)
 
     print(
-        f"Products ETL job completed successfully. Partitioned Parquet output saved to: {output_path}"
+        f"Products ETL job completed successfully. CSV output saved to: {output_path}"
     )
 
 
