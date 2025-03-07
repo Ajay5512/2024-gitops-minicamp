@@ -31,7 +31,7 @@ scrape_configs:
     # Override the global default and scrape targets from this job every 5 seconds.
     scrape_interval: 15s
     static_configs:
-      - targets: 
+      - targets:
         - 'statsd-exporter:9102'
 
   - job_name: 'node-exporter'

@@ -52,7 +52,7 @@ seeds:
           num_buckets: integer
           min_value: float
           max_value: float
-      
+
       data_unpivot_quote:
         +quote_columns: true
 

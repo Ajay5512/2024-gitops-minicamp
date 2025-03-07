@@ -37,7 +37,7 @@
         {{ return(numeric_list) }}
     {%- elif data_type == 'timestamp' %}
         {{ return(timestamp_list) }}
-    {%- elif data_type == "boolean" %} 
+    {%- elif data_type == "boolean" %}
         {{ return(boolean_list) }}
     {%- else %}
         {{ return([]) }}
@@ -86,7 +86,7 @@
     {%- else %}
         {{ return([]) }}
     {%- endif %}
-    
+
 {% endmacro %}
 
 

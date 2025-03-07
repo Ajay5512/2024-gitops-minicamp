@@ -84,7 +84,7 @@
             {% if test_model_owner is string %}
                 {% set owners = test_model_owner.split(',') %}
                 {% for owner in owners %}
-                    {% do test_models_owners.append(owner | trim) %}  
+                    {% do test_models_owners.append(owner | trim) %}
                 {% endfor %}
             {% elif test_model_owner is iterable %}
                 {% do test_models_owners.extend(test_model_owner) %}

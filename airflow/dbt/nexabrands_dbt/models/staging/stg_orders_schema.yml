@@ -23,7 +23,7 @@ models:
               min_value: 1
               max_value: 50
 
-      
+
       - name: order_placement_date
         description: "The date when the order was placed"
         data_type: date
@@ -40,11 +40,11 @@ models:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
           max_value: 10000000  # Adjust based on your expected order volume
-      
+
       - dbt_expectations.expect_table_columns_to_match_ordered_list:
           column_list: ['order_id', 'customer_id', 'order_placement_date']
-      
-      
+
+
       # Test for no duplicate orders per customer per day
       - dbt_expectations.expect_compound_columns_to_be_unique:
           column_list: ['customer_id', 'order_placement_date', 'order_id']

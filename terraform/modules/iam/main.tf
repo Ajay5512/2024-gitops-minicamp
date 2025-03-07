@@ -179,7 +179,7 @@ resource "aws_iam_role_policy" "redshift-glue-access-policy" {
           "redshift:ListQueryEditorV2Favorites",
           "redshift:BatchExecuteQueryEditorQuery",
           "redshift:UpdateQueryEditorV2Favorites",
-          
+
           # Additional Query and Cluster Interaction Permissions
           "redshift:BatchModifyClusterIamRoles",
           "redshift:CancelQuery",
@@ -201,7 +201,7 @@ resource "aws_iam_role_policy" "redshift-glue-access-policy" {
           "redshift:ModifyScheduledAction",
           "redshift:PauseCluster",
           "redshift:ResumeCluster",
-          
+
           # Comprehensive Redshift Serverless Permissions
           "redshift-serverless:*"
         ]
@@ -366,7 +366,7 @@ resource "aws_iam_role_policy" "ec2_policy" {
           "redshift:*",
           "redshift-data:*",
           "redshift-serverless:*",
-          
+
           # Redshift Query Editor specific permissions
           "redshift:DescribeQueryEditorV2",
           "redshift:GetQueryEditorV2Results",

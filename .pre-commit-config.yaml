@@ -1,8 +1,78 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
 repos:
-  # Black: Formats Python code to adhere to PEP 8
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      # Fails if there are any ">>>>>" lines in files due to merge conflicts.
+      - id: check-merge-conflict
+        files: '^terraform/modules/scripts/.*|^terraform/modules/tests/.*'
+      # Trims trailing whitespace. Allows a single space on the end of .md lines for hard line breaks.
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+        files: '^terraform/modules/scripts/.*|^terraform/modules/tests/.*'
+      # Ensures files end in a newline and only a newline.
+      - id: end-of-file-fixer
+        files: '^terraform/modules/scripts/.*|^terraform/modules/tests/.*'
+      # Validates TOML file syntax.
+      - id: check-toml
+        files: '^terraform/modules/scripts/.*|^terraform/modules/tests/.*'
+      # Validates YAML file syntax; 'unsafe' mode checks syntax without loading YAML.
+      - id: check-yaml
+        args: ["--unsafe"]
+        files: '^terraform/modules/scripts/.*|^terraform/modules/tests/.*'
+      # Checks for symlinks that do not point to anything.
+      - id: check-symlinks
+        files: '^terraform/modules/scripts/.*|^terraform/modules/tests/.*'
+      # Fails if staged files exceed a certain size.
+      - id: check-added-large-files
+        args: ["--maxkb=500"]
+        files: '^terraform/modules/scripts/.*|^terraform/modules/tests/.*'
+        exclude: |
+          (?x)(
+              ^example/large/file.csv|
+              ^example/large/sklearn-model.pkl
+          )
+      # Prevents the addition of new git submodules.
+      - id: forbid-new-submodules
+        files: '^terraform/modules/scripts/.*|^terraform/modules/tests/.*'
+      # Prevents committing directly to specified branches.
+      - id: no-commit-to-branch
+        args: ["--branch=main"]
+        files: '^terraform/modules/scripts/.*|^terraform/modules/tests/.*'
+      # Detects the presence of private keys.
+      - id: detect-private-key
+        files: '^terraform/modules/scripts/.*|^terraform/modules/tests/.*'
+
+  - repo: https://github.com/PyCQA/pylint
+    rev: v3.3.4
+    hooks:
+      - id: pylint
+        args: [--rcfile=.pylintrc]
+        files: '^terraform/modules/scripts/.*\.py$|^terraform/modules/tests/.*\.py$'
+
+  - repo: https://github.com/pycqa/isort
+    rev: 6.0.1
+    hooks:
+      - id: isort
+        name: isort (python)
+        args: [--settings=.isort.cfg]
+        files: '^terraform/modules/scripts/.*\.py$|^terraform/modules/tests/.*\.py$'
+
+  - repo: https://github.com/pycqa/flake8
+    rev: "7.1.2"
+    hooks:
+      - id: flake8
+        additional_dependencies:
+          - radon
+          - flake8-docstrings
+        args: [--config=.flake8]
+        files: '^terraform/modules/scripts/.*\.py$|^terraform/modules/tests/.*\.py$'
+
   - repo: https://github.com/psf/black
-    rev: 24.10.0
+    rev: 25.1.0
     hooks:
       - id: black
-
-  
+        args:
+          - --config=./.black.toml
+        files: '^terraform/modules/scripts/.*\.py$|^terraform/modules/tests/.*\.py$'

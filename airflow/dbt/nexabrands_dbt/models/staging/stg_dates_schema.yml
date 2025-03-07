@@ -8,7 +8,7 @@ models:
           min_value: 1
       - dbt_expectations.expect_table_columns_to_match_set:
           column_list: ["date"]
-  
+
 
     columns:
       - name: date

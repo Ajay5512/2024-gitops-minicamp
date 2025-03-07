@@ -1,8 +1,25 @@
 import sys
-from unittest.mock import MagicMock, patch
+from unittest.mock import (
+    MagicMock,
+    patch,
+)
 
 import pytest
-from pyspark.sql import DataFrame, SparkSession
+
+# Import the module to test after mocking
+from order_fulfillment import (
+    clean_order_fulfillment_data,
+    clean_order_id,
+    drop_null_values,
+    filter_invalid_order_ids,
+    load_order_fulfillment_data,
+    rename_columns,
+    transform_metrics,
+)
+from pyspark.sql import (
+    DataFrame,
+    SparkSession,
+)
 from pyspark.sql.functions import col
 from pyspark.sql.types import (
     FloatType,
@@ -16,17 +33,6 @@ from pyspark.sql.types import (
 sys.modules["awsglue"] = MagicMock()
 sys.modules["awsglue.context"] = MagicMock()
 sys.modules["awsglue.job"] = MagicMock()
-
-# Import the module to test after mocking
-from order_fulfillment import (
-    clean_order_fulfillment_data,
-    clean_order_id,
-    drop_null_values,
-    filter_invalid_order_ids,
-    load_order_fulfillment_data,
-    rename_columns,
-    transform_metrics,
-)
 
 
 @pytest.fixture(scope="session")

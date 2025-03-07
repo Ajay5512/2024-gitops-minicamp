@@ -1,16 +1,11 @@
 # test_dates.py
 import sys
-from unittest.mock import MagicMock, patch
+from unittest.mock import (
+    MagicMock,
+    patch,
+)
 
 import pytest
-from pyspark.sql import DataFrame, SparkSession
-from pyspark.sql.functions import col
-from pyspark.sql.types import StringType, StructField, StructType
-
-# Mock the awsglue module
-sys.modules["awsglue"] = MagicMock()
-sys.modules["awsglue.context"] = MagicMock()
-sys.modules["awsglue.job"] = MagicMock()
 
 # Import the module to test after mocking
 from dates import (
@@ -24,6 +19,21 @@ from dates import (
     load_dates_data,
     rename_and_lowercase_columns,
 )
+from pyspark.sql import (
+    DataFrame,
+    SparkSession,
+)
+from pyspark.sql.functions import col
+from pyspark.sql.types import (
+    StringType,
+    StructField,
+    StructType,
+)
+
+# Mock the awsglue module
+sys.modules["awsglue"] = MagicMock()
+sys.modules["awsglue.context"] = MagicMock()
+sys.modules["awsglue.job"] = MagicMock()
 
 
 @pytest.fixture(scope="session")

@@ -7,7 +7,7 @@ order_fulfillment AS (
     FROM {{ ref('stg_order_fulfillment') }}
 ),
 joined_data AS (
-    SELECT 
+    SELECT
         o.order_id,
         o.customer_id,
         o.order_placement_date AS order_date,  -- to join with dim_date if needed
@@ -18,7 +18,7 @@ joined_data AS (
     JOIN order_fulfillment ofu
         ON o.order_id = ofu.order_id
 )
-SELECT 
+SELECT
     ROUND((SUM(on_time::numeric) / COUNT(*)) * 100, 2) AS on_time_percentage,
     ROUND((SUM(in_full::numeric) / COUNT(*)) * 100, 2) AS in_full_percentage,
     ROUND((SUM(otif::numeric) / COUNT(*)) * 100, 2) AS otif_percentage

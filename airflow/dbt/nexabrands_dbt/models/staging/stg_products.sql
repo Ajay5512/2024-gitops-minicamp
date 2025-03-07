@@ -11,6 +11,3 @@ staged AS (
     FROM source
 )
 SELECT * FROM staged
-
-
-

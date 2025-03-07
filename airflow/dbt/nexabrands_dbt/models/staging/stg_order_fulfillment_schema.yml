@@ -12,7 +12,7 @@ models:
     columns:
       - name: order_id
         description: "Unique ID for each order the customer placed"
-    
+
       - name: on_time
         description: "Binary indicator for whether the order was delivered on time (1) or not (0)"
         tests:
@@ -22,7 +22,7 @@ models:
                0,1
               ]
               quote: true
-        
+
       - name: in_full
         description: "Binary indicator for whether the order was delivered in full (1) or not (0)"
         tests:
@@ -42,5 +42,3 @@ models:
                0,1
               ]
               quote: true
-
-  

@@ -6,8 +6,17 @@ from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions
 from pyspark.context import SparkContext
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import col, regexp_replace, trim, when
-from pyspark.sql.types import StringType, StructField, StructType
+from pyspark.sql.functions import (
+    col,
+    regexp_replace,
+    trim,
+    when,
+)
+from pyspark.sql.types import (
+    StringType,
+    StructField,
+    StructType,
+)
 
 args = getResolvedOptions(sys.argv, ["JOB_NAME"])
 sc = SparkContext()
@@ -92,12 +101,9 @@ def main():
     cleaned_products = clean_products_data(products_df)
 
     # Write as single CSV file
-    cleaned_products.coalesce(1).write \
-        .mode("overwrite") \
-        .option("header", "true") \
-        .option("quote", '"') \
-        .option("escape", '"') \
-        .csv(output_path)
+    cleaned_products.coalesce(1).write.mode("overwrite").option(
+        "header", "true"
+    ).option("quote", '"').option("escape", '"').csv(output_path)
 
     print(
         f"Products ETL job completed successfully. CSV output saved to: {output_path}"

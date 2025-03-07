@@ -14,7 +14,7 @@
         {% set schema_exists = run_query(schema_exists_query)|length > 0 %}
     {% else %}
         {% set schema_exists = false %}
-    {% endif %}  
+    {% endif %}
 
     {%- if not schema_exists -%}
         {%- set ddl -%}
@@ -23,5 +23,5 @@
         {{ return(ddl) }}
     {%- else -%}
         {{ return('') }}
-    {% endif %} 
+    {% endif %}
 {%- endmacro -%}

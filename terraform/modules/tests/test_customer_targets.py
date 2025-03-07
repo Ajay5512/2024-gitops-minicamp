@@ -1,16 +1,12 @@
 # test_customer_targets.py
+
 import sys
-from unittest.mock import MagicMock, patch
+from unittest.mock import (
+    MagicMock,
+    patch,
+)
 
 import pytest
-from pyspark.sql import DataFrame, SparkSession
-from pyspark.sql.functions import col
-from pyspark.sql.types import FloatType, StringType, StructField, StructType
-
-# Mock the awsglue module
-sys.modules["awsglue"] = MagicMock()
-sys.modules["awsglue.context"] = MagicMock()
-sys.modules["awsglue.job"] = MagicMock()
 
 # Import the module to test after mocking
 from customer_targets import (
@@ -21,6 +17,22 @@ from customer_targets import (
     load_customer_targets_data,
     rename_columns_to_lowercase,
 )
+from pyspark.sql import (
+    DataFrame,
+    SparkSession,
+)
+from pyspark.sql.functions import col
+from pyspark.sql.types import (
+    FloatType,
+    StringType,
+    StructField,
+    StructType,
+)
+
+# Mock the awsglue module
+sys.modules["awsglue"] = MagicMock()
+sys.modules["awsglue.context"] = MagicMock()
+sys.modules["awsglue.job"] = MagicMock()
 
 
 @pytest.fixture(scope="session")

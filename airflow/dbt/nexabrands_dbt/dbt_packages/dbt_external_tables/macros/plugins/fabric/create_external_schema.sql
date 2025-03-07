@@ -5,7 +5,7 @@
         IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = '{{ source_node.schema }}')
         BEGIN
         EXEC('CREATE SCHEMA [{{ source_node.schema }}]')
-        END 
+        END
     {% endset %}
 
     {{return(ddl)}}

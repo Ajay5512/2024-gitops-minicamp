@@ -1,6 +1,6 @@
-pytest
-pytest-xdist
-pytest-parametrization
-pytest-html
 filelock
+pytest
+pytest-html
+pytest-parametrization
+pytest-xdist
 urllib3==2.0.6

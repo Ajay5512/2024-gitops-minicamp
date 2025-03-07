@@ -1,14 +1,24 @@
 
 # File 2: full_refresh_dag.py
 import os
+
 import pendulum
 from airflow.decorators import dag
 from airflow.models.param import Param
-from airflow.operators.empty import EmptyOperator
 from airflow.operators.bash import BashOperator
-from cosmos import DbtTaskGroup, ProjectConfig, ExecutionConfig, ProfileConfig, RenderConfig
+from airflow.operators.empty import EmptyOperator
+from cosmos import (
+    DbtTaskGroup,
+    ExecutionConfig,
+    ProfileConfig,
+    ProjectConfig,
+    RenderConfig,
+)
+from cosmos.constants import (
+    LoadMode,
+    TestBehavior,
+)
 from cosmos.profiles import PostgresUserPasswordProfileMapping
-from cosmos.constants import LoadMode, TestBehavior
 
 # Profile configuration
 profile_config = ProfileConfig(

@@ -1,5 +1,5 @@
 WITH source AS (
-    SELECT * 
+    SELECT *
     FROM {{ source('nexabrands_datawarehouse', 'customer_targets') }}
 ),
 staged AS (
@@ -7,8 +7,8 @@ staged AS (
         customer_id,
         "ontime_target",
         "infull_target",
-        "otif_target" 
+        "otif_target"
     FROM source
 )
-SELECT * 
+SELECT *
 FROM staged

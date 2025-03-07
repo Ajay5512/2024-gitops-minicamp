@@ -6,7 +6,7 @@
 }}
 
 with error_models as (
-  
+
     select  model_execution_id,
             unique_id,
             invocation_id,
@@ -29,11 +29,11 @@ with error_models as (
             path,
             original_path,
             owner,
-            alias 
+            alias
     from {{ ref('model_run_results') }}
-  
+
     union all
-  
+
     select  model_execution_id,
             unique_id,
             invocation_id,
@@ -56,7 +56,7 @@ with error_models as (
             path,
             original_path,
             owner,
-            alias  
+            alias
   from {{ ref('snapshot_run_results') }}
 )
 

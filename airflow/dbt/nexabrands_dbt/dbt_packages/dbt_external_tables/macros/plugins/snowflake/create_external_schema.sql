@@ -7,7 +7,7 @@
         {% set schema_exists = run_query(schema_exists_query)|length > 0 %}
     {% else %}
         {% set schema_exists = false %}
-    {% endif %}    
+    {% endif %}
 
     {% if schema_exists %}
         {% set ddl %}

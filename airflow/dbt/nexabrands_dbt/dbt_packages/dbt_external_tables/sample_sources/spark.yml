@@ -30,7 +30,7 @@ sources:
           - name: etl_tstamp
             data_type: timestamp
             description: "Timestamp event began ETL"
-            
+
             # depending on the complexity of nested columns, it may be preferable to
             # register them as strings here and parse in a model:
             #   `from_json(contexts, 'schema string, data array<struct<data:varchar(65000),schema:string>>'``

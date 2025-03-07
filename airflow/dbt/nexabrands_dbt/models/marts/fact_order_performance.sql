@@ -15,7 +15,7 @@ customers AS (
 
 -- First get the base order data with fulfillment metrics
 base_orders AS (
-    SELECT 
+    SELECT
         o.order_id,
         o.customer_id,
         COALESCE(c.customer_name, 'Unknown') as customer_name,

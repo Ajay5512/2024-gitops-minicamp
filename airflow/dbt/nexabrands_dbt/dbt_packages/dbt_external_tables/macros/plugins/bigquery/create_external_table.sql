@@ -8,7 +8,7 @@
     {% if options is mapping and options.get('connection_name', none) %}
         {% set connection_name = options.pop('connection_name') %}
     {% endif %}
-    
+
     {%- set uris = [] -%}
     {%- if options is mapping and options.get('uris', none) -%}
         {%- set uris = external.options.get('uris') -%}

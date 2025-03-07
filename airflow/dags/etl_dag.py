@@ -1,7 +1,12 @@
-from datetime import datetime, timedelta
-from airflow import DAG
-from airflow.providers.amazon.aws.operators.glue import GlueJobOperator
+from datetime import (
+    datetime,
+    timedelta,
+)
+
 from airflow.operators.dummy_operator import DummyOperator
+from airflow.providers.amazon.aws.operators.glue import GlueJobOperator
+
+from airflow import DAG
 
 # Default arguments for the DAG
 default_args = {
@@ -66,7 +71,7 @@ glue_tasks = {}
 for job_name, config in job_configs.items():
     task_id = f"glue_job_{job_name}"
     glue_job_name = f"topdevs-{ENV}-{job_name}-job"
-    
+
     # Define script arguments
     script_args = {
         "--source-path": f"s3://{SOURCE_BUCKET}/",
@@ -77,7 +82,7 @@ for job_name, config in job_configs.items():
         "--enable-metrics": "true",
         "--environment": ENV
     }
-    
+
     glue_tasks[job_name] = GlueJobOperator(
         task_id=task_id,
         job_name=glue_job_name,
@@ -95,7 +100,7 @@ for job_name, config in job_configs.items():
             start >> glue_tasks[job_name]
         else:
             glue_tasks[dep] >> glue_tasks[job_name]
-        
+
     # If this is a final task (no other tasks depend on it), connect it to end
     if not any(job_name in c['dependencies'] for c in job_configs.values()):
         glue_tasks[job_name] >> end
