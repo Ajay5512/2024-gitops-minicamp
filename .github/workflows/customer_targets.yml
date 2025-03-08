@@ -37,7 +37,7 @@ jobs:
       - name: Install and run pre-commit hooks
         run: |
           pre-commit install
-          pre-commit run --all-files
+          SKIP=no-commit-to-branch pre-commit run --all-files
         
       - name: Run PySpark tests
         run: |
