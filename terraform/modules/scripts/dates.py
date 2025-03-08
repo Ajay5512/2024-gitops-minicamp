@@ -1,7 +1,10 @@
 import boto3
 from awsglue.context import GlueContext
 from awsglue.job import Job
-from pyspark.sql import DataFrame, SparkSession
+from pyspark.sql import (
+    DataFrame,
+    SparkSession,
+)
 from pyspark.sql.functions import (
     col,
     concat_ws,
@@ -11,7 +14,11 @@ from pyspark.sql.functions import (
     to_date,
     when,
 )
-from pyspark.sql.types import StringType, StructField, StructType
+from pyspark.sql.types import (
+    StringType,
+    StructField,
+    StructType,
+)
 
 
 def load_dates_data(glue_context: GlueContext, s3_input_path: str) -> DataFrame:
@@ -126,7 +133,9 @@ def clean_dates_data(df: DataFrame) -> DataFrame:
 def write_transformed_data(df: DataFrame, s3_output_path: str) -> None:
     """Write the transformed data to an S3 bucket as a single CSV file."""
     # Coalesce the DataFrame into a single partition to ensure one output file
-    df.coalesce(1).write.mode("overwrite").format("csv").option("header", "true").save(s3_output_path)
+    df.coalesce(1).write.mode("overwrite").format("csv").option("header", "true").save(
+        s3_output_path
+    )
 
 
 if __name__ == "__main__":

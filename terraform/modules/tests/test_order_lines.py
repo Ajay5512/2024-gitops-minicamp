@@ -1,22 +1,11 @@
 # test_order_lines.py
 import sys
-from unittest.mock import MagicMock, patch
-
-import pytest
-from pyspark.sql import DataFrame, SparkSession
-from pyspark.sql.functions import col
-from pyspark.sql.types import (
-    FloatType,
-    IntegerType,
-    StringType,
-    StructField,
-    StructType,
+from unittest.mock import (
+    MagicMock,
+    patch,
 )
 
-# Mock the awsglue module
-sys.modules["awsglue"] = MagicMock()
-sys.modules["awsglue.context"] = MagicMock()
-sys.modules["awsglue.job"] = MagicMock()
+import pytest
 
 # Import the module to test after mocking
 from order_lines import (
@@ -31,6 +20,23 @@ from order_lines import (
     filter_unwanted_values,
     load_order_lines_data,
 )
+from pyspark.sql import (
+    DataFrame,
+    SparkSession,
+)
+from pyspark.sql.functions import col
+from pyspark.sql.types import (
+    FloatType,
+    IntegerType,
+    StringType,
+    StructField,
+    StructType,
+)
+
+# Mock the awsglue module
+sys.modules["awsglue"] = MagicMock()
+sys.modules["awsglue.context"] = MagicMock()
+sys.modules["awsglue.job"] = MagicMock()
 
 
 @pytest.fixture(scope="session")

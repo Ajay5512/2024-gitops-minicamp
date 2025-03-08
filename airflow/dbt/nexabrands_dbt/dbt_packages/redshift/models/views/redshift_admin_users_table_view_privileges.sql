@@ -11,7 +11,7 @@ with tables as (
   select * from {{ref('pg_user')}}
 
 ), objects as (
-  
+
   select
     schema_name
   , 'table' as object_type
@@ -19,9 +19,9 @@ with tables as (
   , '"' || schema_name || '"."' || table_name || '"' as full_object_name
   from tables
   where schema_name not in ('pg_catalog', 'information_schema')
-  
+
   union
-  
+
   select
     schema_name
   , 'view' as object_type
@@ -29,10 +29,10 @@ with tables as (
   , '"' || schema_name || '"."' || view_name || '"' as full_object_name
   from views
   where schema_name not in ('pg_catalog', 'information_schema')
-  
+
 )
 
-select 
+select
   objects.schema_name
 , objects.object_name
 , users.username

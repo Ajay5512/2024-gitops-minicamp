@@ -7,7 +7,7 @@
     {% else %}
         {# There's a bug in dbt 1.8 which causes run_result.to_dict to fail on an exception #}
         {% set timing_dicts = [] %}
-        {% if run_result.timing %}          
+        {% if run_result.timing %}
             {% for item in run_result.timing %}
                 {% do timing_dicts.append(item.to_dict()) %}
             {% endfor %}

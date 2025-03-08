@@ -17,7 +17,7 @@ models:
         tests:
           - unique
           - not_null
-    
+
       - name: ontime_target
         description: "Percentage of orders delivered on time based on the target."
         tests:

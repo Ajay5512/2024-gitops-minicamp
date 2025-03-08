@@ -18,12 +18,12 @@
         {% set create_external_file_format %}
             IF NOT EXISTS ( SELECT * FROM sys.external_file_formats WHERE name = '{{external_file_format}}' )
 
-            CREATE EXTERNAL FILE FORMAT [{{external_file_format}}] 
+            CREATE EXTERNAL FILE FORMAT [{{external_file_format}}]
             WITH (
-                FORMAT_TYPE = DELIMITEDTEXT, 
+                FORMAT_TYPE = DELIMITEDTEXT,
                 FORMAT_OPTIONS (
-                    FIELD_TERMINATOR = N',', 
-                    FIRST_ROW = 2, 
+                    FIELD_TERMINATOR = N',',
+                    FIRST_ROW = 2,
                     USE_TYPE_DEFAULT = True
                 )
             )
@@ -53,7 +53,7 @@
         {% endset %}
 
     {%- endif %}
-    
+
 
     {% if target.type == "sqlserver" -%}
         {% do log('Creating database scoped credential ' ~ cred_name, info = true) %}

@@ -37,7 +37,7 @@
 
         {# return schema changes query as standard test query #}
         {{ schema_changes_sql}}
-        
+
     {% else %}
 
         {# test must run an sql query #}

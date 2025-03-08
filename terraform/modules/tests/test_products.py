@@ -1,10 +1,29 @@
 import sys
-from unittest.mock import MagicMock, patch
+from unittest.mock import (
+    MagicMock,
+    patch,
+)
 
 import pytest
-from pyspark.sql import DataFrame, SparkSession
+
+# Mock the getResolvedOptions function
+from awsglue.utils import getResolvedOptions
+
+# Import the module to test after mocking
+from products import (
+    clean_products_data,
+    load_products_data,
+)
+from pyspark.sql import (
+    DataFrame,
+    SparkSession,
+)
 from pyspark.sql.functions import col
-from pyspark.sql.types import StringType, StructField, StructType
+from pyspark.sql.types import (
+    StringType,
+    StructField,
+    StructType,
+)
 
 # Mock the awsglue module
 sys.modules["awsglue"] = MagicMock()
@@ -12,13 +31,7 @@ sys.modules["awsglue.context"] = MagicMock()
 sys.modules["awsglue.utils"] = MagicMock()
 sys.modules["awsglue.transforms"] = MagicMock()
 
-# Mock the getResolvedOptions function
-from awsglue.utils import getResolvedOptions
-
 getResolvedOptions = MagicMock(return_value={"JOB_NAME": "test-job"})
-
-# Import the module to test after mocking
-from products import clean_products_data, load_products_data
 
 
 @pytest.fixture(scope="session")

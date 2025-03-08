@@ -21,49 +21,49 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-      
+
     - name: Set up Python
       uses: actions/setup-python@v3
       with:
         python-version: '3.12'
-        
+
     - name: Install dependencies
       run: pip install -r airflow/requirements_dbt_venv.txt
-      
+
     - name: Configure AWS Credentials using OIDC
       uses: aws-actions/configure-aws-credentials@v4
       with:
         role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
         aws-region: us-east-1
-    
+
     - name: Download manifest.json from S3
       run: |
         aws s3 cp s3://${{ env.S3_MANIFEST_BUCKET }}/${{ env.S3_MANIFEST_KEY }} ./manifest.json || echo "Manifest not found"
-    
+
     - name: Get Schema ID
       id: schema_id
       run: echo "SCHEMA_ID=${{ github.event.pull_request.number }}__${{ github.sha }}" >> $GITHUB_ENV
-    
+
     - name: Test Redshift Connectivity
       run: |
         echo "Testing connection to Redshift"
         nc -vz nexabrands-redshift-workgroup.043309357116.us-east-1.redshift-serverless.amazonaws.com 5439
-    
+
     - name: Set up dbt profiles.yml
       run: |
         mkdir -p ~/.dbt
         cp ./airflow/dbt/nexabrands_dbt/profiles.yml ~/.dbt/profiles.yml
-    
+
     - name: Run dbt debug
       working-directory: airflow/dbt/nexabrands_dbt
       run: |
         dbt debug --target pr --vars "schema_id: $SCHEMA_ID"
-    
+
     - name: Run dbt deps
       working-directory: airflow/dbt/nexabrands_dbt
       run: |
         dbt deps --target pr --vars "schema_id: $SCHEMA_ID"
-    
+
     - name: Drop PR schemas
       working-directory: airflow/dbt/nexabrands_dbt
       run: |

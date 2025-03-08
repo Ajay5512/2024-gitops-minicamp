@@ -1,9 +1,21 @@
 import boto3
 from awsglue.context import GlueContext
 from awsglue.job import Job
-from pyspark.sql import DataFrame, SparkSession
-from pyspark.sql.functions import col, regexp_replace, when
-from pyspark.sql.types import FloatType, StringType, StructField, StructType
+from pyspark.sql import (
+    DataFrame,
+    SparkSession,
+)
+from pyspark.sql.functions import (
+    col,
+    regexp_replace,
+    when,
+)
+from pyspark.sql.types import (
+    FloatType,
+    StringType,
+    StructField,
+    StructType,
+)
 
 
 def load_customer_targets_data(

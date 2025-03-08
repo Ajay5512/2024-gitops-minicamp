@@ -27,14 +27,14 @@ enriched_dates AS (
         EXTRACT(DOW FROM date_day) as day_of_week_number,
         TO_CHAR(date_day, 'Day') as day_name,
         -- Fiscal year (assuming starts in April)
-        CASE 
-            WHEN EXTRACT(MONTH FROM date_day) >= 4 
+        CASE
+            WHEN EXTRACT(MONTH FROM date_day) >= 4
             THEN EXTRACT(YEAR FROM date_day)
             ELSE EXTRACT(YEAR FROM date_day) - 1
         END as fiscal_year,
         -- Is this a weekday?
-        CASE 
-            WHEN EXTRACT(DOW FROM date_day) IN (0, 6) THEN 0 
+        CASE
+            WHEN EXTRACT(DOW FROM date_day) IN (0, 6) THEN 0
             ELSE 1
         END as is_weekday,
         -- Create date key for joining

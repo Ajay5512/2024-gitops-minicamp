@@ -1,9 +1,22 @@
 import boto3
 from awsglue.context import GlueContext
 from awsglue.job import Job
-from pyspark.sql import DataFrame, SparkSession
-from pyspark.sql.functions import col, initcap, regexp_replace, trim
-from pyspark.sql.types import FloatType, StringType, StructField, StructType
+from pyspark.sql import (
+    DataFrame,
+    SparkSession,
+)
+from pyspark.sql.functions import (
+    col,
+    initcap,
+    regexp_replace,
+    trim,
+)
+from pyspark.sql.types import (
+    FloatType,
+    StringType,
+    StructField,
+    StructType,
+)
 
 
 def load_customers_data(glue_context: GlueContext, s3_input_path: str) -> DataFrame:
@@ -92,7 +105,9 @@ def clean_customer_data(df: DataFrame) -> DataFrame:
 
 def write_transformed_data(df: DataFrame, s3_output_path: str) -> None:
     """Write the transformed data to an S3 bucket as a single CSV file."""
-    df.coalesce(1).write.mode("overwrite").format("csv").option("header", "true").save(s3_output_path)
+    df.coalesce(1).write.mode("overwrite").format("csv").option("header", "true").save(
+        s3_output_path
+    )  # noqa: E501
 
 
 if __name__ == "__main__":

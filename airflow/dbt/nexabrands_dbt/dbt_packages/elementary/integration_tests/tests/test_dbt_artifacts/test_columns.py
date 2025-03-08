@@ -1,5 +1,8 @@
 import json
-from typing import List, Optional
+from typing import (
+    List,
+    Optional,
+)
 
 from dbt_project import DbtProject
 from parametrization import Parametrization

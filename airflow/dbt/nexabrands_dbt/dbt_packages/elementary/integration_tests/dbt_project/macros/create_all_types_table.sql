@@ -1,4 +1,4 @@
-{# 
+{#
   Those macros are used to generate a table with all of the supported data types for each DWH.
 #}
 
@@ -11,7 +11,7 @@
     {% set database_name, schema_name = elementary.get_package_database_and_schema('elementary') %}
     {% set _, relation = dbt.get_or_create_relation(database=database_name, schema=schema_name, identifier='all_types', type="table") %}
     {% set sql_query %}
-      select 
+      select
         struct("string" as col1, 42 as col2) as flat_struct_col,
         struct("string" as col1, struct(42 as nestcol1) as col2) as nested_struct_col,
         [1,2,3] as array_col,
@@ -41,7 +41,7 @@
     {% set database_name, schema_name = elementary.get_package_database_and_schema('elementary') %}
     {% set _, relation = dbt.get_or_create_relation(database=database_name, schema=schema_name, identifier='all_types', type="table") %}
     {% set sql_query %}
-      select 
+      select
         'str'::STRING as str_col,
         'str'::TEXT as text_col,
         'a'::VARCHAR as var_col,
@@ -91,7 +91,7 @@
     {% set database_name, schema_name = elementary.get_package_database_and_schema('elementary') %}
     {% set _, relation = dbt.get_or_create_relation(database=database_name, schema=schema_name, identifier='all_types', type="table") %}
     {% set sql_query %}
-      select 
+      select
         1::SMALLINT as smallint_col,
         1::INT2 as int2_col,
         1::INTEGER as integer_col,
@@ -126,7 +126,7 @@
     {% set create_table_query = dbt.create_table_as(false, relation, sql_query) %}
     {% do elementary.edr_log(create_table_query) %}
     {% do elementary.run_query(create_table_query) %}
-  
+
 {% endmacro %}
 
 {% macro postgres__create_all_types_table() %}
@@ -134,7 +134,7 @@
     {% set database_name, schema_name = elementary.get_package_database_and_schema('elementary') %}
     {% set _, relation = dbt.get_or_create_relation(database=database_name, schema=schema_name, identifier='all_types', type="table") %}
     {% set sql_query %}
-      select 
+      select
         CAST(1 as BIGINT) as bigint_col,
         CAST(1 as INT8) as int8_col,
         CAST(B'00' as BIT) as bit_col,

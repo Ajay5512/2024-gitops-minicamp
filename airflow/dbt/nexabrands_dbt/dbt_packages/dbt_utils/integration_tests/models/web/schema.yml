@@ -6,13 +6,13 @@ models:
       - assert_equal:
           actual: actual
           expected: expected
-          
+
   - name: test_url_host
     data_tests:
       - assert_equal:
           actual: actual
           expected: expected
-          
+
   - name: test_url_path
     data_tests:
       - assert_equal:

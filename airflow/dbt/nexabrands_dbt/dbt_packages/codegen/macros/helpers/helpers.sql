@@ -48,7 +48,7 @@
             {% set model_path = "/".join(model.path.split("/")[:-1]) %}
             {% if model_path == directory and model.name.startswith(prefix) %}
                 {% do model_names.append(model.name) %}
-            {% endif %} 
+            {% endif %}
         {% endfor %}
     {% elif directory %}
         {% for model in models %}

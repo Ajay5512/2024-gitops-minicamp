@@ -1,12 +1,22 @@
 import os
+
 import pendulum
 from airflow.decorators import dag
 from airflow.models.param import Param
-from airflow.operators.empty import EmptyOperator
 from airflow.operators.bash import BashOperator
-from cosmos import DbtTaskGroup, ProjectConfig, ExecutionConfig, ProfileConfig, RenderConfig
+from airflow.operators.empty import EmptyOperator
+from cosmos import (
+    DbtTaskGroup,
+    ExecutionConfig,
+    ProfileConfig,
+    ProjectConfig,
+    RenderConfig,
+)
+from cosmos.constants import (
+    LoadMode,
+    TestBehavior,
+)
 from cosmos.profiles import RedshiftUserPasswordProfileMapping
-from cosmos.constants import LoadMode, TestBehavior
 
 # Profile configuration for Redshift
 profile_config = ProfileConfig(
@@ -42,13 +52,26 @@ execution_config = ExecutionConfig(
 
 default_args = {
     "owner": "airflow",
-    'retries': 1,
-    'retry_delay': pendulum.duration(minutes=5),
-    'params': {
-        'start_time': Param(None, type=["null", "string"], format="date", description="Start date for run", title="Start date"),
-        'end_time': Param(None, type=["null", "string"], format="date", description="End date for run", title="End date"),
-    }
+    "retries": 1,
+    "retry_delay": pendulum.duration(minutes=5),
+    "params": {
+        "start_time": Param(
+            None,
+            type=["null", "string"],
+            format="date",
+            description="Start date for run",
+            title="Start date",
+        ),
+        "end_time": Param(
+            None,
+            type=["null", "string"],
+            format="date",
+            description="End date for run",
+            title="End date",
+        ),
+    },
 }
+
 
 @dag(
     schedule_interval="@hourly",
@@ -57,7 +80,7 @@ default_args = {
     tags=["dbt", "incremental"],
     max_active_runs=1,
     max_active_tasks=5,
-    default_args=default_args
+    default_args=default_args,
 )
 def nexabrands_dbt_incremental_dag() -> None:
     """
@@ -123,10 +146,15 @@ def nexabrands_dbt_incremental_dag() -> None:
         ),
     )
 
-
-
     post_dbt_workflow = EmptyOperator(task_id="post_dbt_workflow")
 
-    pre_dbt_workflow >> source_freshness >> staging_models >> marts_models >> post_dbt_workflow
+    (
+        pre_dbt_workflow
+        >> source_freshness
+        >> staging_models
+        >> marts_models
+        >> post_dbt_workflow
+    )
+
 
 dag = nexabrands_dbt_incremental_dag()

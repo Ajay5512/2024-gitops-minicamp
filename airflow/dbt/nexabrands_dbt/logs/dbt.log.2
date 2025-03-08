@@ -4,20 +4,20 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
 
 
-    
+
+
+
+
+
 
 coalesce(array_length((select regexp_matches(city, '^[A-Za-z\s\-\.]+$', '')), 1), 0)
 
@@ -27,7 +27,7 @@ coalesce(array_length((select regexp_matches(city, '^[A-Za-z\s\-\.]+$', '')), 1)
 
 
     from "raw"."staging"."stg_customers"
-    
+
 
 ),
 validation_errors as (
@@ -48,7 +48,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:37.415508 [debug] [Thread-2 (]: Writing injected SQL for node "test.nexabrands_dbt.dbt_expectations_expect_column_values_to_match_regex_stg_order_fulfillment_order_id___A_Za_z0_9___.2da099af86"
 [0m19:49:37.417630 [debug] [Thread-1 (]: SQL status: SELECT 1 in 0.010 seconds
@@ -88,22 +88,22 @@ select
     from (
       with relation_columns as (
 
-        
+
         select
             cast('ORDER_ID' as TEXT) as relation_column,
             cast('TEXT' as TEXT) as relation_column_type
         union all
-        
+
         select
             cast('CUSTOMER_ID' as TEXT) as relation_column,
             cast('TEXT' as TEXT) as relation_column_type
         union all
-        
+
         select
             cast('ORDER_PLACEMENT_DATE' as TEXT) as relation_column,
             cast('DATE' as TEXT) as relation_column_type
-        
-        
+
+
     ),
     test_data as (
 
@@ -119,7 +119,7 @@ select
     )
     select *
     from test_data
-      
+
     ) dbt_internal_test
 [0m19:49:37.482821 [debug] [Thread-3 (]: SQL status: SELECT 1 in 0.001 seconds
 [0m19:49:37.486004 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_of_type_stg_orders_order_placement_date__date.518b599ba0: ROLLBACK
@@ -132,20 +132,20 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
 
 
-    
+
+
+
+
+
 
 coalesce(array_length((select regexp_matches(order_id, '^[A-Za-z0-9\-_]+$', '')), 1), 0)
 
@@ -155,7 +155,7 @@ coalesce(array_length((select regexp_matches(order_id, '^[A-Za-z0-9\-_]+$', ''))
 
 
     from "raw"."staging"."stg_order_fulfillment"
-    
+
 
 ),
 validation_errors as (
@@ -176,7 +176,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:37.494886 [debug] [Thread-1 (]: Compilation Error in test dbt_expectations_expect_column_values_to_match_strftime_format_stg_dates_date___Y_m_d (models/staging/stg_dates_schema.yml)
   'dict object' has no attribute 'test_expect_column_values_to_match_strftime_format'. This can happen when calling a macro that does not exist. Check for typos and/or install package dependencies with "dbt deps".
@@ -212,20 +212,20 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
 
 
-    
+
+
+
+
+
 
 coalesce(array_length((select regexp_matches(product_name, '^\\s*$', '')), 1), 0)
 
@@ -235,7 +235,7 @@ coalesce(array_length((select regexp_matches(product_name, '^\\s*$', '')), 1), 0
 
 
     from "raw"."staging"."stg_products"
-    
+
 
 ),
 validation_errors as (
@@ -256,7 +256,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:37.563190 [debug] [Thread-3 (]: Began executing node test.nexabrands_dbt.dbt_expectations_expect_compound_columns_to_be_unique_stg_products_product_name__category.e804075419
 [0m19:49:37.564015 [debug] [Thread-1 (]: Began executing node test.nexabrands_dbt.dbt_expectations_expect_compound_columns_to_be_unique_stg_orders_customer_id__order_placement_date__order_id.c72b454e6a
@@ -294,7 +294,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -306,16 +306,16 @@ with validation_errors as (
     from "raw"."staging"."stg_orders"
     where
         1=1
-        and 
+        and
     not (
-        customer_id is null and 
-        order_placement_date is null and 
+        customer_id is null and
+        order_placement_date is null and
         order_id is null
-        
+
     )
 
 
-    
+
     group by
         customer_id,order_placement_date,order_id
     having count(*) > 1
@@ -323,7 +323,7 @@ with validation_errors as (
 )
 select * from validation_errors
 
-      
+
     ) dbt_internal_test
 [0m19:49:37.620571 [debug] [Thread-3 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_compound_columns_to_be_unique_stg_products_product_name__category.e804075419"
 [0m19:49:37.622525 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_compound_columns_to_be_unique_stg_products_product_name__category.e804075419: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_compound_columns_to_be_unique_stg_products_product_name__category.e804075419"} */
@@ -332,7 +332,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -344,15 +344,15 @@ with validation_errors as (
     from "raw"."staging"."stg_products"
     where
         1=1
-        and 
+        and
     not (
-        product_name is null and 
+        product_name is null and
         category is null
-        
+
     )
 
 
-    
+
     group by
         product_name,category
     having count(*) > 1
@@ -360,7 +360,7 @@ with validation_errors as (
 )
 select * from validation_errors
 
-      
+
     ) dbt_internal_test
 [0m19:49:37.624611 [debug] [Thread-3 (]: SQL status: SELECT 1 in 0.001 seconds
 [0m19:49:37.627099 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_compound_columns_to_be_unique_stg_products_product_name__category.e804075419: ROLLBACK
@@ -385,12 +385,12 @@ select * from validation_errors
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_products'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:49:37.648131 [debug] [Thread-2 (]: SQL status: BEGIN in 0.017 seconds
 [0m19:49:37.653953 [debug] [Thread-2 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404"
 [0m19:49:37.654808 [debug] [Thread-2 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404"} */
@@ -404,12 +404,12 @@ select * from validation_errors
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_orders'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:49:37.641916 [info ] [Thread-3 (]: 32 of 62 START test dbt_expectations_expect_table_columns_to_match_set_stg_customers_customer_id__customer_name__city  [RUN]
 [0m19:49:37.664582 [debug] [Thread-3 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.dbt_expectations_expect_compound_columns_to_be_unique_stg_products_product_name__category.e804075419, now test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_customers_customer_id__customer_name__city.68cf07e70d)
 [0m19:49:37.665487 [debug] [Thread-3 (]: Began compiling node test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_customers_customer_id__customer_name__city.68cf07e70d
@@ -441,12 +441,12 @@ select * from validation_errors
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_customers'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:49:37.717090 [debug] [Thread-1 (]: Finished running node test.nexabrands_dbt.dbt_expectations_expect_compound_columns_to_be_unique_stg_orders_customer_id__order_placement_date__order_id.c72b454e6a
 [0m19:49:37.719153 [debug] [Thread-1 (]: Began running node test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_dates_date.2d0c578b06
 [0m19:49:37.721244 [info ] [Thread-1 (]: 33 of 62 START test dbt_expectations_expect_table_columns_to_match_set_stg_dates_date  [RUN]
@@ -461,41 +461,41 @@ select
     from (
       with relation_columns as (
 
-        
+
         select
             1 as relation_column_idx,
             cast('ORDER_ID' as TEXT) as relation_column
         union all
-        
+
         select
             2 as relation_column_idx,
             cast('CUSTOMER_ID' as TEXT) as relation_column
         union all
-        
+
         select
             3 as relation_column_idx,
             cast('ORDER_PLACEMENT_DATE' as TEXT) as relation_column
-        
-        
+
+
     ),
     input_columns as (
 
-        
+
         select
             1 as input_column_idx,
             cast('ORDER_ID' as TEXT) as input_column
         union all
-        
+
         select
             2 as input_column_idx,
             cast('CUSTOMER_ID' as TEXT) as input_column
         union all
-        
+
         select
             3 as input_column_idx,
             cast('ORDER_PLACEMENT_DATE' as TEXT) as input_column
-        
-        
+
+
     )
     select *
     from
@@ -507,7 +507,7 @@ select
         -- or any table column that is not in the input sequence
         r.relation_column is null or
         i.input_column is null
-      
+
     ) dbt_internal_test
 [0m19:49:37.733454 [debug] [Thread-3 (]: SQL status: SELECT 3 in 0.015 seconds
 [0m19:49:37.733968 [debug] [Thread-4 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_products_product_id__product_name__category.393dada602"
@@ -522,41 +522,41 @@ select
     from (
       with relation_columns as (
 
-        
+
         select
             1 as relation_column_idx,
             cast('PRODUCT_ID' as TEXT) as relation_column
         union all
-        
+
         select
             2 as relation_column_idx,
             cast('PRODUCT_NAME' as TEXT) as relation_column
         union all
-        
+
         select
             3 as relation_column_idx,
             cast('CATEGORY' as TEXT) as relation_column
-        
-        
+
+
     ),
     input_columns as (
 
-        
+
         select
             1 as input_column_idx,
             cast('PRODUCT_ID' as TEXT) as input_column
         union all
-        
+
         select
             2 as input_column_idx,
             cast('PRODUCT_NAME' as TEXT) as input_column
         union all
-        
+
         select
             3 as input_column_idx,
             cast('CATEGORY' as TEXT) as input_column
-        
-        
+
+
     )
     select *
     from
@@ -568,7 +568,7 @@ select
         -- or any table column that is not in the input sequence
         r.relation_column is null or
         i.input_column is null
-      
+
     ) dbt_internal_test
 [0m19:49:37.738887 [debug] [Thread-1 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_dates_date.2d0c578b06: BEGIN
 [0m19:49:37.740682 [debug] [Thread-2 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404: ROLLBACK
@@ -596,29 +596,29 @@ select
     from (
       with relation_columns as (
 
-        
+
         select cast('CUSTOMER_ID' as TEXT) as relation_column
         union all
-        
+
         select cast('CUSTOMER_NAME' as TEXT) as relation_column
         union all
-        
+
         select cast('CITY' as TEXT) as relation_column
-        
-        
+
+
     ),
     input_columns as (
 
-        
+
         select cast('CUSTOMER_ID' as TEXT) as input_column
         union all
-        
+
         select cast('CUSTOMER_NAME' as TEXT) as input_column
         union all
-        
+
         select cast('CITY' as TEXT) as input_column
-        
-        
+
+
     )
     select *
     from
@@ -630,7 +630,7 @@ select
         -- or any table column that is not in the input list
         r.relation_column is null or
         i.input_column is null
-      
+
     ) dbt_internal_test
 [0m19:49:37.762583 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404, now test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_order_fulfillment_order_id__on_time__in_full__ontime_in_full.4d470eb185)
 [0m19:49:37.763352 [debug] [Thread-4 (]: Began running node test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_customers_40__1.c99103eefc
@@ -645,12 +645,12 @@ select
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_dates'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:49:37.764871 [debug] [Thread-2 (]: Began compiling node test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_order_fulfillment_order_id__on_time__in_full__ontime_in_full.4d470eb185
 [0m19:49:37.765569 [debug] [Thread-3 (]: SQL status: SELECT 1 in 0.001 seconds
 [0m19:49:37.775078 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_customers_customer_id__customer_name__city.68cf07e70d: ROLLBACK
@@ -686,17 +686,17 @@ select
     from (
       with relation_columns as (
 
-        
+
         select cast('DATE' as TEXT) as relation_column
-        
-        
+
+
     ),
     input_columns as (
 
-        
+
         select cast('DATE' as TEXT) as input_column
-        
-        
+
+
     )
     select *
     from
@@ -708,7 +708,7 @@ select
         -- or any table column that is not in the input list
         r.relation_column is null or
         i.input_column is null
-      
+
     ) dbt_internal_test
 [0m19:49:37.817259 [debug] [Thread-3 (]: Began compiling node test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_dates_1.719d3ad97a
 [0m19:49:37.817862 [debug] [Thread-2 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_order_fulfillment_order_id__on_time__in_full__ontime_in_full.4d470eb185: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_order_fulfillment_order_id__on_time__in_full__ontime_in_full.4d470eb185"} */
@@ -722,12 +722,12 @@ select
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_order_fulfillment'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:49:37.818846 [debug] [Thread-4 (]: Opening a new connection, currently in state closed
 [0m19:49:37.823976 [debug] [Thread-3 (]: Writing injected SQL for node "test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_dates_1.719d3ad97a"
 [0m19:49:37.827176 [debug] [Thread-3 (]: Began executing node test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_dates_1.719d3ad97a
@@ -752,23 +752,23 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and count(*) >= 1 and count(*) <= 40
 )
  as expression
 
 
     from "raw"."staging"."stg_customers"
-    
+
 
 ),
 validation_errors as (
@@ -790,7 +790,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:37.851106 [debug] [Thread-1 (]: Began running node test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_order_fulfillment_1.0283bc6212
 [0m19:49:37.851720 [debug] [Thread-3 (]: Opening a new connection, currently in state closed
@@ -802,35 +802,35 @@ select
     from (
       with relation_columns as (
 
-        
+
         select cast('ORDER_ID' as TEXT) as relation_column
         union all
-        
+
         select cast('ON_TIME' as TEXT) as relation_column
         union all
-        
+
         select cast('IN_FULL' as TEXT) as relation_column
         union all
-        
+
         select cast('ONTIME_IN_FULL' as TEXT) as relation_column
-        
-        
+
+
     ),
     input_columns as (
 
-        
+
         select cast('ORDER_ID' as TEXT) as input_column
         union all
-        
+
         select cast('ON_TIME' as TEXT) as input_column
         union all
-        
+
         select cast('IN_FULL' as TEXT) as input_column
         union all
-        
+
         select cast('ONTIME_IN_FULL' as TEXT) as input_column
-        
-        
+
+
     )
     select *
     from
@@ -842,7 +842,7 @@ select
         -- or any table column that is not in the input list
         r.relation_column is null or
         i.input_column is null
-      
+
     ) dbt_internal_test
 [0m19:49:37.856012 [debug] [Thread-2 (]: SQL status: SELECT 1 in 0.001 seconds
 [0m19:49:37.854664 [debug] [Thread-4 (]: SQL status: SELECT 1 in 0.001 seconds
@@ -862,23 +862,23 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and count(*) >= 1
 )
  as expression
 
 
     from "raw"."staging"."stg_dates"
-    
+
 
 ),
 validation_errors as (
@@ -900,7 +900,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:37.865351 [debug] [Thread-1 (]: Began compiling node test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_order_fulfillment_1.0283bc6212
 [0m19:49:37.868977 [info ] [Thread-2 (]: 34 of 62 PASS dbt_expectations_expect_table_columns_to_match_set_stg_order_fulfillment_order_id__on_time__in_full__ontime_in_full  [[32mPASS[0m in 0.11s]
@@ -949,23 +949,23 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and count(*) >= 1
 )
  as expression
 
 
     from "raw"."staging"."stg_order_fulfillment"
-    
+
 
 ),
 validation_errors as (
@@ -987,7 +987,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:37.935118 [debug] [Thread-3 (]: Writing runtime sql for node "test.nexabrands_dbt.not_null_stg_customer_targets_customer_id.528be64241"
 [0m19:49:37.935688 [debug] [Thread-2 (]: Opening a new connection, currently in state closed
@@ -1000,23 +1000,23 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and count(*) >= 1 and count(*) <= 100
 )
  as expression
 
 
     from "raw"."staging"."stg_products"
-    
+
 
 ),
 validation_errors as (
@@ -1038,7 +1038,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:37.946676 [debug] [Thread-1 (]: SQL status: SELECT 1 in 0.010 seconds
 [0m19:49:37.949291 [debug] [Thread-1 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_order_fulfillment_1.0283bc6212: ROLLBACK
@@ -1055,23 +1055,23 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and count(*) >= 1 and count(*) <= 10000000
 )
  as expression
 
 
     from "raw"."staging"."stg_orders"
-    
+
 
 ),
 validation_errors as (
@@ -1093,7 +1093,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:37.963389 [debug] [Thread-3 (]: SQL status: BEGIN in 0.011 seconds
 [0m19:49:37.964970 [debug] [Thread-4 (]: SQL status: SELECT 1 in 0.004 seconds
@@ -1107,9 +1107,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1119,7 +1119,7 @@ where customer_id is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:37.968883 [debug] [Thread-4 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_orders_10000000__1.d2cd7717b3: ROLLBACK
 [0m19:49:37.973029 [debug] [Thread-1 (]: Began running node test.nexabrands_dbt.not_null_stg_customer_targets_infull_target.848a26f728
@@ -1174,9 +1174,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1186,7 +1186,7 @@ where infull_target is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.036892 [debug] [Thread-3 (]: Writing runtime sql for node "test.nexabrands_dbt.not_null_stg_customers_city.54fe47bfb8"
 [0m19:49:38.037757 [debug] [Thread-2 (]: On test.nexabrands_dbt.not_null_stg_customer_targets_ontime_target.5042478108: BEGIN
@@ -1201,9 +1201,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1213,7 +1213,7 @@ where otif_target is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.044104 [debug] [Thread-1 (]: On test.nexabrands_dbt.not_null_stg_customer_targets_infull_target.848a26f728: ROLLBACK
 [0m19:49:38.042392 [debug] [Thread-3 (]: On test.nexabrands_dbt.not_null_stg_customers_city.54fe47bfb8: BEGIN
@@ -1235,9 +1235,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1247,7 +1247,7 @@ where ontime_target is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.062367 [info ] [Thread-1 (]: 45 of 62 START test not_null_stg_customers_customer_id ......................... [RUN]
 [0m19:49:38.063349 [debug] [Thread-3 (]: On test.nexabrands_dbt.not_null_stg_customers_city.54fe47bfb8: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.not_null_stg_customers_city.54fe47bfb8"} */
@@ -1256,9 +1256,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1268,7 +1268,7 @@ where city is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.064469 [debug] [Thread-1 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.not_null_stg_customer_targets_infull_target.848a26f728, now test.nexabrands_dbt.not_null_stg_customers_customer_id.e2cfb1f9aa)
 [0m19:49:38.065247 [debug] [Thread-2 (]: SQL status: SELECT 1 in 0.001 seconds
@@ -1316,9 +1316,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1328,7 +1328,7 @@ where customer_id is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.192781 [debug] [Thread-4 (]: On test.nexabrands_dbt.not_null_stg_customers_customer_name.5c92a78a60: BEGIN
 [0m19:49:38.193819 [debug] [Thread-4 (]: Opening a new connection, currently in state closed
@@ -1349,9 +1349,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1361,7 +1361,7 @@ where customer_name is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.211498 [debug] [Thread-2 (]: Using postgres connection "test.nexabrands_dbt.not_null_stg_dates_date.0b6295f5bd"
 [0m19:49:38.212318 [debug] [Thread-3 (]: Using postgres connection "test.nexabrands_dbt.not_null_stg_order_fulfillment_in_full.7f52ec5fb8"
@@ -1391,9 +1391,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1403,7 +1403,7 @@ where in_full is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.242001 [debug] [Thread-1 (]: Writing runtime sql for node "test.nexabrands_dbt.not_null_stg_order_fulfillment_on_time.cb8d53a996"
 [0m19:49:38.242594 [debug] [Thread-2 (]: On test.nexabrands_dbt.not_null_stg_dates_date.0b6295f5bd: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.not_null_stg_dates_date.0b6295f5bd"} */
@@ -1412,9 +1412,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1424,7 +1424,7 @@ where date is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.243186 [info ] [Thread-4 (]: 50 of 62 START test not_null_stg_order_fulfillment_ontime_in_full .............. [RUN]
 [0m19:49:38.244414 [debug] [Thread-4 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.not_null_stg_customers_customer_name.5c92a78a60, now test.nexabrands_dbt.not_null_stg_order_fulfillment_ontime_in_full.d8e8bdce2a)
@@ -1459,9 +1459,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1471,7 +1471,7 @@ where on_time is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.280510 [debug] [Thread-4 (]: SQL status: BEGIN in 0.007 seconds
 [0m19:49:38.279513 [debug] [Thread-3 (]: Began compiling node test.nexabrands_dbt.not_null_stg_order_fulfillment_order_id.dfae8bc6c4
@@ -1483,9 +1483,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1495,7 +1495,7 @@ where ontime_in_full is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.288571 [info ] [Thread-2 (]: 52 of 62 START test not_null_stg_orders_customer_id ............................ [RUN]
 [0m19:49:38.290781 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.not_null_stg_dates_date.0b6295f5bd, now test.nexabrands_dbt.not_null_stg_orders_customer_id.af79d5e4b5)
@@ -1539,9 +1539,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1551,7 +1551,7 @@ where order_id is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.337353 [debug] [Thread-1 (]: Writing runtime sql for node "test.nexabrands_dbt.not_null_stg_orders_order_id.81cfe2fe64"
 [0m19:49:38.341431 [debug] [Thread-1 (]: Using postgres connection "test.nexabrands_dbt.not_null_stg_orders_order_id.81cfe2fe64"
@@ -1565,9 +1565,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1577,7 +1577,7 @@ where customer_id is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.339309 [debug] [Thread-4 (]: Began compiling node test.nexabrands_dbt.not_null_stg_orders_order_placement_date.b80fa199d8
 [0m19:49:38.353492 [debug] [Thread-4 (]: Writing injected SQL for node "test.nexabrands_dbt.not_null_stg_orders_order_placement_date.b80fa199d8"
@@ -1600,9 +1600,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1612,7 +1612,7 @@ where order_id is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.371527 [info ] [Thread-3 (]: 51 of 62 PASS not_null_stg_order_fulfillment_order_id .......................... [[32mPASS[0m in 0.09s]
 [0m19:49:38.374986 [debug] [Thread-3 (]: Finished running node test.nexabrands_dbt.not_null_stg_order_fulfillment_order_id.dfae8bc6c4
@@ -1636,9 +1636,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1648,7 +1648,7 @@ where order_placement_date is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.400884 [debug] [Thread-1 (]: On test.nexabrands_dbt.not_null_stg_orders_order_id.81cfe2fe64: Close
 [0m19:49:38.409635 [debug] [Thread-4 (]: SQL status: SELECT 1 in 0.007 seconds
@@ -1689,9 +1689,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1701,7 +1701,7 @@ where product_id is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.465941 [debug] [Thread-1 (]: Writing runtime sql for node "test.nexabrands_dbt.not_null_stg_products_product_name.0b59e4b939"
 [0m19:49:38.468206 [debug] [Thread-3 (]: SQL status: BEGIN in 0.015 seconds
@@ -1717,9 +1717,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1729,7 +1729,7 @@ where category is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.477765 [debug] [Thread-2 (]: On test.nexabrands_dbt.not_null_stg_products_product_id.6373b0acf3: Close
 [0m19:49:38.480460 [info ] [Thread-2 (]: 56 of 62 PASS not_null_stg_products_product_id ................................. [[32mPASS[0m in 0.10s]
@@ -1760,9 +1760,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -1772,7 +1772,7 @@ where product_name is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.506611 [debug] [Thread-3 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.not_null_stg_products_category.6007d8b2d1, now test.nexabrands_dbt.unique_stg_order_fulfillment_order_id.7c955b4a29)
 [0m19:49:38.507206 [debug] [Thread-4 (]: Using postgres connection "test.nexabrands_dbt.unique_stg_customer_targets_customer_id.eada6988f9"
@@ -1785,9 +1785,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 select
     customer_id as unique_field,
@@ -1800,7 +1800,7 @@ having count(*) > 1
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.512571 [debug] [Thread-2 (]: Writing runtime sql for node "test.nexabrands_dbt.unique_stg_customers_customer_id.c7614daada"
 [0m19:49:38.514110 [debug] [Thread-1 (]: On test.nexabrands_dbt.not_null_stg_products_product_name.0b59e4b939: ROLLBACK
@@ -1823,9 +1823,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 select
     customer_id as unique_field,
@@ -1838,7 +1838,7 @@ having count(*) > 1
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.535537 [debug] [Thread-1 (]: Finished running node test.nexabrands_dbt.not_null_stg_products_product_name.0b59e4b939
 [0m19:49:38.536575 [debug] [Thread-3 (]: Using postgres connection "test.nexabrands_dbt.unique_stg_order_fulfillment_order_id.7c955b4a29"
@@ -1871,9 +1871,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 select
     order_id as unique_field,
@@ -1886,7 +1886,7 @@ having count(*) > 1
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.571458 [debug] [Thread-4 (]: Began executing node test.nexabrands_dbt.unique_stg_products_product_id.7d950a1467
 [0m19:49:38.575292 [debug] [Thread-4 (]: Writing runtime sql for node "test.nexabrands_dbt.unique_stg_products_product_id.7d950a1467"
@@ -1904,9 +1904,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 select
     product_id as unique_field,
@@ -1919,7 +1919,7 @@ having count(*) > 1
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.588541 [debug] [Thread-4 (]: SQL status: SELECT 1 in 0.001 seconds
 [0m19:49:38.591486 [debug] [Thread-4 (]: On test.nexabrands_dbt.unique_stg_products_product_id.7d950a1467: ROLLBACK
@@ -1935,9 +1935,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 select
     order_id as unique_field,
@@ -1950,7 +1950,7 @@ having count(*) > 1
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:49:38.601205 [info ] [Thread-4 (]: 62 of 62 PASS unique_stg_products_product_id ................................... [[32mPASS[0m in 0.05s]
 [0m19:49:38.602666 [debug] [Thread-4 (]: Finished running node test.nexabrands_dbt.unique_stg_products_product_id.7d950a1467
@@ -1975,25 +1975,25 @@ having count(*) > 1
 [0m19:49:38.637780 [debug] [MainThread]: Connection 'test.nexabrands_dbt.unique_stg_order_fulfillment_order_id.7c955b4a29' was properly closed.
 [0m19:49:38.638393 [debug] [MainThread]: Connection 'test.nexabrands_dbt.unique_stg_products_product_id.7d950a1467' was properly closed.
 [0m19:49:38.639373 [debug] [MainThread]: Connection 'test.nexabrands_dbt.unique_stg_orders_order_id.e3b841c71a' was properly closed.
-[0m19:49:38.640176 [info ] [MainThread]: 
+[0m19:49:38.640176 [info ] [MainThread]:
 [0m19:49:38.640929 [info ] [MainThread]: Finished running 62 data tests in 0 hours 0 minutes and 2.46 seconds (2.46s).
 [0m19:49:38.650619 [debug] [MainThread]: Command end result
 [0m19:49:38.710745 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m19:49:38.713220 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m19:49:38.723922 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m19:49:38.724431 [info ] [MainThread]: 
+[0m19:49:38.724431 [info ] [MainThread]:
 [0m19:49:38.725037 [info ] [MainThread]: [31mCompleted with 2 errors, 0 partial successes, and 0 warnings:[0m
-[0m19:49:38.725564 [info ] [MainThread]: 
+[0m19:49:38.725564 [info ] [MainThread]:
 [0m19:49:38.726178 [error] [MainThread]:   Database Error in test dbt_expectations_expect_column_values_to_be_between_stg_dates_date__current_date___2024_01_01_ (models/staging/stg_dates_schema.yml)
   operator does not exist: text <= date
   LINE 20: ( 1=1 and date >= '2024-01-01' and date <= current_date
                                                    ^
   HINT:  No operator matches the given name and argument types. You might need to add explicit type casts.
   compiled code at target/run/nexabrands_dbt/models/staging/stg_dates_schema.yml/dbt_expectations_expect_column_b84604d10458bc8b924e8889ca0a59e2.sql
-[0m19:49:38.726701 [info ] [MainThread]: 
+[0m19:49:38.726701 [info ] [MainThread]:
 [0m19:49:38.727285 [error] [MainThread]:   Compilation Error in test dbt_expectations_expect_column_values_to_match_strftime_format_stg_dates_date___Y_m_d (models/staging/stg_dates_schema.yml)
   'dict object' has no attribute 'test_expect_column_values_to_match_strftime_format'. This can happen when calling a macro that does not exist. Check for typos and/or install package dependencies with "dbt deps".
-[0m19:49:38.727834 [info ] [MainThread]: 
+[0m19:49:38.727834 [info ] [MainThread]:
 [0m19:49:38.728413 [info ] [MainThread]: Done. PASS=60 WARN=0 ERROR=2 SKIP=0 TOTAL=62
 [0m19:49:38.729634 [debug] [MainThread]: Resource report: {"command_name": "test", "command_success": false, "command_wall_clock_time": 3.6756911, "process_in_blocks": "7984", "process_kernel_time": 0.452822, "process_mem_max_rss": "118084", "process_out_blocks": "6280", "process_user_time": 3.988015}
 [0m19:49:38.730416 [debug] [MainThread]: Command `dbt test` failed at 19:49:38.730287 after 3.68 seconds
@@ -2018,9 +2018,9 @@ having count(*) > 1
 [0m19:50:31.972478 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '764e3259-c5db-49ee-b9ad-11c1938e7088', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x767ba7b8bd10>]}
 [0m19:50:31.973214 [info ] [MainThread]: Found 16 models, 2 snapshots, 62 data tests, 7 sources, 838 macros
 [0m19:50:31.973836 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '764e3259-c5db-49ee-b9ad-11c1938e7088', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x767ba7072ba0>]}
-[0m19:50:31.978790 [info ] [MainThread]: 
+[0m19:50:31.978790 [info ] [MainThread]:
 [0m19:50:31.979609 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m19:50:31.980159 [info ] [MainThread]: 
+[0m19:50:31.980159 [info ] [MainThread]:
 [0m19:50:31.981115 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m19:50:31.986641 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw_marts'
 [0m19:50:31.987431 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw_raw'
@@ -2067,7 +2067,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'marts'
-  
+
 [0m19:50:32.050862 [debug] [ThreadPool]: Using postgres connection "list_raw_intermediate"
 [0m19:50:32.051366 [debug] [ThreadPool]: Using postgres connection "list_raw_raw"
 [0m19:50:32.054079 [debug] [ThreadPool]: On list_raw_raw: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw_raw"} */
@@ -2094,7 +2094,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m19:50:32.052778 [debug] [ThreadPool]: On list_raw_intermediate: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw_intermediate"} */
 select
       'raw' as database,
@@ -2119,7 +2119,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'intermediate'
-  
+
 [0m19:50:32.051847 [debug] [ThreadPool]: Using postgres connection "list_raw_staging"
 [0m19:50:32.055313 [debug] [ThreadPool]: On list_raw_staging: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw_staging"} */
 select
@@ -2145,7 +2145,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'staging'
-  
+
 [0m19:50:32.056152 [debug] [ThreadPool]: SQL status: SELECT 6 in 0.004 seconds
 [0m19:50:32.058789 [debug] [ThreadPool]: On list_raw_marts: ROLLBACK
 [0m19:50:32.059465 [debug] [ThreadPool]: SQL status: SELECT 2 in 0.004 seconds
@@ -2285,9 +2285,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 with all_values as (
 
@@ -2308,7 +2308,7 @@ where value_field not in (
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.233118 [debug] [Thread-3 (]: SQL status: BEGIN in 0.011 seconds
 [0m19:50:32.233871 [debug] [Thread-3 (]: Using postgres connection "test.nexabrands_dbt.accepted_values_stg_order_fulfillment_on_time__True__0__1.8bc1473d95"
@@ -2318,9 +2318,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 with all_values as (
 
@@ -2341,7 +2341,7 @@ where value_field not in (
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.235484 [debug] [Thread-4 (]: SQL status: BEGIN in 0.013 seconds
 [0m19:50:32.237832 [debug] [Thread-4 (]: Using postgres connection "test.nexabrands_dbt.accepted_values_stg_order_fulfillment_ontime_in_full__True__0__1.3b38ec7b73"
@@ -2351,9 +2351,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 with all_values as (
 
@@ -2374,7 +2374,7 @@ where value_field not in (
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.239498 [debug] [Thread-3 (]: SQL status: SELECT 1 in 0.004 seconds
 [0m19:50:32.241143 [debug] [Thread-1 (]: SQL status: BEGIN in 0.019 seconds
@@ -2391,9 +2391,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 with all_values as (
 
@@ -2414,7 +2414,7 @@ where value_field not in (
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.254348 [debug] [Thread-2 (]: On test.nexabrands_dbt.accepted_values_stg_order_fulfillment_in_full__True__0__1.4b722af630: Close
 [0m19:50:32.256577 [info ] [Thread-2 (]: 2 of 60 PASS accepted_values_stg_order_fulfillment_in_full__True__0__1 ......... [[32mPASS[0m in 0.12s]
@@ -2476,9 +2476,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 with all_values as (
 
@@ -2499,7 +2499,7 @@ where value_field not in (
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.339519 [debug] [Thread-4 (]: Opening a new connection, currently in state closed
 [0m19:50:32.334460 [debug] [Thread-3 (]: SQL status: BEGIN in 0.008 seconds
@@ -2514,7 +2514,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -2522,14 +2522,14 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
+
+
+
   infull_target >= otif_target as expression
 
 
     from "raw"."staging"."stg_customer_targets"
-    
+
 
 ),
 validation_errors as (
@@ -2550,7 +2550,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.351049 [debug] [Thread-2 (]: On test.nexabrands_dbt.accepted_values_stg_products_category__Dairy__beverages__Food.9a74aea575: Close
 [0m19:50:32.351602 [debug] [Thread-4 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_customers_city__50__2.75f73ba182"
@@ -2560,7 +2560,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -2568,10 +2568,10 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and length(
         city
     ) >= 2 and length(
@@ -2582,7 +2582,7 @@ select
 
 
     from "raw"."staging"."stg_customers"
-    
+
 
 ),
 validation_errors as (
@@ -2605,7 +2605,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.354177 [debug] [Thread-3 (]: SQL status: SELECT 1 in 0.001 seconds
 [0m19:50:32.352485 [debug] [Thread-1 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_column_pair_values_A_to_be_greater_than_B_stg_customer_targets_ontime_target__otif_target__True.e07a51facc"
@@ -2615,7 +2615,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -2623,14 +2623,14 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
+
+
+
   ontime_target >= otif_target as expression
 
 
     from "raw"."staging"."stg_customer_targets"
-    
+
 
 ),
 validation_errors as (
@@ -2651,7 +2651,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.357476 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_pair_values_A_to_be_greater_than_B_stg_customer_targets_infull_target__otif_target__True.5277415478: ROLLBACK
 [0m19:50:32.358396 [debug] [Thread-4 (]: SQL status: SELECT 1 in 0.003 seconds
@@ -2718,7 +2718,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -2726,10 +2726,10 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and length(
         customer_id
     ) >= 1 and length(
@@ -2740,7 +2740,7 @@ select
 
 
     from "raw"."staging"."stg_orders"
-    
+
 
 ),
 validation_errors as (
@@ -2763,7 +2763,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.447223 [debug] [Thread-1 (]: SQL status: BEGIN in 0.020 seconds
 [0m19:50:32.448060 [debug] [Thread-1 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_products_category__50__2.f036dd83e2"
@@ -2773,7 +2773,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -2781,10 +2781,10 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and length(
         category
     ) >= 2 and length(
@@ -2795,7 +2795,7 @@ select
 
 
     from "raw"."staging"."stg_products"
-    
+
 
 ),
 validation_errors as (
@@ -2818,7 +2818,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.443695 [debug] [Thread-4 (]: SQL status: BEGIN in 0.018 seconds
 [0m19:50:32.450548 [debug] [Thread-4 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_orders_order_id__50__1.0ecb6709db"
@@ -2828,7 +2828,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -2836,10 +2836,10 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and length(
         order_id
     ) >= 1 and length(
@@ -2850,7 +2850,7 @@ select
 
 
     from "raw"."staging"."stg_orders"
-    
+
 
 ),
 validation_errors as (
@@ -2873,7 +2873,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.442386 [debug] [Thread-3 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_customers_customer_name__100__2.862ed945bf"
 [0m19:50:32.453094 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_customers_customer_name__100__2.862ed945bf: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_customers_customer_name__100__2.862ed945bf"} */
@@ -2882,7 +2882,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -2890,10 +2890,10 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and length(
         customer_name
     ) >= 2 and length(
@@ -2904,7 +2904,7 @@ select
 
 
     from "raw"."staging"."stg_customers"
-    
+
 
 ),
 validation_errors as (
@@ -2927,7 +2927,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.454716 [debug] [Thread-3 (]: SQL status: SELECT 1 in 0.001 seconds
 [0m19:50:32.457111 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_customers_customer_name__100__2.862ed945bf: ROLLBACK
@@ -2993,17 +2993,17 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 
     length(
         date
@@ -3011,7 +3011,7 @@ select
 
 
     from "raw"."staging"."stg_dates"
-    
+
 
 ),
 validation_errors as (
@@ -3032,7 +3032,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.540368 [debug] [Thread-2 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_between_stg_customer_targets_ontime_target__100__0.41469dcdf6"
 [0m19:50:32.545460 [debug] [Thread-2 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_between_stg_customer_targets_ontime_target__100__0.41469dcdf6: BEGIN
@@ -3048,7 +3048,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -3056,10 +3056,10 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and length(
         product_name
     ) >= 1 and length(
@@ -3070,7 +3070,7 @@ select
 
 
     from "raw"."staging"."stg_products"
-    
+
 
 ),
 validation_errors as (
@@ -3093,7 +3093,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.556982 [debug] [Thread-1 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_equal_stg_dates_date__10.ddb94d6f63: Close
 [0m19:50:32.559019 [debug] [Thread-4 (]: SQL status: SELECT 1 in 0.001 seconds
@@ -3111,7 +3111,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -3120,17 +3120,17 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and ontime_target >= 0 and ontime_target <= 100
 )
  as expression
 
 
     from "raw"."staging"."stg_customer_targets"
-    
+
 
 ),
 validation_errors as (
@@ -3154,7 +3154,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.570820 [info ] [Thread-4 (]: 13 of 60 PASS dbt_expectations_expect_column_value_lengths_to_be_between_stg_products_product_name__100__1  [[32mPASS[0m in 0.09s]
 [0m19:50:32.573956 [debug] [Thread-4 (]: Finished running node test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_products_product_name__100__1.2a82c98710
@@ -3165,7 +3165,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -3174,17 +3174,17 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and infull_target >= 0 and infull_target <= 100
 )
  as expression
 
 
     from "raw"."staging"."stg_customer_targets"
-    
+
 
 ),
 validation_errors as (
@@ -3208,7 +3208,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.576017 [info ] [Thread-1 (]: 17 of 60 START test dbt_expectations_expect_column_values_to_be_between_stg_customer_targets_otif_target__100__0  [RUN]
 [0m19:50:32.575487 [debug] [Thread-2 (]: SQL status: SELECT 1 in 0.002 seconds
@@ -3264,7 +3264,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -3273,17 +3273,17 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and otif_target >= 0 and otif_target <= 100
 )
  as expression
 
 
     from "raw"."staging"."stg_customer_targets"
-    
+
 
 ),
 validation_errors as (
@@ -3307,7 +3307,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.649395 [debug] [Thread-2 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_between_stg_products_product_id__1__product_id_IS_NOT_NULL__True.0e54fce5ed: BEGIN
 [0m19:50:32.651341 [debug] [Thread-2 (]: Opening a new connection, currently in state closed
@@ -3328,7 +3328,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -3337,17 +3337,17 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and order_placement_date >= '2024-01-01' and order_placement_date <= current_date
 )
  as expression
 
 
     from "raw"."staging"."stg_orders"
-    
+
 
 ),
 validation_errors as (
@@ -3371,7 +3371,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.669393 [info ] [Thread-1 (]: 21 of 60 START test dbt_expectations_expect_column_values_to_be_of_type_stg_orders_order_placement_date__date  [RUN]
 [0m19:50:32.670090 [debug] [Thread-3 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_in_set_stg_products_category__Dairy__beverages__Food.af6390bd10"
@@ -3381,7 +3381,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 with all_values as (
 
@@ -3389,7 +3389,7 @@ with all_values as (
         category as value_field
 
     from "raw"."staging"."stg_products"
-    
+
 
 ),
 set_values as (
@@ -3402,8 +3402,8 @@ set_values as (
     union all
     select
         cast('Food' as TEXT) as value_field
-    
-    
+
+
 ),
 validation_errors as (
     -- values from the model that are not in the set
@@ -3422,7 +3422,7 @@ select *
 from validation_errors
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.670647 [debug] [Thread-2 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_between_stg_products_product_id__1__product_id_IS_NOT_NULL__True.0e54fce5ed"
 [0m19:50:32.676012 [debug] [Thread-2 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_between_stg_products_product_id__1__product_id_IS_NOT_NULL__True.0e54fce5ed: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_between_stg_products_product_id__1__product_id_IS_NOT_NULL__True.0e54fce5ed"} */
@@ -3431,7 +3431,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -3440,10 +3440,10 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and product_id > 1
 )
  as expression
@@ -3452,8 +3452,8 @@ select
     from "raw"."staging"."stg_products"
     where
         product_id IS NOT NULL
-    
-    
+
+
 
 ),
 validation_errors as (
@@ -3477,7 +3477,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.676887 [debug] [Thread-3 (]: SQL status: SELECT 1 in 0.002 seconds
 [0m19:50:32.679266 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_in_set_stg_products_category__Dairy__beverages__Food.af6390bd10: ROLLBACK
@@ -3524,12 +3524,12 @@ from validation_errors
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_orders'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:50:32.775042 [debug] [Thread-2 (]: Writing injected SQL for node "test.nexabrands_dbt.dbt_expectations_expect_column_values_to_match_regex_stg_customers_customer_name___A_Za_z0_9_s_.96dd2aa828"
 [0m19:50:32.782926 [debug] [Thread-2 (]: Began executing node test.nexabrands_dbt.dbt_expectations_expect_column_values_to_match_regex_stg_customers_customer_name___A_Za_z0_9_s_.96dd2aa828
 [0m19:50:32.781427 [debug] [Thread-3 (]: Writing injected SQL for node "test.nexabrands_dbt.dbt_expectations_expect_column_values_to_match_regex_stg_order_fulfillment_order_id___A_Za_z0_9___.2da099af86"
@@ -3560,22 +3560,22 @@ select
     from (
       with relation_columns as (
 
-        
+
         select
             cast('ORDER_ID' as TEXT) as relation_column,
             cast('TEXT' as TEXT) as relation_column_type
         union all
-        
+
         select
             cast('CUSTOMER_ID' as TEXT) as relation_column,
             cast('TEXT' as TEXT) as relation_column_type
         union all
-        
+
         select
             cast('ORDER_PLACEMENT_DATE' as TEXT) as relation_column,
             cast('DATE' as TEXT) as relation_column_type
-        
-        
+
+
     ),
     test_data as (
 
@@ -3591,7 +3591,7 @@ select
     )
     select *
     from test_data
-      
+
     ) dbt_internal_test
 [0m19:50:32.820480 [debug] [Thread-4 (]: Opening a new connection, currently in state closed
 [0m19:50:32.821415 [debug] [Thread-2 (]: SQL status: BEGIN in 0.009 seconds
@@ -3602,20 +3602,20 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
 
 
-    
+
+
+
+
+
 
 coalesce(array_length((select regexp_matches(customer_name, '^[A-Za-z0-9\s\-\.]+$', '')), 1), 0)
 
@@ -3625,7 +3625,7 @@ coalesce(array_length((select regexp_matches(customer_name, '^[A-Za-z0-9\s\-\.]+
 
 
     from "raw"."staging"."stg_customers"
-    
+
 
 ),
 validation_errors as (
@@ -3646,7 +3646,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.827203 [debug] [Thread-1 (]: SQL status: SELECT 1 in 0.004 seconds
 [0m19:50:32.830594 [debug] [Thread-2 (]: SQL status: SELECT 1 in 0.002 seconds
@@ -3663,20 +3663,20 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
 
 
-    
+
+
+
+
+
 
 coalesce(array_length((select regexp_matches(order_id, '^[A-Za-z0-9\-_]+$', '')), 1), 0)
 
@@ -3686,7 +3686,7 @@ coalesce(array_length((select regexp_matches(order_id, '^[A-Za-z0-9\-_]+$', ''))
 
 
     from "raw"."staging"."stg_order_fulfillment"
-    
+
 
 ),
 validation_errors as (
@@ -3707,7 +3707,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.841557 [debug] [Thread-1 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_of_type_stg_orders_order_placement_date__date.518b599ba0: Close
 [0m19:50:32.842165 [debug] [Thread-4 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_values_to_match_regex_stg_customers_city___A_Za_z_s_.0423a3db39: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_column_values_to_match_regex_stg_customers_city___A_Za_z_s_.0423a3db39"} */
@@ -3716,20 +3716,20 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
 
 
-    
+
+
+
+
+
 
 coalesce(array_length((select regexp_matches(city, '^[A-Za-z\s\-\.]+$', '')), 1), 0)
 
@@ -3739,7 +3739,7 @@ coalesce(array_length((select regexp_matches(city, '^[A-Za-z\s\-\.]+$', '')), 1)
 
 
     from "raw"."staging"."stg_customers"
-    
+
 
 ),
 validation_errors as (
@@ -3760,7 +3760,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.843391 [info ] [Thread-1 (]: 21 of 60 PASS dbt_expectations_expect_column_values_to_be_of_type_stg_orders_order_placement_date__date  [[32mPASS[0m in 0.17s]
 [0m19:50:32.847599 [debug] [Thread-1 (]: Finished running node test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_of_type_stg_orders_order_placement_date__date.518b599ba0
@@ -3813,20 +3813,20 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
 
 
-    
+
+
+
+
+
 
 coalesce(array_length((select regexp_matches(product_name, '^\\s*$', '')), 1), 0)
 
@@ -3836,7 +3836,7 @@ coalesce(array_length((select regexp_matches(product_name, '^\\s*$', '')), 1), 0
 
 
     from "raw"."staging"."stg_products"
-    
+
 
 ),
 validation_errors as (
@@ -3857,7 +3857,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.939942 [debug] [Thread-3 (]: Began compiling node test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404
 [0m19:50:32.940597 [debug] [Thread-2 (]: On test.nexabrands_dbt.dbt_expectations_expect_compound_columns_to_be_unique_stg_orders_customer_id__order_placement_date__order_id.c72b454e6a: BEGIN
@@ -3885,7 +3885,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -3897,16 +3897,16 @@ with validation_errors as (
     from "raw"."staging"."stg_orders"
     where
         1=1
-        and 
+        and
     not (
-        customer_id is null and 
-        order_placement_date is null and 
+        customer_id is null and
+        order_placement_date is null and
         order_id is null
-        
+
     )
 
 
-    
+
     group by
         customer_id,order_placement_date,order_id
     having count(*) > 1
@@ -3914,7 +3914,7 @@ with validation_errors as (
 )
 select * from validation_errors
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.973882 [debug] [Thread-3 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404"
 [0m19:50:32.976709 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404"} */
@@ -3928,19 +3928,19 @@ select * from validation_errors
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_orders'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:50:32.975215 [debug] [Thread-4 (]: On test.nexabrands_dbt.dbt_expectations_expect_compound_columns_to_be_unique_stg_products_product_name__category.e804075419: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_compound_columns_to_be_unique_stg_products_product_name__category.e804075419"} */
 select
       count(*) as failures,
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -3952,15 +3952,15 @@ with validation_errors as (
     from "raw"."staging"."stg_products"
     where
         1=1
-        and 
+        and
     not (
-        product_name is null and 
+        product_name is null and
         category is null
-        
+
     )
 
 
-    
+
     group by
         product_name,category
     having count(*) > 1
@@ -3968,7 +3968,7 @@ with validation_errors as (
 )
 select * from validation_errors
 
-      
+
     ) dbt_internal_test
 [0m19:50:32.978662 [debug] [Thread-4 (]: SQL status: SELECT 1 in 0.001 seconds
 [0m19:50:32.981251 [debug] [Thread-4 (]: On test.nexabrands_dbt.dbt_expectations_expect_compound_columns_to_be_unique_stg_products_product_name__category.e804075419: ROLLBACK
@@ -4011,12 +4011,12 @@ select * from validation_errors
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_products'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:50:33.045865 [info ] [Thread-2 (]: 31 of 60 START test dbt_expectations_expect_table_columns_to_match_set_stg_dates_date  [RUN]
 [0m19:50:33.049147 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.dbt_expectations_expect_compound_columns_to_be_unique_stg_orders_customer_id__order_placement_date__order_id.c72b454e6a, now test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_dates_date.2d0c578b06)
 [0m19:50:33.047336 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404"} */
@@ -4027,41 +4027,41 @@ select
     from (
       with relation_columns as (
 
-        
+
         select
             1 as relation_column_idx,
             cast('ORDER_ID' as TEXT) as relation_column
         union all
-        
+
         select
             2 as relation_column_idx,
             cast('CUSTOMER_ID' as TEXT) as relation_column
         union all
-        
+
         select
             3 as relation_column_idx,
             cast('ORDER_PLACEMENT_DATE' as TEXT) as relation_column
-        
-        
+
+
     ),
     input_columns as (
 
-        
+
         select
             1 as input_column_idx,
             cast('ORDER_ID' as TEXT) as input_column
         union all
-        
+
         select
             2 as input_column_idx,
             cast('CUSTOMER_ID' as TEXT) as input_column
         union all
-        
+
         select
             3 as input_column_idx,
             cast('ORDER_PLACEMENT_DATE' as TEXT) as input_column
-        
-        
+
+
     )
     select *
     from
@@ -4073,7 +4073,7 @@ select
         -- or any table column that is not in the input sequence
         r.relation_column is null or
         i.input_column is null
-      
+
     ) dbt_internal_test
 [0m19:50:33.051656 [debug] [Thread-3 (]: SQL status: SELECT 1 in 0.001 seconds
 [0m19:50:33.054317 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404: ROLLBACK
@@ -4102,12 +4102,12 @@ select
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_customers'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:50:33.080422 [debug] [Thread-2 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_dates_date.2d0c578b06"
 [0m19:50:33.082578 [debug] [Thread-2 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_dates_date.2d0c578b06: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_dates_date.2d0c578b06"} */
 
@@ -4120,12 +4120,12 @@ select
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_dates'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:50:33.081070 [debug] [Thread-1 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_products_product_id__product_name__category.393dada602"
 [0m19:50:33.083667 [debug] [Thread-1 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_products_product_id__product_name__category.393dada602: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_products_product_id__product_name__category.393dada602"} */
 select
@@ -4135,41 +4135,41 @@ select
     from (
       with relation_columns as (
 
-        
+
         select
             1 as relation_column_idx,
             cast('PRODUCT_ID' as TEXT) as relation_column
         union all
-        
+
         select
             2 as relation_column_idx,
             cast('PRODUCT_NAME' as TEXT) as relation_column
         union all
-        
+
         select
             3 as relation_column_idx,
             cast('CATEGORY' as TEXT) as relation_column
-        
-        
+
+
     ),
     input_columns as (
 
-        
+
         select
             1 as input_column_idx,
             cast('PRODUCT_ID' as TEXT) as input_column
         union all
-        
+
         select
             2 as input_column_idx,
             cast('PRODUCT_NAME' as TEXT) as input_column
         union all
-        
+
         select
             3 as input_column_idx,
             cast('CATEGORY' as TEXT) as input_column
-        
-        
+
+
     )
     select *
     from
@@ -4181,7 +4181,7 @@ select
         -- or any table column that is not in the input sequence
         r.relation_column is null or
         i.input_column is null
-      
+
     ) dbt_internal_test
 [0m19:50:33.085263 [debug] [Thread-1 (]: SQL status: SELECT 1 in 0.001 seconds
 [0m19:50:33.087772 [debug] [Thread-1 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_products_product_id__product_name__category.393dada602: ROLLBACK
@@ -4216,29 +4216,29 @@ select
     from (
       with relation_columns as (
 
-        
+
         select cast('CUSTOMER_ID' as TEXT) as relation_column
         union all
-        
+
         select cast('CUSTOMER_NAME' as TEXT) as relation_column
         union all
-        
+
         select cast('CITY' as TEXT) as relation_column
-        
-        
+
+
     ),
     input_columns as (
 
-        
+
         select cast('CUSTOMER_ID' as TEXT) as input_column
         union all
-        
+
         select cast('CUSTOMER_NAME' as TEXT) as input_column
         union all
-        
+
         select cast('CITY' as TEXT) as input_column
-        
-        
+
+
     )
     select *
     from
@@ -4250,7 +4250,7 @@ select
         -- or any table column that is not in the input list
         r.relation_column is null or
         i.input_column is null
-      
+
     ) dbt_internal_test
 [0m19:50:33.130778 [debug] [Thread-3 (]: SQL status: BEGIN in 0.007 seconds
 [0m19:50:33.127005 [debug] [Thread-2 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_dates_date.2d0c578b06: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_dates_date.2d0c578b06"} */
@@ -4261,17 +4261,17 @@ select
     from (
       with relation_columns as (
 
-        
+
         select cast('DATE' as TEXT) as relation_column
-        
-        
+
+
     ),
     input_columns as (
 
-        
+
         select cast('DATE' as TEXT) as input_column
-        
-        
+
+
     )
     select *
     from
@@ -4283,7 +4283,7 @@ select
         -- or any table column that is not in the input list
         r.relation_column is null or
         i.input_column is null
-      
+
     ) dbt_internal_test
 [0m19:50:33.132164 [debug] [Thread-3 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_order_fulfillment_order_id__on_time__in_full__ontime_in_full.4d470eb185"
 [0m19:50:33.129866 [debug] [Thread-1 (]: Began compiling node test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_customers_40__1.c99103eefc
@@ -4300,12 +4300,12 @@ select
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_order_fulfillment'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:50:33.140065 [debug] [Thread-1 (]: Writing injected SQL for node "test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_customers_40__1.c99103eefc"
 [0m19:50:33.141870 [debug] [Thread-2 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_dates_date.2d0c578b06: ROLLBACK
 [0m19:50:33.143339 [debug] [Thread-4 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_customers_customer_id__customer_name__city.68cf07e70d: ROLLBACK
@@ -4347,23 +4347,23 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and count(*) >= 1
 )
  as expression
 
 
     from "raw"."staging"."stg_dates"
-    
+
 
 ),
 validation_errors as (
@@ -4385,7 +4385,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.275029 [debug] [Thread-2 (]: Writing runtime sql for node "test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_order_fulfillment_1.0283bc6212"
 [0m19:50:33.287592 [debug] [Thread-4 (]: SQL status: SELECT 1 in 0.003 seconds
@@ -4401,35 +4401,35 @@ select
     from (
       with relation_columns as (
 
-        
+
         select cast('ORDER_ID' as TEXT) as relation_column
         union all
-        
+
         select cast('ON_TIME' as TEXT) as relation_column
         union all
-        
+
         select cast('IN_FULL' as TEXT) as relation_column
         union all
-        
+
         select cast('ONTIME_IN_FULL' as TEXT) as relation_column
-        
-        
+
+
     ),
     input_columns as (
 
-        
+
         select cast('ORDER_ID' as TEXT) as input_column
         union all
-        
+
         select cast('ON_TIME' as TEXT) as input_column
         union all
-        
+
         select cast('IN_FULL' as TEXT) as input_column
         union all
-        
+
         select cast('ONTIME_IN_FULL' as TEXT) as input_column
-        
-        
+
+
     )
     select *
     from
@@ -4441,7 +4441,7 @@ select
         -- or any table column that is not in the input list
         r.relation_column is null or
         i.input_column is null
-      
+
     ) dbt_internal_test
 [0m19:50:33.295573 [debug] [Thread-2 (]: Opening a new connection, currently in state closed
 [0m19:50:33.299779 [debug] [Thread-3 (]: SQL status: SELECT 1 in 0.002 seconds
@@ -4461,23 +4461,23 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and count(*) >= 1 and count(*) <= 40
 )
  as expression
 
 
     from "raw"."staging"."stg_customers"
-    
+
 
 ),
 validation_errors as (
@@ -4499,7 +4499,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.323661 [debug] [Thread-1 (]: SQL status: SELECT 1 in 0.005 seconds
 [0m19:50:33.315973 [debug] [Thread-3 (]: Finished running node test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_order_fulfillment_order_id__on_time__in_full__ontime_in_full.4d470eb185
@@ -4519,23 +4519,23 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and count(*) >= 1
 )
  as expression
 
 
     from "raw"."staging"."stg_order_fulfillment"
-    
+
 
 ),
 validation_errors as (
@@ -4557,7 +4557,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.349200 [debug] [Thread-1 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_customers_40__1.c99103eefc: Close
 [0m19:50:33.352911 [info ] [Thread-1 (]: 33 of 60 PASS dbt_expectations_expect_table_row_count_to_be_between_stg_customers_40__1  [[32mPASS[0m in 0.22s]
@@ -4594,23 +4594,23 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and count(*) >= 1 and count(*) <= 10000000
 )
  as expression
 
 
     from "raw"."staging"."stg_orders"
-    
+
 
 ),
 validation_errors as (
@@ -4632,7 +4632,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.412677 [debug] [Thread-3 (]: Opening a new connection, currently in state closed
 [0m19:50:33.414725 [debug] [Thread-1 (]: Using postgres connection "test.nexabrands_dbt.not_null_stg_customer_targets_customer_id.528be64241"
@@ -4649,23 +4649,23 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and count(*) >= 1 and count(*) <= 100
 )
  as expression
 
 
     from "raw"."staging"."stg_products"
-    
+
 
 ),
 validation_errors as (
@@ -4687,7 +4687,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.424924 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_order_fulfillment_1.0283bc6212, now test.nexabrands_dbt.not_null_stg_customer_targets_infull_target.848a26f728)
 [0m19:50:33.427889 [debug] [Thread-2 (]: Began compiling node test.nexabrands_dbt.not_null_stg_customer_targets_infull_target.848a26f728
@@ -4714,9 +4714,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -4726,7 +4726,7 @@ where customer_id is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.453774 [debug] [Thread-3 (]: Began running node test.nexabrands_dbt.not_null_stg_customer_targets_otif_target.74d072ca2a
 [0m19:50:33.459823 [debug] [Thread-4 (]: Writing injected SQL for node "test.nexabrands_dbt.not_null_stg_customer_targets_ontime_target.5042478108"
@@ -4754,9 +4754,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -4766,7 +4766,7 @@ where infull_target is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.485408 [debug] [Thread-1 (]: Finished running node test.nexabrands_dbt.not_null_stg_customer_targets_customer_id.528be64241
 [0m19:50:33.487958 [debug] [Thread-3 (]: Began executing node test.nexabrands_dbt.not_null_stg_customer_targets_otif_target.74d072ca2a
@@ -4787,9 +4787,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -4799,7 +4799,7 @@ where ontime_target is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.509363 [debug] [Thread-2 (]: On test.nexabrands_dbt.not_null_stg_customer_targets_infull_target.848a26f728: Close
 [0m19:50:33.499373 [debug] [Thread-3 (]: Opening a new connection, currently in state closed
@@ -4822,9 +4822,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -4834,7 +4834,7 @@ where otif_target is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.546906 [debug] [Thread-3 (]: SQL status: SELECT 1 in 0.001 seconds
 [0m19:50:33.545298 [info ] [Thread-4 (]: 40 of 60 PASS not_null_stg_customer_targets_ontime_target ...................... [[32mPASS[0m in 0.09s]
@@ -4872,9 +4872,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -4884,7 +4884,7 @@ where city is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.588420 [debug] [Thread-4 (]: Began executing node test.nexabrands_dbt.not_null_stg_customers_customer_name.5c92a78a60
 [0m19:50:33.586772 [debug] [Thread-2 (]: Using postgres connection "test.nexabrands_dbt.not_null_stg_customers_customer_id.e2cfb1f9aa"
@@ -4895,9 +4895,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -4907,7 +4907,7 @@ where customer_id is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.594104 [debug] [Thread-3 (]: Began executing node test.nexabrands_dbt.not_null_stg_dates_date.0b6295f5bd
 [0m19:50:33.594834 [debug] [Thread-1 (]: SQL status: SELECT 1 in 0.004 seconds
@@ -4939,9 +4939,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -4951,7 +4951,7 @@ where date is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.623146 [info ] [Thread-1 (]: 47 of 60 START test not_null_stg_order_fulfillment_on_time ..................... [RUN]
 [0m19:50:33.624415 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.not_null_stg_customers_customer_id.e2cfb1f9aa, now test.nexabrands_dbt.not_null_stg_order_fulfillment_in_full.7f52ec5fb8)
@@ -4965,9 +4965,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -4977,7 +4977,7 @@ where customer_name is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.628652 [debug] [Thread-1 (]: Began compiling node test.nexabrands_dbt.not_null_stg_order_fulfillment_on_time.cb8d53a996
 [0m19:50:33.630579 [debug] [Thread-3 (]: On test.nexabrands_dbt.not_null_stg_dates_date.0b6295f5bd: ROLLBACK
@@ -5013,9 +5013,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -5025,7 +5025,7 @@ where in_full is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.666959 [debug] [Thread-3 (]: Began compiling node test.nexabrands_dbt.not_null_stg_order_fulfillment_ontime_in_full.d8e8bdce2a
 [0m19:50:33.665931 [info ] [Thread-4 (]: 49 of 60 START test not_null_stg_order_fulfillment_order_id .................... [RUN]
@@ -5052,9 +5052,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -5064,7 +5064,7 @@ where on_time is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.694062 [info ] [Thread-2 (]: 50 of 60 START test not_null_stg_orders_customer_id ............................ [RUN]
 [0m19:50:33.704870 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.not_null_stg_order_fulfillment_in_full.7f52ec5fb8, now test.nexabrands_dbt.not_null_stg_orders_customer_id.af79d5e4b5)
@@ -5082,9 +5082,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -5094,7 +5094,7 @@ where ontime_in_full is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.719694 [debug] [Thread-1 (]: On test.nexabrands_dbt.not_null_stg_order_fulfillment_on_time.cb8d53a996: Close
 [0m19:50:33.724709 [info ] [Thread-1 (]: 47 of 60 PASS not_null_stg_order_fulfillment_on_time ........................... [[32mPASS[0m in 0.10s]
@@ -5120,9 +5120,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -5132,7 +5132,7 @@ where order_id is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.749074 [debug] [Thread-3 (]: Began running node test.nexabrands_dbt.not_null_stg_orders_order_placement_date.b80fa199d8
 [0m19:50:33.758721 [info ] [Thread-3 (]: 52 of 60 START test not_null_stg_orders_order_placement_date ................... [RUN]
@@ -5162,9 +5162,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -5174,7 +5174,7 @@ where customer_id is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.792822 [debug] [Thread-3 (]: Began executing node test.nexabrands_dbt.not_null_stg_orders_order_placement_date.b80fa199d8
 [0m19:50:33.787099 [debug] [Thread-1 (]: Writing runtime sql for node "test.nexabrands_dbt.not_null_stg_orders_order_id.81cfe2fe64"
@@ -5194,9 +5194,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -5206,7 +5206,7 @@ where order_id is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.821480 [debug] [Thread-4 (]: Writing injected SQL for node "test.nexabrands_dbt.not_null_stg_products_category.6007d8b2d1"
 [0m19:50:33.806060 [debug] [Thread-3 (]: Writing runtime sql for node "test.nexabrands_dbt.not_null_stg_orders_order_placement_date.b80fa199d8"
@@ -5229,9 +5229,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -5241,7 +5241,7 @@ where order_placement_date is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.866247 [debug] [Thread-1 (]: On test.nexabrands_dbt.not_null_stg_orders_order_id.81cfe2fe64: Close
 [0m19:50:33.875507 [debug] [Thread-4 (]: Using postgres connection "test.nexabrands_dbt.not_null_stg_products_category.6007d8b2d1"
@@ -5273,9 +5273,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -5285,7 +5285,7 @@ where category is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.913603 [debug] [Thread-2 (]: Using postgres connection "test.nexabrands_dbt.not_null_stg_products_product_id.6373b0acf3"
 [0m19:50:33.914379 [debug] [Thread-2 (]: On test.nexabrands_dbt.not_null_stg_products_product_id.6373b0acf3: BEGIN
@@ -5311,9 +5311,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -5323,7 +5323,7 @@ where product_id is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.941573 [debug] [Thread-4 (]: Began running node test.nexabrands_dbt.unique_stg_customers_customer_id.c7614daada
 [0m19:50:33.936738 [debug] [Thread-3 (]: Writing runtime sql for node "test.nexabrands_dbt.unique_stg_customer_targets_customer_id.eada6988f9"
@@ -5341,9 +5341,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -5353,7 +5353,7 @@ where product_name is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.951380 [debug] [Thread-2 (]: On test.nexabrands_dbt.not_null_stg_products_product_id.6373b0acf3: Close
 [0m19:50:33.951910 [debug] [Thread-4 (]: Began compiling node test.nexabrands_dbt.unique_stg_customers_customer_id.c7614daada
@@ -5375,9 +5375,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 select
     customer_id as unique_field,
@@ -5390,7 +5390,7 @@ having count(*) > 1
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:33.973391 [info ] [Thread-2 (]: 58 of 60 START test unique_stg_order_fulfillment_order_id ...................... [RUN]
 [0m19:50:33.976906 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.not_null_stg_products_product_id.6373b0acf3, now test.nexabrands_dbt.unique_stg_order_fulfillment_order_id.7c955b4a29)
@@ -5430,9 +5430,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 select
     customer_id as unique_field,
@@ -5445,7 +5445,7 @@ having count(*) > 1
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:34.012682 [debug] [Thread-1 (]: Using postgres connection "test.nexabrands_dbt.unique_stg_orders_order_id.e3b841c71a"
 [0m19:50:34.021132 [debug] [Thread-1 (]: On test.nexabrands_dbt.unique_stg_orders_order_id.e3b841c71a: BEGIN
@@ -5460,9 +5460,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 select
     order_id as unique_field,
@@ -5475,7 +5475,7 @@ having count(*) > 1
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:34.024860 [debug] [Thread-3 (]: Began executing node test.nexabrands_dbt.unique_stg_products_product_id.7d950a1467
 [0m19:50:34.035315 [debug] [Thread-3 (]: Writing runtime sql for node "test.nexabrands_dbt.unique_stg_products_product_id.7d950a1467"
@@ -5488,9 +5488,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 select
     order_id as unique_field,
@@ -5503,7 +5503,7 @@ having count(*) > 1
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:34.037982 [debug] [Thread-3 (]: Using postgres connection "test.nexabrands_dbt.unique_stg_products_product_id.7d950a1467"
 [0m19:50:34.040740 [debug] [Thread-3 (]: On test.nexabrands_dbt.unique_stg_products_product_id.7d950a1467: BEGIN
@@ -5519,9 +5519,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 select
     product_id as unique_field,
@@ -5534,7 +5534,7 @@ having count(*) > 1
 
 
 
-      
+
     ) dbt_internal_test
 [0m19:50:34.053733 [debug] [Thread-2 (]: SQL status: SELECT 1 in 0.024 seconds
 [0m19:50:34.056441 [debug] [Thread-2 (]: On test.nexabrands_dbt.unique_stg_order_fulfillment_order_id.7c955b4a29: ROLLBACK
@@ -5565,15 +5565,15 @@ having count(*) > 1
 [0m19:50:34.090501 [debug] [MainThread]: Connection 'test.nexabrands_dbt.unique_stg_products_product_id.7d950a1467' was properly closed.
 [0m19:50:34.091081 [debug] [MainThread]: Connection 'test.nexabrands_dbt.unique_stg_customers_customer_id.c7614daada' was properly closed.
 [0m19:50:34.091587 [debug] [MainThread]: Connection 'test.nexabrands_dbt.unique_stg_orders_order_id.e3b841c71a' was properly closed.
-[0m19:50:34.092504 [info ] [MainThread]: 
+[0m19:50:34.092504 [info ] [MainThread]:
 [0m19:50:34.093142 [info ] [MainThread]: Finished running 60 data tests in 0 hours 0 minutes and 2.11 seconds (2.11s).
 [0m19:50:34.107203 [debug] [MainThread]: Command end result
 [0m19:50:34.161879 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m19:50:34.164373 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m19:50:34.173614 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m19:50:34.174321 [info ] [MainThread]: 
+[0m19:50:34.174321 [info ] [MainThread]:
 [0m19:50:34.175152 [info ] [MainThread]: [32mCompleted successfully[0m
-[0m19:50:34.176067 [info ] [MainThread]: 
+[0m19:50:34.176067 [info ] [MainThread]:
 [0m19:50:34.176865 [info ] [MainThread]: Done. PASS=60 WARN=0 ERROR=0 SKIP=0 TOTAL=60
 [0m19:50:34.178540 [debug] [MainThread]: Resource report: {"command_name": "test", "command_success": true, "command_wall_clock_time": 3.6677265, "process_in_blocks": "480", "process_kernel_time": 0.427692, "process_mem_max_rss": "121948", "process_out_blocks": "8400", "process_user_time": 4.256943}
 [0m19:50:34.179434 [debug] [MainThread]: Command `dbt test` succeeded at 19:50:34.179284 after 3.67 seconds
@@ -5598,9 +5598,9 @@ having count(*) > 1
 [0m19:53:45.504431 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '3179512a-079a-4eab-80c4-964a1e472ab1', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7edd851b7350>]}
 [0m19:53:45.505017 [info ] [MainThread]: Found 16 models, 2 snapshots, 62 data tests, 7 sources, 838 macros
 [0m19:53:45.505600 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '3179512a-079a-4eab-80c4-964a1e472ab1', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7edd85162d50>]}
-[0m19:53:45.509677 [info ] [MainThread]: 
+[0m19:53:45.509677 [info ] [MainThread]:
 [0m19:53:45.510318 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m19:53:45.510853 [info ] [MainThread]: 
+[0m19:53:45.510853 [info ] [MainThread]:
 [0m19:53:45.511626 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m19:53:45.516788 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw_marts'
 [0m19:53:45.517722 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw_raw'
@@ -5646,7 +5646,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m19:53:45.571410 [debug] [ThreadPool]: SQL status: BEGIN in 0.010 seconds
 [0m19:53:45.577318 [debug] [ThreadPool]: Using postgres connection "list_raw_intermediate"
 [0m19:53:45.578049 [debug] [ThreadPool]: On list_raw_intermediate: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw_intermediate"} */
@@ -5673,7 +5673,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'intermediate'
-  
+
 [0m19:53:45.574862 [debug] [ThreadPool]: On list_raw_marts: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw_marts"} */
 select
       'raw' as database,
@@ -5698,7 +5698,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'marts'
-  
+
 [0m19:53:45.581978 [debug] [ThreadPool]: SQL status: SELECT 2 in 0.003 seconds
 [0m19:53:45.582865 [debug] [ThreadPool]: SQL status: SELECT 6 in 0.004 seconds
 [0m19:53:45.583600 [debug] [ThreadPool]: SQL status: SELECT 15 in 0.006 seconds
@@ -5734,7 +5734,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'staging'
-  
+
 [0m19:53:45.601890 [debug] [ThreadPool]: SQL status: SELECT 7 in 0.002 seconds
 [0m19:53:45.603285 [debug] [ThreadPool]: On list_raw_staging: ROLLBACK
 [0m19:53:45.603842 [debug] [ThreadPool]: On list_raw_staging: Close
@@ -5849,9 +5849,9 @@ with relation as (
 [0m19:53:45.712041 [debug] [Thread-2 (]: On model.nexabrands_dbt.dim_date: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.dim_date"} */
 
 
-        select 
+        select
         ((cast('2025-12-31' as date))::date - (cast('2020-01-01' as date))::date)
-    
+
 [0m19:53:45.712619 [debug] [Thread-3 (]: Began compiling node model.nexabrands_dbt.stg_dates
 [0m19:53:45.717304 [debug] [Thread-1 (]: Writing injected SQL for node "model.nexabrands_dbt.stg_order_lines"
 [0m19:53:45.718174 [debug] [Thread-4 (]: Finished running node model.nexabrands_dbt.stg_order_fulfillment
@@ -6017,12 +6017,12 @@ with relation as (
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_customers'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:53:45.942491 [debug] [Thread-3 (]: Finished running node test.nexabrands_dbt.not_null_stg_customers_city.54fe47bfb8
 [0m19:53:45.943071 [debug] [Thread-4 (]: Began executing node test.nexabrands_dbt.not_null_stg_customers_customer_id.e2cfb1f9aa
 [0m19:53:45.945769 [debug] [Thread-4 (]: Finished running node test.nexabrands_dbt.not_null_stg_customers_customer_id.e2cfb1f9aa
@@ -6105,12 +6105,12 @@ with relation as (
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_order_fulfillment'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:53:46.051565 [debug] [Thread-3 (]: Began running node test.nexabrands_dbt.not_null_stg_order_fulfillment_ontime_in_full.d8e8bdce2a
 [0m19:53:46.053779 [debug] [Thread-3 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_order_fulfillment_1.0283bc6212, now test.nexabrands_dbt.not_null_stg_order_fulfillment_ontime_in_full.d8e8bdce2a)
 [0m19:53:46.054571 [debug] [Thread-3 (]: Began compiling node test.nexabrands_dbt.not_null_stg_order_fulfillment_ontime_in_full.d8e8bdce2a
@@ -6188,12 +6188,12 @@ with relation as (
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_dates'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:53:46.190178 [debug] [Thread-4 (]: Began running node test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_orders_customer_id__50__1.4bd54d8012
 [0m19:53:46.195111 [debug] [Thread-4 (]: Re-using an available connection from the pool (formerly model.nexabrands_dbt.dim_order, now test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_orders_customer_id__50__1.4bd54d8012)
 [0m19:53:46.195957 [debug] [Thread-4 (]: Began compiling node test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_orders_customer_id__50__1.4bd54d8012
@@ -6257,12 +6257,12 @@ with relation as (
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_orders'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:53:46.271305 [debug] [Thread-2 (]: Began executing node test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_orders_10000000__1.d2cd7717b3
 [0m19:53:46.276680 [debug] [Thread-2 (]: Finished running node test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_orders_10000000__1.d2cd7717b3
 [0m19:53:46.277434 [debug] [Thread-2 (]: Began running node test.nexabrands_dbt.not_null_stg_orders_order_id.81cfe2fe64
@@ -6302,12 +6302,12 @@ with relation as (
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_orders'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:53:46.310207 [debug] [Thread-4 (]: Began running node model.nexabrands_dbt.dim_product
 [0m19:53:46.317544 [debug] [Thread-4 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_of_type_stg_orders_order_placement_date__date.518b599ba0, now model.nexabrands_dbt.dim_product)
 [0m19:53:46.318365 [debug] [Thread-4 (]: Began compiling node model.nexabrands_dbt.dim_product
@@ -6400,12 +6400,12 @@ with relation as (
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_products'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:53:46.434061 [debug] [Thread-1 (]: Began executing node test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_products_100__1.bd6a3a0191
 [0m19:53:46.441583 [debug] [Thread-1 (]: Finished running node test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_products_100__1.bd6a3a0191
 [0m19:53:46.442368 [debug] [Thread-1 (]: Began running node test.nexabrands_dbt.unique_stg_products_product_id.7d950a1467
@@ -6472,9 +6472,9 @@ with relation as (
 [0m19:54:00.176273 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '60d5d842-4b88-4b24-b894-0c61bf772b09', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7dc887bc78c0>]}
 [0m19:54:00.176916 [info ] [MainThread]: Found 16 models, 2 snapshots, 62 data tests, 7 sources, 838 macros
 [0m19:54:00.177482 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '60d5d842-4b88-4b24-b894-0c61bf772b09', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7dc886b091c0>]}
-[0m19:54:00.180667 [info ] [MainThread]: 
+[0m19:54:00.180667 [info ] [MainThread]:
 [0m19:54:00.181233 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m19:54:00.181736 [info ] [MainThread]: 
+[0m19:54:00.181736 [info ] [MainThread]:
 [0m19:54:00.182523 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m19:54:00.187575 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m19:54:00.188362 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
@@ -6485,22 +6485,22 @@ with relation as (
 [0m19:54:00.239884 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m19:54:00.240340 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m19:54:00.240875 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m19:54:00.241300 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m19:54:00.241784 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m19:54:00.242275 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m19:54:00.242768 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m19:54:00.243249 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m19:54:00.244291 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m19:54:00.244965 [debug] [ThreadPool]: Opening a new connection, currently in state init
@@ -6555,7 +6555,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'marts'
-  
+
 [0m19:54:00.295617 [debug] [ThreadPool]: Using postgres connection "list_raw_staging"
 [0m19:54:00.297793 [debug] [ThreadPool]: SQL status: BEGIN in 0.014 seconds
 [0m19:54:00.299474 [debug] [ThreadPool]: Using postgres connection "list_raw_raw"
@@ -6583,7 +6583,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m19:54:00.298421 [debug] [ThreadPool]: On list_raw_staging: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw_staging"} */
 select
       'raw' as database,
@@ -6608,7 +6608,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'staging'
-  
+
 [0m19:54:00.301220 [debug] [ThreadPool]: SQL status: BEGIN in 0.015 seconds
 [0m19:54:00.304008 [debug] [ThreadPool]: Using postgres connection "list_raw_intermediate"
 [0m19:54:00.305281 [debug] [ThreadPool]: SQL status: SELECT 6 in 0.007 seconds
@@ -6637,7 +6637,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'intermediate'
-  
+
 [0m19:54:00.307108 [debug] [ThreadPool]: SQL status: SELECT 15 in 0.006 seconds
 [0m19:54:00.312595 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m19:54:00.310133 [debug] [ThreadPool]: On list_raw_staging: ROLLBACK
@@ -6763,9 +6763,9 @@ with relation as (
 [0m19:54:00.506133 [debug] [Thread-2 (]: On model.nexabrands_dbt.dim_date: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.dim_date"} */
 
 
-        select 
+        select
         ((cast('2025-12-31' as date))::date - (cast('2020-01-01' as date))::date)
-    
+
 [0m19:54:00.507409 [debug] [Thread-4 (]: Using postgres connection "model.nexabrands_dbt.stg_customers"
 [0m19:54:00.508269 [debug] [Thread-2 (]: SQL status: SELECT 1 in 0.001 seconds
 [0m19:54:00.510147 [debug] [Thread-1 (]: SQL status: BEGIN in 0.008 seconds
@@ -6779,10 +6779,10 @@ with relation as (
 [0m19:54:00.526314 [debug] [Thread-1 (]: On model.nexabrands_dbt.check_current_date: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.check_current_date"} */
 
   create view "raw"."raw"."check_current_date__dbt_tmp"
-    
-    
+
+
   as (
-    select 
+    select
     current_date as current_date_value,
     current_timestamp as current_timestamp_value,
     current_timestamp::timestamp at time zone 'UTC' as current_utc_timestamp
@@ -6792,18 +6792,18 @@ with relation as (
 [0m19:54:00.536975 [debug] [Thread-2 (]: Using postgres connection "model.nexabrands_dbt.dim_date"
 [0m19:54:00.538025 [debug] [Thread-2 (]: On model.nexabrands_dbt.dim_date: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.dim_date"} */
 
-  
-    
+
+
 
   create  table "raw"."marts"."dim_date__dbt_tmp"
-  
-  
+
+
     as
-  
+
   (
     -- models/marts/dim_date.sql
 WITH date_spine AS (
-    
+
 
 
 
@@ -6811,9 +6811,9 @@ WITH date_spine AS (
 
 with rawdata as (
 
-    
 
-    
+
+
 
     with p as (
         select 0 as generated_number union all select 1
@@ -6821,85 +6821,85 @@ with rawdata as (
 
     select
 
-    
+
     p0.generated_number * power(2, 0)
-     + 
-    
+     +
+
     p1.generated_number * power(2, 1)
-     + 
-    
+     +
+
     p2.generated_number * power(2, 2)
-     + 
-    
+     +
+
     p3.generated_number * power(2, 3)
-     + 
-    
+     +
+
     p4.generated_number * power(2, 4)
-     + 
-    
+     +
+
     p5.generated_number * power(2, 5)
-     + 
-    
+     +
+
     p6.generated_number * power(2, 6)
-     + 
-    
+     +
+
     p7.generated_number * power(2, 7)
-     + 
-    
+     +
+
     p8.generated_number * power(2, 8)
-     + 
-    
+     +
+
     p9.generated_number * power(2, 9)
-     + 
-    
+     +
+
     p10.generated_number * power(2, 10)
-     + 
-    
+     +
+
     p11.generated_number * power(2, 11)
-    
-    
+
+
     + 1
     as generated_number
 
     from
 
-    
+
     p as p0
-     cross join 
-    
+     cross join
+
     p as p1
-     cross join 
-    
+     cross join
+
     p as p2
-     cross join 
-    
+     cross join
+
     p as p3
-     cross join 
-    
+     cross join
+
     p as p4
-     cross join 
-    
+     cross join
+
     p as p5
-     cross join 
-    
+     cross join
+
     p as p6
-     cross join 
-    
+     cross join
+
     p as p7
-     cross join 
-    
+     cross join
+
     p as p8
-     cross join 
-    
+     cross join
+
     p as p9
-     cross join 
-    
+     cross join
+
     p as p10
-     cross join 
-    
+     cross join
+
     p as p11
-    
-    
+
+
 
     )
 
@@ -6915,7 +6915,7 @@ with rawdata as (
 all_periods as (
 
     select (
-        
+
 
     cast('2020-01-01' as date) + ((interval '1 day') * (row_number() over (order by 1) - 1))
 
@@ -6958,14 +6958,14 @@ enriched_dates AS (
         EXTRACT(DOW FROM date_day) as day_of_week_number,
         TO_CHAR(date_day, 'Day') as day_name,
         -- Fiscal year (assuming starts in April)
-        CASE 
-            WHEN EXTRACT(MONTH FROM date_day) >= 4 
+        CASE
+            WHEN EXTRACT(MONTH FROM date_day) >= 4
             THEN EXTRACT(YEAR FROM date_day)
             ELSE EXTRACT(YEAR FROM date_day) - 1
         END as fiscal_year,
         -- Is this a weekday?
-        CASE 
-            WHEN EXTRACT(DOW FROM date_day) IN (0, 6) THEN 0 
+        CASE
+            WHEN EXTRACT(DOW FROM date_day) IN (0, 6) THEN 0
             ELSE 1
         END as is_weekday,
         -- Create date key for joining
@@ -6974,19 +6974,19 @@ enriched_dates AS (
 )
 SELECT * FROM enriched_dates
   );
-  
+
 [0m19:54:00.540980 [debug] [Thread-3 (]: SQL status: BEGIN in 0.014 seconds
 [0m19:54:00.542354 [debug] [Thread-3 (]: Using postgres connection "model.nexabrands_dbt.stg_customer_targets"
 [0m19:54:00.543509 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
-  
-    
+
+
 
   create  table "raw"."staging"."stg_customer_targets__dbt_tmp"
-  
-  
+
+
     as
-  
+
   (
     -- models/staging/stg_customer_targets.sql
 WITH source AS (
@@ -7002,20 +7002,20 @@ staged AS (
 )
 SELECT * FROM staged
   );
-  
+
 [0m19:54:00.547694 [debug] [Thread-4 (]: SQL status: BEGIN in 0.022 seconds
 [0m19:54:00.550570 [debug] [Thread-1 (]: SQL status: CREATE VIEW in 0.022 seconds
 [0m19:54:00.551395 [debug] [Thread-4 (]: Using postgres connection "model.nexabrands_dbt.stg_customers"
 [0m19:54:00.563156 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_customers: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customers"} */
 
-  
-    
+
+
 
   create  table "raw"."staging"."stg_customers__dbt_tmp"
-  
-  
+
+
     as
-  
+
   (
     -- models/staging/stg_customers.sql
 WITH source AS (
@@ -7030,7 +7030,7 @@ staged AS (
 )
 SELECT * FROM staged
   );
-  
+
 [0m19:54:00.562186 [debug] [Thread-3 (]: SQL status: SELECT 21 in 0.018 seconds
 [0m19:54:00.579298 [debug] [Thread-1 (]: Using postgres connection "model.nexabrands_dbt.check_current_date"
 [0m19:54:00.580330 [debug] [Thread-1 (]: On model.nexabrands_dbt.check_current_date: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.check_current_date"} */
@@ -7075,21 +7075,21 @@ alter table "raw"."marts"."dim_date__dbt_tmp" rename to "dim_date"
 [0m19:54:00.732868 [debug] [Thread-3 (]: Using postgres connection "model.nexabrands_dbt.stg_customer_targets"
 [0m19:54:00.733432 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_customers: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customers"} */
 
-    
-  
+
+
   comment on table "raw"."staging"."stg_customers" is $dbt_comment_literal_block$Staging table for customer information including basic details and location$dbt_comment_literal_block$;
 
-  
+
 [0m19:54:00.739419 [debug] [Thread-1 (]: Using postgres connection "model.nexabrands_dbt.check_current_date"
 [0m19:54:00.742426 [debug] [Thread-1 (]: On model.nexabrands_dbt.check_current_date: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.check_current_date"} */
 drop view if exists "raw"."raw"."check_current_date__dbt_backup" cascade
 [0m19:54:00.741550 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
-    
-  
+
+
   comment on table "raw"."staging"."stg_customer_targets" is $dbt_comment_literal_block$Customer performance targets for on-time, in-full, and OTIF metrics.$dbt_comment_literal_block$;
 
-  
+
 [0m19:54:00.740969 [debug] [Thread-2 (]: On model.nexabrands_dbt.dim_date: COMMIT
 [0m19:54:00.744090 [debug] [Thread-2 (]: Using postgres connection "model.nexabrands_dbt.dim_date"
 [0m19:54:00.744905 [debug] [Thread-2 (]: On model.nexabrands_dbt.dim_date: COMMIT
@@ -7112,12 +7112,12 @@ drop view if exists "raw"."raw"."check_current_date__dbt_backup" cascade
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_customers'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:54:00.793646 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
       select
@@ -7129,12 +7129,12 @@ drop view if exists "raw"."raw"."check_current_date__dbt_backup" cascade
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_customer_targets'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:54:00.798032 [debug] [Thread-2 (]: Using postgres connection "model.nexabrands_dbt.dim_date"
 [0m19:54:00.799565 [debug] [Thread-2 (]: On model.nexabrands_dbt.dim_date: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.dim_date"} */
 drop table if exists "raw"."marts"."dim_date__dbt_backup" cascade
@@ -7145,23 +7145,23 @@ drop table if exists "raw"."marts"."dim_date__dbt_backup" cascade
 [0m19:54:00.815325 [debug] [Thread-3 (]: SQL status: SELECT 4 in 0.016 seconds
 [0m19:54:00.815930 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_customers: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customers"} */
 
-    
-  
-  
-    
-    
-    comment on column "raw"."staging"."stg_customers".customer_id is $dbt_comment_literal_block$Unique identifier for each customer$dbt_comment_literal_block$;
-  
-    
-    
-    comment on column "raw"."staging"."stg_customers".customer_name is $dbt_comment_literal_block$Full name of the customer$dbt_comment_literal_block$;
-  
-    
-    
-    comment on column "raw"."staging"."stg_customers".city is $dbt_comment_literal_block$City where the customer is located$dbt_comment_literal_block$;
-  
 
-  
+
+
+
+
+    comment on column "raw"."staging"."stg_customers".customer_id is $dbt_comment_literal_block$Unique identifier for each customer$dbt_comment_literal_block$;
+
+
+
+    comment on column "raw"."staging"."stg_customers".customer_name is $dbt_comment_literal_block$Full name of the customer$dbt_comment_literal_block$;
+
+
+
+    comment on column "raw"."staging"."stg_customers".city is $dbt_comment_literal_block$City where the customer is located$dbt_comment_literal_block$;
+
+
+
 [0m19:54:00.814805 [info ] [Thread-1 (]: 1 of 16 OK created sql view model raw.check_current_date ....................... [[32mCREATE VIEW[0m in 0.41s]
 [0m19:54:00.817564 [debug] [Thread-2 (]: On model.nexabrands_dbt.dim_date: Close
 [0m19:54:00.822579 [debug] [Thread-2 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': '60d5d842-4b88-4b24-b894-0c61bf772b09', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7dc887efe300>]}
@@ -7172,27 +7172,27 @@ drop table if exists "raw"."marts"."dim_date__dbt_backup" cascade
 [0m19:54:00.824631 [debug] [Thread-2 (]: Finished running node model.nexabrands_dbt.dim_date
 [0m19:54:00.825256 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
-    
-  
-  
-    
-    
-    comment on column "raw"."staging"."stg_customer_targets".customer_id is $dbt_comment_literal_block$Unique identifier for each customer.$dbt_comment_literal_block$;
-  
-    
-    
-    comment on column "raw"."staging"."stg_customer_targets".ontime_target is $dbt_comment_literal_block$Percentage of orders delivered on time based on the target.$dbt_comment_literal_block$;
-  
-    
-    
-    comment on column "raw"."staging"."stg_customer_targets".infull_target is $dbt_comment_literal_block$Percentage of orders delivered in full based on the target.$dbt_comment_literal_block$;
-  
-    
-    
-    comment on column "raw"."staging"."stg_customer_targets".otif_target is $dbt_comment_literal_block$Percentage of orders meeting both on-time and in-full (OTIF) requirements based on the target.$dbt_comment_literal_block$;
-  
 
-  
+
+
+
+
+    comment on column "raw"."staging"."stg_customer_targets".customer_id is $dbt_comment_literal_block$Unique identifier for each customer.$dbt_comment_literal_block$;
+
+
+
+    comment on column "raw"."staging"."stg_customer_targets".ontime_target is $dbt_comment_literal_block$Percentage of orders delivered on time based on the target.$dbt_comment_literal_block$;
+
+
+
+    comment on column "raw"."staging"."stg_customer_targets".infull_target is $dbt_comment_literal_block$Percentage of orders delivered in full based on the target.$dbt_comment_literal_block$;
+
+
+
+    comment on column "raw"."staging"."stg_customer_targets".otif_target is $dbt_comment_literal_block$Percentage of orders meeting both on-time and in-full (OTIF) requirements based on the target.$dbt_comment_literal_block$;
+
+
+
 [0m19:54:00.826595 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_customers: COMMIT
 [0m19:54:00.827232 [debug] [Thread-1 (]: Began running node model.nexabrands_dbt.stg_dates
 [0m19:54:00.827927 [debug] [Thread-2 (]: Began running node model.nexabrands_dbt.stg_order_fulfillment
@@ -7246,14 +7246,14 @@ drop table if exists "raw"."staging"."stg_customer_targets__dbt_backup" cascade
 [0m19:54:00.895446 [debug] [Thread-1 (]: Using postgres connection "model.nexabrands_dbt.stg_dates"
 [0m19:54:00.897981 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_dates: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_dates"} */
 
-  
-    
+
+
 
   create  table "raw"."staging"."stg_dates__dbt_tmp"
-  
-  
+
+
     as
-  
+
   (
     -- models/staging/stg_dates.sql
 WITH source AS (
@@ -7264,7 +7264,7 @@ staged AS (
 )
 SELECT * FROM staged
   );
-  
+
 [0m19:54:00.897298 [info ] [Thread-3 (]: 3 of 16 OK created sql table model staging.stg_customer_targets ................ [[32mSELECT 21[0m in 0.51s]
 [0m19:54:00.899405 [debug] [Thread-3 (]: Finished running node model.nexabrands_dbt.stg_customer_targets
 [0m19:54:00.894688 [debug] [Thread-2 (]: Opening a new connection, currently in state closed
@@ -7285,14 +7285,14 @@ SELECT * FROM staged
 alter table "raw"."staging"."stg_dates" rename to "stg_dates__dbt_backup"
 [0m19:54:00.923179 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_order_fulfillment: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_fulfillment"} */
 
-  
-    
+
+
 
   create  table "raw"."staging"."stg_order_fulfillment__dbt_tmp"
-  
-  
+
+
     as
-  
+
   (
     -- models/staging/stg_order_fulfillment.sql
 WITH source AS (
@@ -7308,7 +7308,7 @@ staged AS (
 )
 SELECT * FROM staged
   );
-  
+
 [0m19:54:00.923821 [debug] [Thread-3 (]: Began executing node model.nexabrands_dbt.stg_orders
 [0m19:54:00.924324 [debug] [Thread-4 (]: Opening a new connection, currently in state closed
 [0m19:54:00.925296 [debug] [Thread-1 (]: SQL status: ALTER TABLE in 0.000 seconds
@@ -7318,14 +7318,14 @@ SELECT * FROM staged
 [0m19:54:00.931123 [debug] [Thread-3 (]: Writing runtime sql for node "model.nexabrands_dbt.stg_orders"
 [0m19:54:00.952858 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_order_lines: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_lines"} */
 
-  
-    
+
+
 
   create  table "raw"."staging"."stg_order_lines__dbt_tmp"
-  
-  
+
+
     as
-  
+
   (
     -- models/staging/stg_order_lines.sql
 WITH source AS (
@@ -7339,14 +7339,14 @@ staged AS (
         agreed_delivery_date,
         actual_delivery_date,
         delivery_qty,
-        
+
     md5(cast(coalesce(cast(order_id as TEXT), '') || coalesce(cast(product_id as TEXT), '') as TEXT))
  as order_line_id
     FROM source
 )
 SELECT * FROM staged
   );
-  
+
 [0m19:54:00.950723 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_dates: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_dates"} */
 alter table "raw"."staging"."stg_dates__dbt_tmp" rename to "stg_dates"
 [0m19:54:00.954216 [debug] [Thread-3 (]: Using postgres connection "model.nexabrands_dbt.stg_orders"
@@ -7356,11 +7356,11 @@ alter table "raw"."staging"."stg_dates__dbt_tmp" rename to "stg_dates"
 [0m19:54:00.967010 [debug] [Thread-1 (]: Using postgres connection "model.nexabrands_dbt.stg_dates"
 [0m19:54:00.970084 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_dates: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_dates"} */
 
-    
-  
+
+
   comment on table "raw"."staging"."stg_dates" is $dbt_comment_literal_block$Date dimension table for time-based analysis$dbt_comment_literal_block$;
 
-  
+
 [0m19:54:00.971391 [debug] [Thread-1 (]: SQL status: COMMENT in 0.000 seconds
 [0m19:54:00.977970 [debug] [Thread-1 (]: Using postgres connection "model.nexabrands_dbt.stg_dates"
 [0m19:54:00.979263 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_dates: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_dates"} */
@@ -7374,12 +7374,12 @@ alter table "raw"."staging"."stg_dates__dbt_tmp" rename to "stg_dates"
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_dates'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:54:00.984917 [debug] [Thread-2 (]: SQL status: SELECT 20464 in 0.060 seconds
 [0m19:54:00.995220 [debug] [Thread-2 (]: Using postgres connection "model.nexabrands_dbt.stg_order_fulfillment"
 [0m19:54:00.998637 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_order_fulfillment: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_fulfillment"} */
@@ -7388,14 +7388,14 @@ alter table "raw"."staging"."stg_order_fulfillment" rename to "stg_order_fulfill
 [0m19:54:01.002444 [debug] [Thread-3 (]: Using postgres connection "model.nexabrands_dbt.stg_orders"
 [0m19:54:01.003292 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_orders: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_orders"} */
 
-  
-    
+
+
 
   create  table "raw"."staging"."stg_orders__dbt_tmp"
-  
-  
+
+
     as
-  
+
   (
     -- models/staging/stg_orders.sql
 WITH source AS (
@@ -7410,20 +7410,20 @@ staged AS (
 )
 SELECT * FROM staged
   );
-  
+
 [0m19:54:01.008899 [debug] [Thread-1 (]: SQL status: SELECT 1 in 0.028 seconds
 [0m19:54:01.011574 [debug] [Thread-1 (]: Using postgres connection "model.nexabrands_dbt.stg_dates"
 [0m19:54:01.013853 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_dates: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_dates"} */
 
-    
-  
-  
-    
-    
-    comment on column "raw"."staging"."stg_dates".date is $dbt_comment_literal_block$Date value in YYYY-MM-DD format$dbt_comment_literal_block$;
-  
 
-  
+
+
+
+
+    comment on column "raw"."staging"."stg_dates".date is $dbt_comment_literal_block$Date value in YYYY-MM-DD format$dbt_comment_literal_block$;
+
+
+
 [0m19:54:01.017301 [debug] [Thread-1 (]: SQL status: COMMENT in 0.002 seconds
 [0m19:54:01.028550 [debug] [Thread-2 (]: SQL status: ALTER TABLE in 0.029 seconds
 [0m19:54:01.042401 [debug] [Thread-2 (]: Using postgres connection "model.nexabrands_dbt.stg_order_fulfillment"
@@ -7436,11 +7436,11 @@ alter table "raw"."staging"."stg_order_fulfillment__dbt_tmp" rename to "stg_orde
 [0m19:54:01.053623 [debug] [Thread-2 (]: Using postgres connection "model.nexabrands_dbt.stg_order_fulfillment"
 [0m19:54:01.054437 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_order_fulfillment: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_fulfillment"} */
 
-    
-  
+
+
   comment on table "raw"."staging"."stg_order_fulfillment" is $dbt_comment_literal_block$Staging table for order fulfillment metrics including on-time and in-full delivery status$dbt_comment_literal_block$;
 
-  
+
 [0m19:54:01.057439 [debug] [Thread-2 (]: SQL status: COMMENT in 0.002 seconds
 [0m19:54:01.066801 [debug] [Thread-2 (]: Using postgres connection "model.nexabrands_dbt.stg_order_fulfillment"
 [0m19:54:01.067664 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_order_fulfillment: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_fulfillment"} */
@@ -7454,37 +7454,37 @@ alter table "raw"."staging"."stg_order_fulfillment__dbt_tmp" rename to "stg_orde
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_order_fulfillment'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:54:01.079316 [debug] [Thread-2 (]: SQL status: SELECT 4 in 0.008 seconds
 [0m19:54:01.082447 [debug] [Thread-2 (]: Using postgres connection "model.nexabrands_dbt.stg_order_fulfillment"
 [0m19:54:01.083370 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_order_fulfillment: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_fulfillment"} */
 
-    
-  
-  
-    
-    
-    comment on column "raw"."staging"."stg_order_fulfillment".order_id is $dbt_comment_literal_block$Unique identifier for each order$dbt_comment_literal_block$;
-  
-    
-    
-    comment on column "raw"."staging"."stg_order_fulfillment".on_time is $dbt_comment_literal_block$Binary indicator for whether the order was delivered on time (1) or not (0)$dbt_comment_literal_block$;
-  
-    
-    
-    comment on column "raw"."staging"."stg_order_fulfillment".in_full is $dbt_comment_literal_block$Binary indicator for whether the order was delivered in full (1) or not (0)$dbt_comment_literal_block$;
-  
-    
-    
-    comment on column "raw"."staging"."stg_order_fulfillment".ontime_in_full is $dbt_comment_literal_block$Binary indicator for whether the order was both on time and in full (1) or not (0)$dbt_comment_literal_block$;
-  
 
-  
+
+
+
+
+    comment on column "raw"."staging"."stg_order_fulfillment".order_id is $dbt_comment_literal_block$Unique identifier for each order$dbt_comment_literal_block$;
+
+
+
+    comment on column "raw"."staging"."stg_order_fulfillment".on_time is $dbt_comment_literal_block$Binary indicator for whether the order was delivered on time (1) or not (0)$dbt_comment_literal_block$;
+
+
+
+    comment on column "raw"."staging"."stg_order_fulfillment".in_full is $dbt_comment_literal_block$Binary indicator for whether the order was delivered in full (1) or not (0)$dbt_comment_literal_block$;
+
+
+
+    comment on column "raw"."staging"."stg_order_fulfillment".ontime_in_full is $dbt_comment_literal_block$Binary indicator for whether the order was both on time and in full (1) or not (0)$dbt_comment_literal_block$;
+
+
+
 [0m19:54:01.097214 [debug] [Thread-1 (]: SQL status: COMMIT in 0.051 seconds
 [0m19:54:01.102319 [debug] [Thread-1 (]: Applying DROP to: "raw"."staging"."stg_dates__dbt_backup"
 [0m19:54:01.103699 [debug] [Thread-1 (]: Using postgres connection "model.nexabrands_dbt.stg_dates"
@@ -7526,25 +7526,25 @@ drop table if exists "raw"."staging"."stg_order_fulfillment__dbt_backup" cascade
 [0m19:54:01.236325 [debug] [Thread-3 (]: Using postgres connection "model.nexabrands_dbt.stg_orders"
 [0m19:54:01.237873 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_orders: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_orders"} */
 
-    
-  
+
+
   comment on table "raw"."staging"."stg_orders" is $dbt_comment_literal_block$Staged order data containing basic order information$dbt_comment_literal_block$;
 
-  
+
 [0m19:54:01.239428 [debug] [Thread-3 (]: SQL status: COMMENT in 0.001 seconds
 [0m19:54:01.247267 [debug] [Thread-3 (]: Using postgres connection "model.nexabrands_dbt.stg_orders"
 [0m19:54:01.248448 [debug] [Thread-1 (]: SQL status: BEGIN in 0.024 seconds
 [0m19:54:01.250364 [debug] [Thread-1 (]: Using postgres connection "model.nexabrands_dbt.stg_products"
 [0m19:54:01.251265 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_products: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_products"} */
 
-  
-    
+
+
 
   create  table "raw"."staging"."stg_products__dbt_tmp"
-  
-  
+
+
     as
-  
+
   (
     -- models/staging/stg_products.sql
 WITH source AS (
@@ -7559,7 +7559,7 @@ staged AS (
 )
 SELECT * FROM staged
   );
-  
+
 [0m19:54:01.249396 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_orders: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_orders"} */
 
       select
@@ -7571,12 +7571,12 @@ SELECT * FROM staged
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_orders'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:54:01.270596 [debug] [Thread-3 (]: SQL status: SELECT 3 in 0.018 seconds
 [0m19:54:01.277502 [debug] [Thread-3 (]: Using postgres connection "model.nexabrands_dbt.stg_orders"
 [0m19:54:01.278413 [debug] [Thread-2 (]: SQL status: DROP TABLE in 0.042 seconds
@@ -7587,23 +7587,23 @@ SELECT * FROM staged
 [0m19:54:01.293518 [debug] [Thread-2 (]: Finished running node model.nexabrands_dbt.stg_order_fulfillment
 [0m19:54:01.279644 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_orders: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_orders"} */
 
-    
-  
-  
-    
-    
-    comment on column "raw"."staging"."stg_orders".order_id is $dbt_comment_literal_block$The primary key for the orders table$dbt_comment_literal_block$;
-  
-    
-    
-    comment on column "raw"."staging"."stg_orders".customer_id is $dbt_comment_literal_block$Foreign key to the customers table$dbt_comment_literal_block$;
-  
-    
-    
-    comment on column "raw"."staging"."stg_orders".order_placement_date is $dbt_comment_literal_block$The date when the order was placed$dbt_comment_literal_block$;
-  
 
-  
+
+
+
+
+    comment on column "raw"."staging"."stg_orders".order_id is $dbt_comment_literal_block$The primary key for the orders table$dbt_comment_literal_block$;
+
+
+
+    comment on column "raw"."staging"."stg_orders".customer_id is $dbt_comment_literal_block$Foreign key to the customers table$dbt_comment_literal_block$;
+
+
+
+    comment on column "raw"."staging"."stg_orders".order_placement_date is $dbt_comment_literal_block$The date when the order was placed$dbt_comment_literal_block$;
+
+
+
 [0m19:54:01.290085 [debug] [Thread-1 (]: Using postgres connection "model.nexabrands_dbt.stg_products"
 [0m19:54:01.295854 [debug] [Thread-3 (]: SQL status: COMMENT in 0.000 seconds
 [0m19:54:01.294328 [debug] [Thread-2 (]: Began running node model.nexabrands_dbt.dim_customer
@@ -7631,11 +7631,11 @@ alter table "raw"."staging"."stg_products__dbt_tmp" rename to "stg_products"
 [0m19:54:01.326115 [debug] [Thread-4 (]: Using postgres connection "model.nexabrands_dbt.stg_order_lines"
 [0m19:54:01.341219 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_products: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_products"} */
 
-    
-  
+
+
   comment on table "raw"."staging"."stg_products" is $dbt_comment_literal_block$Staged product data with basic product information$dbt_comment_literal_block$;
 
-  
+
 [0m19:54:01.337392 [debug] [Thread-2 (]: Writing runtime sql for node "model.nexabrands_dbt.dim_customer"
 [0m19:54:01.342655 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_order_lines: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_lines"} */
 alter table "raw"."staging"."stg_order_lines__dbt_tmp" rename to "stg_order_lines"
@@ -7663,12 +7663,12 @@ drop table if exists "raw"."staging"."stg_orders__dbt_backup" cascade
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_products'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m19:54:01.360273 [debug] [Thread-2 (]: Opening a new connection, currently in state closed
 [0m19:54:01.360766 [debug] [Thread-3 (]: SQL status: DROP TABLE in 0.005 seconds
 [0m19:54:01.364528 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_orders: Close
@@ -7682,37 +7682,37 @@ drop table if exists "raw"."staging"."stg_orders__dbt_backup" cascade
 [0m19:54:01.379326 [info ] [Thread-3 (]: 8 of 16 OK created sql table model staging.stg_orders .......................... [[32mSELECT 31712[0m in 0.46s]
 [0m19:54:01.380035 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_products: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_products"} */
 
-    
-  
-  
-    
-    
-    comment on column "raw"."staging"."stg_products".product_id is $dbt_comment_literal_block$The primary key for the products table$dbt_comment_literal_block$;
-  
-    
-    
-    comment on column "raw"."staging"."stg_products".product_name is $dbt_comment_literal_block$The name of the product$dbt_comment_literal_block$;
-  
-    
-    
-    comment on column "raw"."staging"."stg_products".category is $dbt_comment_literal_block$The category of the product$dbt_comment_literal_block$;
-  
 
-  
+
+
+
+
+    comment on column "raw"."staging"."stg_products".product_id is $dbt_comment_literal_block$The primary key for the products table$dbt_comment_literal_block$;
+
+
+
+    comment on column "raw"."staging"."stg_products".product_name is $dbt_comment_literal_block$The name of the product$dbt_comment_literal_block$;
+
+
+
+    comment on column "raw"."staging"."stg_products".category is $dbt_comment_literal_block$The category of the product$dbt_comment_literal_block$;
+
+
+
 [0m19:54:01.380582 [debug] [Thread-2 (]: Using postgres connection "model.nexabrands_dbt.dim_customer"
 [0m19:54:01.381300 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_order_lines: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_lines"} */
 drop table if exists "raw"."staging"."stg_order_lines__dbt_backup" cascade
 [0m19:54:01.382087 [debug] [Thread-3 (]: Finished running node model.nexabrands_dbt.stg_orders
 [0m19:54:01.383170 [debug] [Thread-2 (]: On model.nexabrands_dbt.dim_customer: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.dim_customer"} */
 
-  
-    
+
+
 
   create  table "raw"."marts"."dim_customer__dbt_tmp"
-  
-  
+
+
     as
-  
+
   (
     -- models/marts/dim_customer.sql
 WITH customers AS (
@@ -7731,7 +7731,7 @@ SELECT
 FROM customers c
 LEFT JOIN customer_targets ct ON c.customer_id = ct.customer_id
   );
-  
+
 [0m19:54:01.388038 [debug] [Thread-4 (]: SQL status: DROP TABLE in 0.004 seconds
 [0m19:54:01.383682 [debug] [Thread-1 (]: SQL status: COMMENT in 0.001 seconds
 [0m19:54:01.386762 [debug] [Thread-3 (]: Began running node model.nexabrands_dbt.dim_order
@@ -7793,19 +7793,19 @@ drop table if exists "raw"."staging"."stg_products__dbt_backup" cascade
 [0m19:54:01.465712 [debug] [Thread-1 (]: Writing injected SQL for node "model.nexabrands_dbt.int_order_metrics"
 [0m19:54:01.467062 [debug] [Thread-3 (]: On model.nexabrands_dbt.dim_order: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.dim_order"} */
 
-  
-    
+
+
 
   create  table "raw"."marts"."dim_order__dbt_tmp"
-  
-  
+
+
     as
-  
+
   (
     -- models/marts/dim_order.sql
 SELECT * FROM "raw"."staging"."stg_orders"
   );
-  
+
 [0m19:54:01.467585 [debug] [Thread-4 (]: SQL status: BEGIN in 0.008 seconds
 [0m19:54:01.470294 [debug] [Thread-2 (]: Applying DROP to: "raw"."marts"."dim_customer__dbt_backup"
 [0m19:54:01.473297 [debug] [Thread-2 (]: Using postgres connection "model.nexabrands_dbt.dim_customer"
@@ -7815,19 +7815,19 @@ drop table if exists "raw"."marts"."dim_customer__dbt_backup" cascade
 [0m19:54:01.471195 [debug] [Thread-1 (]: Began executing node model.nexabrands_dbt.int_order_metrics
 [0m19:54:01.477927 [debug] [Thread-4 (]: On model.nexabrands_dbt.fact_order_lines: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.fact_order_lines"} */
 
-  
-    
+
+
 
   create  table "raw"."marts"."fact_order_lines__dbt_tmp"
-  
-  
+
+
     as
-  
+
   (
     -- models/marts/fact_order_lines.sql
 SELECT * FROM "raw"."staging"."stg_order_lines"
   );
-  
+
 [0m19:54:01.485003 [debug] [Thread-2 (]: SQL status: DROP TABLE in 0.009 seconds
 [0m19:54:01.487742 [debug] [Thread-2 (]: On model.nexabrands_dbt.dim_customer: Close
 [0m19:54:01.489342 [debug] [Thread-2 (]: Sending event: {'category': 'dbt', 'action': 'run_model', 'label': '60d5d842-4b88-4b24-b894-0c61bf772b09', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7dc884248350>]}
@@ -7845,14 +7845,14 @@ SELECT * FROM "raw"."staging"."stg_order_lines"
 [0m19:54:01.514569 [debug] [Thread-1 (]: Using postgres connection "model.nexabrands_dbt.int_order_metrics"
 [0m19:54:01.515597 [debug] [Thread-1 (]: On model.nexabrands_dbt.int_order_metrics: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.int_order_metrics"} */
 
-  
-    
+
+
 
   create  table "raw"."intermediate"."int_order_metrics__dbt_tmp"
-  
-  
+
+
     as
-  
+
   (
     WITH order_lines AS (
     SELECT * FROM "raw"."staging"."stg_order_lines"
@@ -7871,55 +7871,55 @@ order_metrics AS (
         SUM(ol.order_qty) as total_ordered_qty,
         SUM(ol.delivery_qty) as total_delivered_qty,
         SUM(CASE WHEN ol.delivery_qty >= ol.order_qty THEN 1 ELSE 0 END) as fulfilled_lines,
-        
+
         -- Line and volume fill rates
-        SUM(CASE WHEN ol.delivery_qty >= ol.order_qty THEN 1 ELSE 0 END) * 100.0 / 
+        SUM(CASE WHEN ol.delivery_qty >= ol.order_qty THEN 1 ELSE 0 END) * 100.0 /
             NULLIF(COUNT(DISTINCT ol.product_id), 0) as line_fill_rate,
         SUM(ol.delivery_qty) * 100.0 / NULLIF(SUM(ol.order_qty), 0) as volume_fill_rate,
-        
+
         -- Time-based calculations
         MAX(ol.agreed_delivery_date) as promised_delivery_date,
         MAX(ol.actual_delivery_date) as actual_delivery_date,
-        
+
         -- Calculate delivery delay in days using PostgreSQL date subtraction
         (MAX(ol.actual_delivery_date) - MAX(ol.agreed_delivery_date)) as delivery_delay_days,
-        
+
         -- On-time calculation with more detail
-        CASE 
-            WHEN MAX(ol.actual_delivery_date) <= MAX(ol.agreed_delivery_date) THEN 1 
-            ELSE 0 
+        CASE
+            WHEN MAX(ol.actual_delivery_date) <= MAX(ol.agreed_delivery_date) THEN 1
+            ELSE 0
         END as on_time,
-        
+
         -- In-full calculation
-        CASE 
-            WHEN SUM(CASE WHEN ol.delivery_qty >= ol.order_qty THEN 1 ELSE 0 END) = COUNT(*) 
-            THEN 1 
-            ELSE 0 
+        CASE
+            WHEN SUM(CASE WHEN ol.delivery_qty >= ol.order_qty THEN 1 ELSE 0 END) = COUNT(*)
+            THEN 1
+            ELSE 0
         END as in_full,
-        
+
         -- OTIF calculation
-        CASE 
-            WHEN MAX(ol.actual_delivery_date) <= MAX(ol.agreed_delivery_date) 
-             AND SUM(CASE WHEN ol.delivery_qty >= ol.order_qty THEN 1 ELSE 0 END) = COUNT(*) 
-            THEN 1 
-            ELSE 0 
+        CASE
+            WHEN MAX(ol.actual_delivery_date) <= MAX(ol.agreed_delivery_date)
+             AND SUM(CASE WHEN ol.delivery_qty >= ol.order_qty THEN 1 ELSE 0 END) = COUNT(*)
+            THEN 1
+            ELSE 0
         END as ontime_in_full,
-        
+
         -- Add time period references
         o.order_placement_date,
         d.year as order_year,
         d.quarter as order_quarter,
         d.month_number as order_month,
         d.week_number as order_week,
-        
+
         -- Add lead time calculation using PostgreSQL date subtraction
         (MAX(ol.agreed_delivery_date) - o.order_placement_date) as promised_lead_time_days,
         (MAX(ol.actual_delivery_date) - o.order_placement_date) as actual_lead_time_days
-        
+
     FROM order_lines ol
     JOIN orders o ON ol.order_id = o.order_id
     LEFT JOIN date_dim d ON o.order_placement_date = d.date
-    GROUP BY 
+    GROUP BY
         ol.order_id,
         o.order_placement_date,
         d.year,
@@ -7929,7 +7929,7 @@ order_metrics AS (
 )
 SELECT * FROM order_metrics
   );
-  
+
 [0m19:54:01.520537 [debug] [Thread-2 (]: Writing injected SQL for node "model.nexabrands_dbt.dim_product"
 [0m19:54:01.525651 [debug] [Thread-2 (]: Began executing node model.nexabrands_dbt.dim_product
 [0m19:54:01.540781 [debug] [Thread-2 (]: Writing runtime sql for node "model.nexabrands_dbt.dim_product"
@@ -7940,19 +7940,19 @@ SELECT * FROM order_metrics
 [0m19:54:01.553901 [debug] [Thread-2 (]: Using postgres connection "model.nexabrands_dbt.dim_product"
 [0m19:54:01.554770 [debug] [Thread-2 (]: On model.nexabrands_dbt.dim_product: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.dim_product"} */
 
-  
-    
+
+
 
   create  table "raw"."marts"."dim_product__dbt_tmp"
-  
-  
+
+
     as
-  
+
   (
     -- models/marts/dim_product.sql
 SELECT * FROM "raw"."staging"."stg_products"
   );
-  
+
 [0m19:54:01.564625 [debug] [Thread-3 (]: SQL status: SELECT 31712 in 0.093 seconds
 [0m19:54:01.572054 [debug] [Thread-3 (]: Using postgres connection "model.nexabrands_dbt.dim_order"
 [0m19:54:01.573129 [debug] [Thread-3 (]: On model.nexabrands_dbt.dim_order: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.dim_order"} */
@@ -8065,14 +8065,14 @@ drop table if exists "raw"."intermediate"."int_order_metrics__dbt_backup" cascad
 [0m19:54:03.967596 [debug] [Thread-3 (]: Using postgres connection "model.nexabrands_dbt.fact_order_fulfillment"
 [0m19:54:03.968572 [debug] [Thread-3 (]: On model.nexabrands_dbt.fact_order_fulfillment: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.fact_order_fulfillment"} */
 
-  
-    
+
+
 
   create  table "raw"."marts"."fact_order_fulfillment__dbt_tmp"
-  
-  
+
+
     as
-  
+
   (
     -- models/marts/fact_order_fulfillment.sql
 WITH order_metrics AS (
@@ -8090,21 +8090,21 @@ final AS (
         f.order_id,
         o.customer_id,
         ol.product_id,
-        
+
         -- Join to date dimension for each relevant date
         placement_date.date_key as order_placement_date_key,
         placement_date.year as order_year,
         placement_date.month_name as order_month,
         placement_date.quarter_year as order_quarter,
-        
+
         agreed_date.date_key as agreed_delivery_date_key,
         agreed_date.year as agreed_delivery_year,
         agreed_date.month_name as agreed_delivery_month,
-        
+
         actual_date.date_key as actual_delivery_date_key,
         actual_date.year as actual_delivery_year,
         actual_date.month_name as actual_delivery_month,
-        
+
         -- Metrics
         f.total_lines,
         f.total_ordered_qty,
@@ -8115,35 +8115,35 @@ final AS (
         f.on_time,
         f.in_full,
         f.ontime_in_full
-        
+
     FROM order_metrics f
-    JOIN orders o 
+    JOIN orders o
         ON f.order_id = o.order_id
-    JOIN order_lines ol 
+    JOIN order_lines ol
         ON f.order_id = ol.order_id
     -- Join to date dimension for each type of date
-    LEFT JOIN "raw"."marts"."dim_date" placement_date 
+    LEFT JOIN "raw"."marts"."dim_date" placement_date
         ON o.order_placement_date = placement_date.date
-    LEFT JOIN "raw"."marts"."dim_date" agreed_date 
+    LEFT JOIN "raw"."marts"."dim_date" agreed_date
         ON ol.agreed_delivery_date = agreed_date.date
-    LEFT JOIN "raw"."marts"."dim_date" actual_date 
+    LEFT JOIN "raw"."marts"."dim_date" actual_date
         ON ol.actual_delivery_date = actual_date.date
 )
 SELECT * FROM final
   );
-  
+
 [0m19:54:03.980155 [debug] [Thread-2 (]: SQL status: BEGIN in 0.017 seconds
 [0m19:54:03.981004 [debug] [Thread-2 (]: Using postgres connection "model.nexabrands_dbt.int_customer_metrics"
 [0m19:54:03.981873 [debug] [Thread-2 (]: On model.nexabrands_dbt.int_customer_metrics: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.int_customer_metrics"} */
 
-  
-    
+
+
 
   create  table "raw"."intermediate"."int_customer_metrics__dbt_tmp"
-  
-  
+
+
     as
-  
+
   (
     -- models/intermediate/int_customer_metrics.sql
 WITH orders AS (
@@ -8168,7 +8168,7 @@ customer_metrics AS (
 )
 SELECT * FROM customer_metrics
   );
-  
+
 [0m19:54:05.683854 [debug] [Thread-2 (]: SQL status: SELECT 35 in 1.701 seconds
 [0m19:54:05.689729 [debug] [Thread-2 (]: Using postgres connection "model.nexabrands_dbt.int_customer_metrics"
 [0m19:54:05.690561 [debug] [Thread-2 (]: On model.nexabrands_dbt.int_customer_metrics: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.int_customer_metrics"} */
@@ -8227,15 +8227,15 @@ drop table if exists "raw"."marts"."fact_order_fulfillment__dbt_backup" cascade
 [0m19:54:07.137976 [debug] [MainThread]: Connection 'model.nexabrands_dbt.fact_order_fulfillment' was properly closed.
 [0m19:54:07.138702 [debug] [MainThread]: Connection 'model.nexabrands_dbt.fact_order_lines' was properly closed.
 [0m19:54:07.139427 [debug] [MainThread]: Connection 'model.nexabrands_dbt.int_customer_metrics' was properly closed.
-[0m19:54:07.140348 [info ] [MainThread]: 
+[0m19:54:07.140348 [info ] [MainThread]:
 [0m19:54:07.141367 [info ] [MainThread]: Finished running 15 table models, 1 view model in 0 hours 0 minutes and 6.96 seconds (6.96s).
 [0m19:54:07.146864 [debug] [MainThread]: Command end result
 [0m19:54:07.315527 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m19:54:07.317960 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m19:54:07.324573 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m19:54:07.325062 [info ] [MainThread]: 
+[0m19:54:07.325062 [info ] [MainThread]:
 [0m19:54:07.325668 [info ] [MainThread]: [32mCompleted successfully[0m
-[0m19:54:07.326204 [info ] [MainThread]: 
+[0m19:54:07.326204 [info ] [MainThread]:
 [0m19:54:07.326849 [info ] [MainThread]: Done. PASS=16 WARN=0 ERROR=0 SKIP=0 TOTAL=16
 [0m19:54:07.328207 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 8.2295, "process_in_blocks": "8", "process_kernel_time": 0.38801, "process_mem_max_rss": "116208", "process_out_blocks": "5152", "process_user_time": 3.484174}
 [0m19:54:07.328933 [debug] [MainThread]: Command `dbt run` succeeded at 19:54:07.328817 after 8.23 seconds
@@ -8305,7 +8305,7 @@ The database returned the following error:
   >Database Error
   connection to server at "172.19.0.2", port 5432 failed: Connection refused
   	Is the server running on that host and accepting TCP/IP connections?
-  
+
 
 Check your database credentials and try again. For more information, visit:
 https://docs.getdbt.com/docs/configure-your-profile
@@ -8391,9 +8391,9 @@ https://docs.getdbt.com/docs/configure-your-profile
 [0m03:52:40.964803 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': 'caab1482-1883-413e-83ec-bd380df6fcfd', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7771e5f6aab0>]}
 [0m03:52:40.965497 [info ] [MainThread]: Found 16 models, 2 snapshots, 62 data tests, 7 sources, 838 macros
 [0m03:52:40.966097 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': 'caab1482-1883-413e-83ec-bd380df6fcfd', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7771e69b7560>]}
-[0m03:52:40.970766 [info ] [MainThread]: 
+[0m03:52:40.970766 [info ] [MainThread]:
 [0m03:52:40.971408 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m03:52:40.972439 [info ] [MainThread]: 
+[0m03:52:40.972439 [info ] [MainThread]:
 [0m03:52:40.973239 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m03:52:40.978216 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw_staging'
 [0m03:52:40.986288 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw_marts'
@@ -8437,7 +8437,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'staging'
-  
+
 [0m03:52:41.034680 [debug] [ThreadPool]: SQL status: BEGIN in 0.011 seconds
 [0m03:52:41.037375 [debug] [ThreadPool]: Using postgres connection "list_raw_marts"
 [0m03:52:41.036551 [debug] [ThreadPool]: SQL status: BEGIN in 0.012 seconds
@@ -8466,7 +8466,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m03:52:41.035696 [debug] [ThreadPool]: SQL status: BEGIN in 0.012 seconds
 [0m03:52:41.042214 [debug] [ThreadPool]: Using postgres connection "list_raw_intermediate"
 [0m03:52:41.043457 [debug] [ThreadPool]: On list_raw_intermediate: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw_intermediate"} */
@@ -8493,7 +8493,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'intermediate'
-  
+
 [0m03:52:41.038266 [debug] [ThreadPool]: On list_raw_marts: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw_marts"} */
 select
       'raw' as database,
@@ -8518,7 +8518,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'marts'
-  
+
 [0m03:52:41.081260 [debug] [ThreadPool]: SQL status: SELECT 15 in 0.039 seconds
 [0m03:52:41.086100 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m03:52:41.082778 [debug] [ThreadPool]: SQL status: SELECT 2 in 0.038 seconds
@@ -8658,9 +8658,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 with all_values as (
 
@@ -8681,7 +8681,7 @@ where value_field not in (
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.278743 [debug] [Thread-4 (]: SQL status: BEGIN in 0.010 seconds
 [0m03:52:41.280611 [debug] [Thread-4 (]: Using postgres connection "test.nexabrands_dbt.accepted_values_stg_order_fulfillment_ontime_in_full__True__0__1.3b38ec7b73"
@@ -8691,9 +8691,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 with all_values as (
 
@@ -8714,7 +8714,7 @@ where value_field not in (
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.283666 [debug] [Thread-3 (]: SQL status: BEGIN in 0.013 seconds
 [0m03:52:41.284804 [debug] [Thread-3 (]: Using postgres connection "test.nexabrands_dbt.accepted_values_stg_order_fulfillment_on_time__True__0__1.8bc1473d95"
@@ -8724,9 +8724,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 with all_values as (
 
@@ -8747,7 +8747,7 @@ where value_field not in (
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.291470 [debug] [Thread-2 (]: SQL status: BEGIN in 0.019 seconds
 [0m03:52:41.292662 [debug] [Thread-2 (]: Using postgres connection "test.nexabrands_dbt.accepted_values_stg_order_fulfillment_in_full__True__0__1.4b722af630"
@@ -8757,9 +8757,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 with all_values as (
 
@@ -8780,7 +8780,7 @@ where value_field not in (
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.300726 [debug] [Thread-1 (]: SQL status: SELECT 1 in 0.022 seconds
 [0m03:52:41.309137 [debug] [Thread-1 (]: On test.nexabrands_dbt.accepted_values_stg_customers_city__True__Klerksdorp__Polokwane__Stellenbosch__Paarl__East_London__Grahamstown__George__Upington__Bloemfontein__Worcester__Pietermaritzburg__Pretoria__Nelspruit__Kimberley__Johannesburg__Cape_Town.e541883a0e: ROLLBACK
@@ -8847,7 +8847,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -8855,14 +8855,14 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
+
+
+
   infull_target >= otif_target as expression
 
 
     from "raw"."staging"."stg_customer_targets"
-    
+
 
 ),
 validation_errors as (
@@ -8883,7 +8883,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.387938 [debug] [Thread-3 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_customers_city__50__2.75f73ba182"
 [0m03:52:41.388412 [debug] [Thread-1 (]: Using postgres connection "test.nexabrands_dbt.accepted_values_stg_products_category__Dairy__beverages__Food.9a74aea575"
@@ -8896,9 +8896,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 with all_values as (
 
@@ -8919,7 +8919,7 @@ where value_field not in (
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.395045 [debug] [Thread-4 (]: SQL status: SELECT 1 in 0.005 seconds
 [0m03:52:41.400364 [debug] [Thread-4 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_pair_values_A_to_be_greater_than_B_stg_customer_targets_infull_target__otif_target__True.5277415478: ROLLBACK
@@ -8936,7 +8936,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -8944,10 +8944,10 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and length(
         city
     ) >= 2 and length(
@@ -8958,7 +8958,7 @@ select
 
 
     from "raw"."staging"."stg_customers"
-    
+
 
 ),
 validation_errors as (
@@ -8981,7 +8981,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.408884 [debug] [Thread-2 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_pair_values_A_to_be_greater_than_B_stg_customer_targets_ontime_target__otif_target__True.e07a51facc: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_column_pair_values_A_to_be_greater_than_B_stg_customer_targets_ontime_target__otif_target__True.e07a51facc"} */
 select
@@ -8989,7 +8989,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -8997,14 +8997,14 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
+
+
+
   ontime_target >= otif_target as expression
 
 
     from "raw"."staging"."stg_customer_targets"
-    
+
 
 ),
 validation_errors as (
@@ -9025,7 +9025,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.411448 [debug] [Thread-1 (]: On test.nexabrands_dbt.accepted_values_stg_products_category__Dairy__beverages__Food.9a74aea575: Close
 [0m03:52:41.415795 [debug] [Thread-2 (]: SQL status: SELECT 1 in 0.004 seconds
@@ -9092,7 +9092,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -9100,10 +9100,10 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and length(
         customer_name
     ) >= 2 and length(
@@ -9114,7 +9114,7 @@ select
 
 
     from "raw"."staging"."stg_customers"
-    
+
 
 ),
 validation_errors as (
@@ -9137,7 +9137,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.498082 [debug] [Thread-1 (]: SQL status: BEGIN in 0.017 seconds
 [0m03:52:41.500982 [debug] [Thread-1 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_orders_customer_id__50__1.4bd54d8012"
@@ -9147,7 +9147,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -9155,10 +9155,10 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and length(
         customer_id
     ) >= 1 and length(
@@ -9169,7 +9169,7 @@ select
 
 
     from "raw"."staging"."stg_orders"
-    
+
 
 ),
 validation_errors as (
@@ -9192,7 +9192,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.496961 [debug] [Thread-2 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_orders_order_id__50__1.0ecb6709db: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_orders_order_id__50__1.0ecb6709db"} */
 select
@@ -9200,7 +9200,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -9208,10 +9208,10 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and length(
         order_id
     ) >= 1 and length(
@@ -9222,7 +9222,7 @@ select
 
 
     from "raw"."staging"."stg_orders"
-    
+
 
 ),
 validation_errors as (
@@ -9245,7 +9245,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.511107 [debug] [Thread-4 (]: SQL status: SELECT 1 in 0.010 seconds
 [0m03:52:41.513918 [debug] [Thread-4 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_customers_customer_name__100__2.862ed945bf: ROLLBACK
@@ -9257,7 +9257,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -9265,10 +9265,10 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and length(
         category
     ) >= 2 and length(
@@ -9279,7 +9279,7 @@ select
 
 
     from "raw"."staging"."stg_products"
-    
+
 
 ),
 validation_errors as (
@@ -9302,7 +9302,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.519079 [debug] [Thread-4 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_customers_customer_name__100__2.862ed945bf: Close
 [0m03:52:41.520339 [info ] [Thread-4 (]: 9 of 60 PASS dbt_expectations_expect_column_value_lengths_to_be_between_stg_customers_customer_name__100__2  [[32mPASS[0m in 0.09s]
@@ -9366,17 +9366,17 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 
     length(
         date
@@ -9384,7 +9384,7 @@ select
 
 
     from "raw"."staging"."stg_dates"
-    
+
 
 ),
 validation_errors as (
@@ -9405,7 +9405,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.713757 [debug] [Thread-1 (]: Writing runtime sql for node "test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_between_stg_customer_targets_ontime_target__100__0.41469dcdf6"
 [0m03:52:41.715775 [debug] [Thread-4 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_products_product_name__100__1.2a82c98710: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_products_product_name__100__1.2a82c98710"} */
@@ -9414,7 +9414,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -9422,10 +9422,10 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and length(
         product_name
     ) >= 1 and length(
@@ -9436,7 +9436,7 @@ select
 
 
     from "raw"."staging"."stg_products"
-    
+
 
 ),
 validation_errors as (
@@ -9459,7 +9459,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.716434 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_between_stg_customer_targets_infull_target__100__0.d5824578f5: BEGIN
 [0m03:52:41.719598 [debug] [Thread-1 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_between_stg_customer_targets_ontime_target__100__0.41469dcdf6"
@@ -9483,7 +9483,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -9492,17 +9492,17 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and infull_target >= 0 and infull_target <= 100
 )
  as expression
 
 
     from "raw"."staging"."stg_customer_targets"
-    
+
 
 ),
 validation_errors as (
@@ -9526,7 +9526,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.747145 [debug] [Thread-4 (]: Finished running node test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_products_product_name__100__1.2a82c98710
 [0m03:52:41.749368 [debug] [Thread-2 (]: Began running node test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_between_stg_customer_targets_otif_target__100__0.20c157cf69
@@ -9544,7 +9544,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -9553,17 +9553,17 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and ontime_target >= 0 and ontime_target <= 100
 )
  as expression
 
 
     from "raw"."staging"."stg_customer_targets"
-    
+
 
 ),
 validation_errors as (
@@ -9587,7 +9587,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.758914 [debug] [Thread-4 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.dbt_expectations_expect_column_value_lengths_to_be_between_stg_products_product_name__100__1.2a82c98710, now test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_between_stg_orders_order_placement_date__current_date___2024_01_01_.9a31a15386)
 [0m03:52:41.759500 [debug] [Thread-2 (]: Began compiling node test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_between_stg_customer_targets_otif_target__100__0.20c157cf69
@@ -9626,7 +9626,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -9635,17 +9635,17 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and otif_target >= 0 and otif_target <= 100
 )
  as expression
 
 
     from "raw"."staging"."stg_customer_targets"
-    
+
 
 ),
 validation_errors as (
@@ -9669,7 +9669,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.806557 [debug] [Thread-4 (]: SQL status: BEGIN in 0.012 seconds
 [0m03:52:41.808568 [debug] [Thread-4 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_between_stg_orders_order_placement_date__current_date___2024_01_01_.9a31a15386"
@@ -9681,7 +9681,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -9690,17 +9690,17 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and order_placement_date >= '2024-01-01' and order_placement_date <= current_date
 )
  as expression
 
 
     from "raw"."staging"."stg_orders"
-    
+
 
 ),
 validation_errors as (
@@ -9724,7 +9724,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.810120 [debug] [Thread-2 (]: SQL status: SELECT 1 in 0.002 seconds
 [0m03:52:41.815090 [debug] [Thread-2 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_between_stg_customer_targets_otif_target__100__0.20c157cf69: ROLLBACK
@@ -9759,7 +9759,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -9768,10 +9768,10 @@ select
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and product_id > 1
 )
  as expression
@@ -9780,8 +9780,8 @@ select
     from "raw"."staging"."stg_products"
     where
         product_id IS NOT NULL
-    
-    
+
+
 
 ),
 validation_errors as (
@@ -9805,7 +9805,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.845454 [debug] [Thread-3 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_in_set_stg_products_category__Dairy__beverages__Food.af6390bd10"
 [0m03:52:41.871085 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_in_set_stg_products_category__Dairy__beverages__Food.af6390bd10: BEGIN
@@ -9827,7 +9827,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 with all_values as (
 
@@ -9835,7 +9835,7 @@ with all_values as (
         category as value_field
 
     from "raw"."staging"."stg_products"
-    
+
 
 ),
 set_values as (
@@ -9848,8 +9848,8 @@ set_values as (
     union all
     select
         cast('Food' as TEXT) as value_field
-    
-    
+
+
 ),
 validation_errors as (
     -- values from the model that are not in the set
@@ -9868,7 +9868,7 @@ select *
 from validation_errors
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.889114 [debug] [Thread-1 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_between_stg_products_product_id__1__product_id_IS_NOT_NULL__True.0e54fce5ed: Close
 [0m03:52:41.891839 [debug] [Thread-4 (]: Writing runtime sql for node "test.nexabrands_dbt.dbt_expectations_expect_column_values_to_match_regex_stg_customers_city___A_Za_z_s_.0423a3db39"
@@ -9893,12 +9893,12 @@ from validation_errors
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_orders'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m03:52:41.904615 [info ] [Thread-1 (]: 23 of 60 START test dbt_expectations_expect_column_values_to_match_regex_stg_customers_customer_name___A_Za_z0_9_s_  [RUN]
 [0m03:52:41.908430 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_in_set_stg_products_category__Dairy__beverages__Food.af6390bd10: Close
 [0m03:52:41.908937 [debug] [Thread-4 (]: SQL status: BEGIN in 0.012 seconds
@@ -9915,20 +9915,20 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
 
 
-    
+
+
+
+
+
 
 coalesce(array_length((select regexp_matches(city, '^[A-Za-z\s\-\.]+$', '')), 1), 0)
 
@@ -9938,7 +9938,7 @@ coalesce(array_length((select regexp_matches(city, '^[A-Za-z\s\-\.]+$', '')), 1)
 
 
     from "raw"."staging"."stg_customers"
-    
+
 
 ),
 validation_errors as (
@@ -9959,7 +9959,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:41.931937 [debug] [Thread-3 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_in_set_stg_products_category__Dairy__beverages__Food.af6390bd10, now test.nexabrands_dbt.dbt_expectations_expect_column_values_to_match_regex_stg_order_fulfillment_order_id___A_Za_z0_9___.2da099af86)
 [0m03:52:41.938621 [debug] [Thread-3 (]: Began compiling node test.nexabrands_dbt.dbt_expectations_expect_column_values_to_match_regex_stg_order_fulfillment_order_id___A_Za_z0_9___.2da099af86
@@ -9997,22 +9997,22 @@ select
     from (
       with relation_columns as (
 
-        
+
         select
             cast('ORDER_ID' as TEXT) as relation_column,
             cast('TEXT' as TEXT) as relation_column_type
         union all
-        
+
         select
             cast('CUSTOMER_ID' as TEXT) as relation_column,
             cast('TEXT' as TEXT) as relation_column_type
         union all
-        
+
         select
             cast('ORDER_PLACEMENT_DATE' as TEXT) as relation_column,
             cast('DATE' as TEXT) as relation_column_type
-        
-        
+
+
     ),
     test_data as (
 
@@ -10028,7 +10028,7 @@ select
     )
     select *
     from test_data
-      
+
     ) dbt_internal_test
 [0m03:52:41.986844 [debug] [Thread-2 (]: SQL status: SELECT 1 in 0.001 seconds
 [0m03:52:41.983302 [debug] [Thread-4 (]: Writing injected SQL for node "test.nexabrands_dbt.dbt_expectations_expect_column_values_to_not_match_regex_stg_products_product_name___s_.11c7940908"
@@ -10044,20 +10044,20 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
 
 
-    
+
+
+
+
+
 
 coalesce(array_length((select regexp_matches(order_id, '^[A-Za-z0-9\-_]+$', '')), 1), 0)
 
@@ -10067,7 +10067,7 @@ coalesce(array_length((select regexp_matches(order_id, '^[A-Za-z0-9\-_]+$', ''))
 
 
     from "raw"."staging"."stg_order_fulfillment"
-    
+
 
 ),
 validation_errors as (
@@ -10088,7 +10088,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:42.002127 [info ] [Thread-2 (]: 21 of 60 PASS dbt_expectations_expect_column_values_to_be_of_type_stg_orders_order_placement_date__date  [[32mPASS[0m in 0.16s]
 [0m03:52:42.003283 [debug] [Thread-2 (]: Finished running node test.nexabrands_dbt.dbt_expectations_expect_column_values_to_be_of_type_stg_orders_order_placement_date__date.518b599ba0
@@ -10100,20 +10100,20 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
 
 
-    
+
+
+
+
+
 
 coalesce(array_length((select regexp_matches(customer_name, '^[A-Za-z0-9\s\-\.]+$', '')), 1), 0)
 
@@ -10123,7 +10123,7 @@ coalesce(array_length((select regexp_matches(customer_name, '^[A-Za-z0-9\s\-\.]+
 
 
     from "raw"."staging"."stg_customers"
-    
+
 
 ),
 validation_errors as (
@@ -10144,7 +10144,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:42.006815 [debug] [Thread-4 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_column_values_to_not_match_regex_stg_products_product_name___s_.11c7940908"
 [0m03:52:42.007760 [debug] [Thread-4 (]: On test.nexabrands_dbt.dbt_expectations_expect_column_values_to_not_match_regex_stg_products_product_name___s_.11c7940908: BEGIN
@@ -10163,20 +10163,20 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
 
 
-    
+
+
+
+
+
 
 coalesce(array_length((select regexp_matches(product_name, '^\\s*$', '')), 1), 0)
 
@@ -10186,7 +10186,7 @@ coalesce(array_length((select regexp_matches(product_name, '^\\s*$', '')), 1), 0
 
 
     from "raw"."staging"."stg_products"
-    
+
 
 ),
 validation_errors as (
@@ -10207,7 +10207,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:42.027477 [debug] [Thread-4 (]: SQL status: SELECT 1 in 0.001 seconds
 [0m03:52:42.017337 [info ] [Thread-1 (]: 23 of 60 PASS dbt_expectations_expect_column_values_to_match_regex_stg_customers_customer_name___A_Za_z0_9_s_  [[32mPASS[0m in 0.11s]
@@ -10254,7 +10254,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -10266,15 +10266,15 @@ with validation_errors as (
     from "raw"."staging"."stg_products"
     where
         1=1
-        and 
+        and
     not (
-        product_name is null and 
+        product_name is null and
         category is null
-        
+
     )
 
 
-    
+
     group by
         product_name,category
     having count(*) > 1
@@ -10282,7 +10282,7 @@ with validation_errors as (
 )
 select * from validation_errors
 
-      
+
     ) dbt_internal_test
 [0m03:52:42.104655 [debug] [Thread-2 (]: SQL status: BEGIN in 0.027 seconds
 [0m03:52:42.107087 [debug] [Thread-2 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_compound_columns_to_be_unique_stg_orders_customer_id__order_placement_date__order_id.c72b454e6a"
@@ -10292,7 +10292,7 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
@@ -10304,16 +10304,16 @@ with validation_errors as (
     from "raw"."staging"."stg_orders"
     where
         1=1
-        and 
+        and
     not (
-        customer_id is null and 
-        order_placement_date is null and 
+        customer_id is null and
+        order_placement_date is null and
         order_id is null
-        
+
     )
 
 
-    
+
     group by
         customer_id,order_placement_date,order_id
     having count(*) > 1
@@ -10321,7 +10321,7 @@ with validation_errors as (
 )
 select * from validation_errors
 
-      
+
     ) dbt_internal_test
 [0m03:52:42.087941 [debug] [Thread-4 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404"
 [0m03:52:42.117296 [debug] [Thread-4 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404: BEGIN
@@ -10351,12 +10351,12 @@ select * from validation_errors
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_orders'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m03:52:42.147438 [debug] [Thread-1 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_customers_customer_id__customer_name__city.68cf07e70d"
 [0m03:52:42.148361 [debug] [Thread-1 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_customers_customer_id__customer_name__city.68cf07e70d: BEGIN
 [0m03:52:42.149256 [debug] [Thread-1 (]: Opening a new connection, currently in state closed
@@ -10375,12 +10375,12 @@ select * from validation_errors
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_products'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m03:52:42.167513 [debug] [Thread-4 (]: Began executing node test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404
 [0m03:52:42.168343 [debug] [Thread-1 (]: SQL status: BEGIN in 0.019 seconds
 [0m03:52:42.175524 [debug] [Thread-1 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_customers_customer_id__customer_name__city.68cf07e70d"
@@ -10397,12 +10397,12 @@ select * from validation_errors
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_customers'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m03:52:42.177270 [debug] [Thread-3 (]: SQL status: SELECT 3 in 0.013 seconds
 [0m03:52:42.182872 [debug] [Thread-3 (]: Writing injected SQL for node "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_products_product_id__product_name__category.393dada602"
 [0m03:52:42.179312 [debug] [Thread-2 (]: On test.nexabrands_dbt.dbt_expectations_expect_compound_columns_to_be_unique_stg_orders_customer_id__order_placement_date__order_id.c72b454e6a: ROLLBACK
@@ -10423,41 +10423,41 @@ select
     from (
       with relation_columns as (
 
-        
+
         select
             1 as relation_column_idx,
             cast('ORDER_ID' as TEXT) as relation_column
         union all
-        
+
         select
             2 as relation_column_idx,
             cast('CUSTOMER_ID' as TEXT) as relation_column
         union all
-        
+
         select
             3 as relation_column_idx,
             cast('ORDER_PLACEMENT_DATE' as TEXT) as relation_column
-        
-        
+
+
     ),
     input_columns as (
 
-        
+
         select
             1 as input_column_idx,
             cast('ORDER_ID' as TEXT) as input_column
         union all
-        
+
         select
             2 as input_column_idx,
             cast('CUSTOMER_ID' as TEXT) as input_column
         union all
-        
+
         select
             3 as input_column_idx,
             cast('ORDER_PLACEMENT_DATE' as TEXT) as input_column
-        
-        
+
+
     )
     select *
     from
@@ -10469,7 +10469,7 @@ select
         -- or any table column that is not in the input sequence
         r.relation_column is null or
         i.input_column is null
-      
+
     ) dbt_internal_test
 [0m03:52:42.200412 [debug] [Thread-1 (]: Began executing node test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_customers_customer_id__customer_name__city.68cf07e70d
 [0m03:52:42.201026 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_products_product_id__product_name__category.393dada602: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_products_product_id__product_name__category.393dada602"} */
@@ -10480,41 +10480,41 @@ select
     from (
       with relation_columns as (
 
-        
+
         select
             1 as relation_column_idx,
             cast('PRODUCT_ID' as TEXT) as relation_column
         union all
-        
+
         select
             2 as relation_column_idx,
             cast('PRODUCT_NAME' as TEXT) as relation_column
         union all
-        
+
         select
             3 as relation_column_idx,
             cast('CATEGORY' as TEXT) as relation_column
-        
-        
+
+
     ),
     input_columns as (
 
-        
+
         select
             1 as input_column_idx,
             cast('PRODUCT_ID' as TEXT) as input_column
         union all
-        
+
         select
             2 as input_column_idx,
             cast('PRODUCT_NAME' as TEXT) as input_column
         union all
-        
+
         select
             3 as input_column_idx,
             cast('CATEGORY' as TEXT) as input_column
-        
-        
+
+
     )
     select *
     from
@@ -10526,7 +10526,7 @@ select
         -- or any table column that is not in the input sequence
         r.relation_column is null or
         i.input_column is null
-      
+
     ) dbt_internal_test
 [0m03:52:42.201685 [debug] [Thread-2 (]: Began running node test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_dates_date.2d0c578b06
 [0m03:52:42.204862 [debug] [Thread-1 (]: Writing runtime sql for node "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_customers_customer_id__customer_name__city.68cf07e70d"
@@ -10545,29 +10545,29 @@ select
     from (
       with relation_columns as (
 
-        
+
         select cast('CUSTOMER_ID' as TEXT) as relation_column
         union all
-        
+
         select cast('CUSTOMER_NAME' as TEXT) as relation_column
         union all
-        
+
         select cast('CITY' as TEXT) as relation_column
-        
-        
+
+
     ),
     input_columns as (
 
-        
+
         select cast('CUSTOMER_ID' as TEXT) as input_column
         union all
-        
+
         select cast('CUSTOMER_NAME' as TEXT) as input_column
         union all
-        
+
         select cast('CITY' as TEXT) as input_column
-        
-        
+
+
     )
     select *
     from
@@ -10579,7 +10579,7 @@ select
         -- or any table column that is not in the input list
         r.relation_column is null or
         i.input_column is null
-      
+
     ) dbt_internal_test
 [0m03:52:42.213257 [debug] [Thread-4 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404: Close
 [0m03:52:42.214220 [debug] [Thread-2 (]: Began compiling node test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_dates_date.2d0c578b06
@@ -10609,12 +10609,12 @@ select
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_dates'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m03:52:42.237328 [info ] [Thread-4 (]: 32 of 60 START test dbt_expectations_expect_table_columns_to_match_set_stg_order_fulfillment_order_id__on_time__in_full__ontime_in_full  [RUN]
 [0m03:52:42.241936 [debug] [Thread-4 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_ordered_list_stg_orders_order_id__customer_id__order_placement_date.26d5dbb404, now test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_order_fulfillment_order_id__on_time__in_full__ontime_in_full.4d470eb185)
 [0m03:52:42.242788 [debug] [Thread-4 (]: Began compiling node test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_order_fulfillment_order_id__on_time__in_full__ontime_in_full.4d470eb185
@@ -10650,12 +10650,12 @@ select
 
       from "raw".INFORMATION_SCHEMA.columns
       where table_name = 'stg_order_fulfillment'
-        
+
         and table_schema = 'staging'
-        
+
       order by ordinal_position
 
-  
+
 [0m03:52:42.280744 [debug] [Thread-1 (]: Began compiling node test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_dates_1.719d3ad97a
 [0m03:52:42.281356 [debug] [Thread-2 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_dates_date.2d0c578b06: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_dates_date.2d0c578b06"} */
 select
@@ -10665,17 +10665,17 @@ select
     from (
       with relation_columns as (
 
-        
+
         select cast('DATE' as TEXT) as relation_column
-        
-        
+
+
     ),
     input_columns as (
 
-        
+
         select cast('DATE' as TEXT) as input_column
-        
-        
+
+
     )
     select *
     from
@@ -10687,7 +10687,7 @@ select
         -- or any table column that is not in the input list
         r.relation_column is null or
         i.input_column is null
-      
+
     ) dbt_internal_test
 [0m03:52:42.289332 [debug] [Thread-2 (]: SQL status: SELECT 1 in 0.000 seconds
 [0m03:52:42.291673 [debug] [Thread-2 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_columns_to_match_set_stg_dates_date.2d0c578b06: ROLLBACK
@@ -10718,35 +10718,35 @@ select
     from (
       with relation_columns as (
 
-        
+
         select cast('ORDER_ID' as TEXT) as relation_column
         union all
-        
+
         select cast('ON_TIME' as TEXT) as relation_column
         union all
-        
+
         select cast('IN_FULL' as TEXT) as relation_column
         union all
-        
+
         select cast('ONTIME_IN_FULL' as TEXT) as relation_column
-        
-        
+
+
     ),
     input_columns as (
 
-        
+
         select cast('ORDER_ID' as TEXT) as input_column
         union all
-        
+
         select cast('ON_TIME' as TEXT) as input_column
         union all
-        
+
         select cast('IN_FULL' as TEXT) as input_column
         union all
-        
+
         select cast('ONTIME_IN_FULL' as TEXT) as input_column
-        
-        
+
+
     )
     select *
     from
@@ -10758,7 +10758,7 @@ select
         -- or any table column that is not in the input list
         r.relation_column is null or
         i.input_column is null
-      
+
     ) dbt_internal_test
 [0m03:52:42.320981 [debug] [Thread-4 (]: SQL status: SELECT 1 in 0.001 seconds
 [0m03:52:42.317246 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_customers_40__1.c99103eefc: /* {"app": "dbt", "dbt_version": "1.9.2", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_customers_40__1.c99103eefc"} */
@@ -10767,23 +10767,23 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and count(*) >= 1 and count(*) <= 40
 )
  as expression
 
 
     from "raw"."staging"."stg_customers"
-    
+
 
 ),
 validation_errors as (
@@ -10805,7 +10805,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:42.317814 [debug] [Thread-1 (]: Opening a new connection, currently in state closed
 [0m03:52:42.318367 [info ] [Thread-2 (]: 35 of 60 START test dbt_expectations_expect_table_row_count_to_be_between_stg_order_fulfillment_1  [RUN]
@@ -10822,23 +10822,23 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and count(*) >= 1
 )
  as expression
 
 
     from "raw"."staging"."stg_dates"
-    
+
 
 ),
 validation_errors as (
@@ -10860,7 +10860,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:42.334332 [debug] [Thread-2 (]: Writing injected SQL for node "test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_order_fulfillment_1.0283bc6212"
 [0m03:52:42.336165 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_customers_40__1.c99103eefc: ROLLBACK
@@ -10906,23 +10906,23 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and count(*) >= 1
 )
  as expression
 
 
     from "raw"."staging"."stg_order_fulfillment"
-    
+
 
 ),
 validation_errors as (
@@ -10944,7 +10944,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:42.394105 [debug] [Thread-3 (]: Writing runtime sql for node "test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_products_100__1.bd6a3a0191"
 [0m03:52:42.396196 [debug] [Thread-3 (]: Using postgres connection "test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_products_100__1.bd6a3a0191"
@@ -10969,23 +10969,23 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and count(*) >= 1 and count(*) <= 100
 )
  as expression
 
 
     from "raw"."staging"."stg_products"
-    
+
 
 ),
 validation_errors as (
@@ -11007,7 +11007,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:42.413528 [info ] [Thread-2 (]: 39 of 60 START test not_null_stg_customer_targets_infull_target ................ [RUN]
 [0m03:52:42.416274 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_order_fulfillment_1.0283bc6212, now test.nexabrands_dbt.not_null_stg_customer_targets_infull_target.848a26f728)
@@ -11022,23 +11022,23 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
+
 
 
 
     with grouped_expression as (
     select
-        
-        
-    
-  
+
+
+
+
 ( 1=1 and count(*) >= 1 and count(*) <= 10000000
 )
  as expression
 
 
     from "raw"."staging"."stg_orders"
-    
+
 
 ),
 validation_errors as (
@@ -11060,7 +11060,7 @@ from validation_errors
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:42.417115 [debug] [Thread-2 (]: Began compiling node test.nexabrands_dbt.not_null_stg_customer_targets_infull_target.848a26f728
 [0m03:52:42.422299 [debug] [Thread-3 (]: On test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_products_100__1.bd6a3a0191: ROLLBACK
@@ -11083,9 +11083,9 @@ select
       count(*) != 0 as should_warn,
       count(*) != 0 as should_error
     from (
-      
-    
-    
+
+
+
 
 
 
@@ -11095,7 +11095,7 @@ where customer_id is null
 
 
 
-      
+
     ) dbt_internal_test
 [0m03:52:42.443985 [debug] [Thread-3 (]: Re-using an available connection from the pool (formerly test.nexabrands_dbt.dbt_expectations_expect_table_row_count_to_be_between_stg_products_100__1.bd6a3a0191, now test.nexabrands_dbt.not_null_stg_customer_targets_ontime_target.5042478108)
 [0m03:52:42.445024 [debug] [Thread-3 (]: Began compiling node test.nexabrands_dbt.not_null_stg_customer_targets_ontime_target.5042478108

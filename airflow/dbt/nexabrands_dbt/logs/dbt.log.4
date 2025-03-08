@@ -59,7 +59,7 @@ The database returned the following error:
 
   >Database Error
   connection to server at "172.19.0.2", port 5432 failed: FATAL:  password authentication failed for user "Ajay"
-  
+
 
 Check your database credentials and try again. For more information, visit:
 https://docs.getdbt.com/docs/configure-your-profile
@@ -132,7 +132,7 @@ The database returned the following error:
 
   >Database Error
   connection to server at "172.19.0.2", port 5432 failed: FATAL:  password authentication failed for user "Ajay"
-  
+
 
 Check your database credentials and try again. For more information, visit:
 https://docs.getdbt.com/docs/configure-your-profile
@@ -274,16 +274,16 @@ https://docs.getdbt.com/docs/configure-your-profile
 [0m15:53:53.820824 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': 'bce34c9a-e035-4737-8cc2-c9a7da78299b', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x740c9dd0e990>]}
 [0m15:53:53.821548 [info ] [MainThread]: Found 6 models, 431 macros
 [0m15:53:53.822257 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': 'bce34c9a-e035-4737-8cc2-c9a7da78299b', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x740c9e594530>]}
-[0m15:53:53.824067 [info ] [MainThread]: 
+[0m15:53:53.824067 [info ] [MainThread]:
 [0m15:53:53.824735 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m15:53:53.825337 [info ] [MainThread]: 
+[0m15:53:53.825337 [info ] [MainThread]:
 [0m15:53:53.826190 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m15:53:53.827385 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m15:53:53.864813 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m15:53:53.865436 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m15:53:53.865969 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m15:53:53.870367 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m15:53:53.871792 [debug] [ThreadPool]: On list_raw: Close
@@ -317,7 +317,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m15:53:53.899549 [debug] [ThreadPool]: SQL status: SELECT 7 in 0.007 seconds
 [0m15:53:53.902055 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m15:53:53.902985 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -415,8 +415,8 @@ with relation as (
 [0m15:53:53.996163 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
  SELECT
@@ -462,21 +462,21 @@ LINE 15:  ontime_targets%,
 [0m15:53:54.056483 [debug] [MainThread]: On master: Close
 [0m15:53:54.057184 [debug] [MainThread]: Connection 'master' was properly closed.
 [0m15:53:54.057856 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer_targets' was properly closed.
-[0m15:53:54.058579 [info ] [MainThread]: 
+[0m15:53:54.058579 [info ] [MainThread]:
 [0m15:53:54.059312 [info ] [MainThread]: Finished running 1 view model in 0 hours 0 minutes and 0.23 seconds (0.23s).
 [0m15:53:54.060386 [debug] [MainThread]: Command end result
 [0m15:53:54.137534 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m15:53:54.139511 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m15:53:54.145539 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m15:53:54.146074 [info ] [MainThread]: 
+[0m15:53:54.146074 [info ] [MainThread]:
 [0m15:53:54.146840 [info ] [MainThread]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
-[0m15:53:54.147456 [info ] [MainThread]: 
+[0m15:53:54.147456 [info ] [MainThread]:
 [0m15:53:54.148132 [error] [MainThread]:   Database Error in model stg_customer_targets (models/src/stg_customer_targets.sql)
   syntax error at or near ","
   LINE 15:  ontime_targets%,
                            ^
   compiled code at target/run/nexabrands_dbt/models/src/stg_customer_targets.sql
-[0m15:53:54.148704 [info ] [MainThread]: 
+[0m15:53:54.148704 [info ] [MainThread]:
 [0m15:53:54.149329 [info ] [MainThread]: Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
 [0m15:53:54.150587 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 2.0410464, "process_in_blocks": "560", "process_kernel_time": 0.314632, "process_mem_max_rss": "116332", "process_out_blocks": "2576", "process_user_time": 3.032267}
 [0m15:53:54.151253 [debug] [MainThread]: Command `dbt run` failed at 15:53:54.151134 after 2.04 seconds
@@ -501,16 +501,16 @@ LINE 15:  ontime_targets%,
 [0m15:54:14.229287 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '706538f5-a3c3-4b45-bff3-7113ba0ef5de', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7c1bee5c4980>]}
 [0m15:54:14.229950 [info ] [MainThread]: Found 6 models, 431 macros
 [0m15:54:14.230578 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '706538f5-a3c3-4b45-bff3-7113ba0ef5de', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7c1bef5c6a20>]}
-[0m15:54:14.232767 [info ] [MainThread]: 
+[0m15:54:14.232767 [info ] [MainThread]:
 [0m15:54:14.233341 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m15:54:14.233945 [info ] [MainThread]: 
+[0m15:54:14.233945 [info ] [MainThread]:
 [0m15:54:14.234877 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m15:54:14.236281 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m15:54:14.280156 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m15:54:14.280841 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m15:54:14.281418 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m15:54:14.285746 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m15:54:14.287221 [debug] [ThreadPool]: On list_raw: Close
@@ -544,7 +544,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m15:54:14.311731 [debug] [ThreadPool]: SQL status: SELECT 7 in 0.003 seconds
 [0m15:54:14.314034 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m15:54:14.314734 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -642,8 +642,8 @@ with relation as (
 [0m15:54:14.408077 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
  SELECT
@@ -690,21 +690,21 @@ LINE 15:  ontime_targets%,
 [0m15:54:14.452812 [debug] [MainThread]: Connection 'master' was properly closed.
 [0m15:54:14.453494 [debug] [MainThread]: Connection 'list_raw' was properly closed.
 [0m15:54:14.454142 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer_targets' was properly closed.
-[0m15:54:14.455234 [info ] [MainThread]: 
+[0m15:54:14.455234 [info ] [MainThread]:
 [0m15:54:14.456028 [info ] [MainThread]: Finished running 1 view model in 0 hours 0 minutes and 0.22 seconds (0.22s).
 [0m15:54:14.457303 [debug] [MainThread]: Command end result
 [0m15:54:14.484089 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m15:54:14.486015 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m15:54:14.493254 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m15:54:14.493818 [info ] [MainThread]: 
+[0m15:54:14.493818 [info ] [MainThread]:
 [0m15:54:14.494528 [info ] [MainThread]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
-[0m15:54:14.495141 [info ] [MainThread]: 
+[0m15:54:14.495141 [info ] [MainThread]:
 [0m15:54:14.495803 [error] [MainThread]:   Database Error in model stg_customer_targets (models/src/stg_customer_targets.sql)
   syntax error at or near ","
   LINE 15:  ontime_targets%,
                            ^
   compiled code at target/run/nexabrands_dbt/models/src/stg_customer_targets.sql
-[0m15:54:14.496380 [info ] [MainThread]: 
+[0m15:54:14.496380 [info ] [MainThread]:
 [0m15:54:14.496983 [info ] [MainThread]: Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
 [0m15:54:14.498245 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 0.99816287, "process_in_blocks": "8", "process_kernel_time": 0.335362, "process_mem_max_rss": "110640", "process_out_blocks": "1744", "process_user_time": 2.169991}
 [0m15:54:14.499060 [debug] [MainThread]: Command `dbt run` failed at 15:54:14.498940 after 1.00 seconds
@@ -729,16 +729,16 @@ LINE 15:  ontime_targets%,
 [0m15:54:53.494331 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '143c9363-d19b-4d9b-b79b-e20212cb1516', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fbb50dca060>]}
 [0m15:54:53.495085 [info ] [MainThread]: Found 6 models, 431 macros
 [0m15:54:53.495746 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '143c9363-d19b-4d9b-b79b-e20212cb1516', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fbb5011f7d0>]}
-[0m15:54:53.497654 [info ] [MainThread]: 
+[0m15:54:53.497654 [info ] [MainThread]:
 [0m15:54:53.498327 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m15:54:53.498913 [info ] [MainThread]: 
+[0m15:54:53.498913 [info ] [MainThread]:
 [0m15:54:53.499709 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m15:54:53.501126 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m15:54:53.537570 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m15:54:53.538356 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m15:54:53.538944 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m15:54:53.543286 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m15:54:53.544745 [debug] [ThreadPool]: On list_raw: Close
@@ -772,7 +772,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m15:54:53.566580 [debug] [ThreadPool]: SQL status: SELECT 7 in 0.003 seconds
 [0m15:54:53.568325 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m15:54:53.568921 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -870,8 +870,8 @@ with relation as (
 [0m15:54:53.701053 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
  SELECT
@@ -917,21 +917,21 @@ LINE 15:  ontime_targets%,
 [0m15:54:53.754698 [debug] [MainThread]: On master: Close
 [0m15:54:53.755614 [debug] [MainThread]: Connection 'master' was properly closed.
 [0m15:54:53.756516 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer_targets' was properly closed.
-[0m15:54:53.757293 [info ] [MainThread]: 
+[0m15:54:53.757293 [info ] [MainThread]:
 [0m15:54:53.758360 [info ] [MainThread]: Finished running 1 view model in 0 hours 0 minutes and 0.26 seconds (0.26s).
 [0m15:54:53.760210 [debug] [MainThread]: Command end result
 [0m15:54:53.786795 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m15:54:53.788755 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m15:54:53.794853 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m15:54:53.795394 [info ] [MainThread]: 
+[0m15:54:53.795394 [info ] [MainThread]:
 [0m15:54:53.796106 [info ] [MainThread]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
-[0m15:54:53.796726 [info ] [MainThread]: 
+[0m15:54:53.796726 [info ] [MainThread]:
 [0m15:54:53.797407 [error] [MainThread]:   Database Error in model stg_customer_targets (models/src/stg_customer_targets.sql)
   syntax error at or near ","
   LINE 15:  ontime_targets%,
                            ^
   compiled code at target/run/nexabrands_dbt/models/src/stg_customer_targets.sql
-[0m15:54:53.797992 [info ] [MainThread]: 
+[0m15:54:53.797992 [info ] [MainThread]:
 [0m15:54:53.798651 [info ] [MainThread]: Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
 [0m15:54:53.799859 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 0.99215984, "process_in_blocks": "16", "process_kernel_time": 0.24804, "process_mem_max_rss": "111364", "process_out_blocks": "1752", "process_user_time": 2.112344}
 [0m15:54:53.800513 [debug] [MainThread]: Command `dbt run` failed at 15:54:53.800399 after 0.99 seconds
@@ -956,16 +956,16 @@ LINE 15:  ontime_targets%,
 [0m15:55:06.610329 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': 'e52ae58a-431a-4e60-9cf9-15fbdcbd0df2', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x73c9b7ff3800>]}
 [0m15:55:06.610939 [info ] [MainThread]: Found 6 models, 431 macros
 [0m15:55:06.611509 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': 'e52ae58a-431a-4e60-9cf9-15fbdcbd0df2', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x73c9b83f9400>]}
-[0m15:55:06.613340 [info ] [MainThread]: 
+[0m15:55:06.613340 [info ] [MainThread]:
 [0m15:55:06.613903 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m15:55:06.614484 [info ] [MainThread]: 
+[0m15:55:06.614484 [info ] [MainThread]:
 [0m15:55:06.615256 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m15:55:06.616287 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m15:55:06.654304 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m15:55:06.654983 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m15:55:06.655524 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m15:55:06.659994 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m15:55:06.661440 [debug] [ThreadPool]: On list_raw: Close
@@ -999,7 +999,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m15:55:06.681059 [debug] [ThreadPool]: SQL status: SELECT 7 in 0.002 seconds
 [0m15:55:06.682856 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m15:55:06.683942 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -1097,8 +1097,8 @@ with relation as (
 [0m15:55:06.776725 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
  SELECT
@@ -1144,21 +1144,21 @@ LINE 15:  ontime_targets%,
 [0m15:55:06.830224 [debug] [MainThread]: On master: Close
 [0m15:55:06.831031 [debug] [MainThread]: Connection 'master' was properly closed.
 [0m15:55:06.831802 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer_targets' was properly closed.
-[0m15:55:06.832610 [info ] [MainThread]: 
+[0m15:55:06.832610 [info ] [MainThread]:
 [0m15:55:06.833504 [info ] [MainThread]: Finished running 1 view model in 0 hours 0 minutes and 0.22 seconds (0.22s).
 [0m15:55:06.834602 [debug] [MainThread]: Command end result
 [0m15:55:06.864289 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m15:55:06.866129 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m15:55:06.872284 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m15:55:06.872791 [info ] [MainThread]: 
+[0m15:55:06.872791 [info ] [MainThread]:
 [0m15:55:06.873579 [info ] [MainThread]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
-[0m15:55:06.874308 [info ] [MainThread]: 
+[0m15:55:06.874308 [info ] [MainThread]:
 [0m15:55:06.875018 [error] [MainThread]:   Database Error in model stg_customer_targets (models/src/stg_customer_targets.sql)
   syntax error at or near ","
   LINE 15:  ontime_targets%,
                            ^
   compiled code at target/run/nexabrands_dbt/models/src/stg_customer_targets.sql
-[0m15:55:06.875630 [info ] [MainThread]: 
+[0m15:55:06.875630 [info ] [MainThread]:
 [0m15:55:06.876274 [info ] [MainThread]: Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
 [0m15:55:06.877558 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 1.2151675, "process_in_blocks": "8", "process_kernel_time": 0.327757, "process_mem_max_rss": "116408", "process_out_blocks": "2584", "process_user_time": 2.317996}
 [0m15:55:06.878207 [debug] [MainThread]: Command `dbt run` failed at 15:55:06.878028 after 1.22 seconds
@@ -1183,16 +1183,16 @@ LINE 15:  ontime_targets%,
 [0m15:55:27.223072 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '1c73320c-f3ac-4287-93f5-43a80517e800', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x731778f2aa20>]}
 [0m15:55:27.223718 [info ] [MainThread]: Found 6 models, 431 macros
 [0m15:55:27.224398 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '1c73320c-f3ac-4287-93f5-43a80517e800', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x731779302420>]}
-[0m15:55:27.226264 [info ] [MainThread]: 
+[0m15:55:27.226264 [info ] [MainThread]:
 [0m15:55:27.226942 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m15:55:27.227547 [info ] [MainThread]: 
+[0m15:55:27.227547 [info ] [MainThread]:
 [0m15:55:27.228362 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m15:55:27.229827 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m15:55:27.265526 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m15:55:27.266227 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m15:55:27.266872 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m15:55:27.271312 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m15:55:27.272763 [debug] [ThreadPool]: On list_raw: Close
@@ -1226,7 +1226,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m15:55:27.293371 [debug] [ThreadPool]: SQL status: SELECT 7 in 0.002 seconds
 [0m15:55:27.295098 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m15:55:27.295752 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -1324,8 +1324,8 @@ with relation as (
 [0m15:55:27.389132 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
  SELECT
@@ -1371,21 +1371,21 @@ LINE 15:  ontime_targets%,
 [0m15:55:27.441170 [debug] [MainThread]: On master: Close
 [0m15:55:27.444409 [debug] [MainThread]: Connection 'master' was properly closed.
 [0m15:55:27.445044 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer_targets' was properly closed.
-[0m15:55:27.446928 [info ] [MainThread]: 
+[0m15:55:27.446928 [info ] [MainThread]:
 [0m15:55:27.447689 [info ] [MainThread]: Finished running 1 view model in 0 hours 0 minutes and 0.22 seconds (0.22s).
 [0m15:55:27.448979 [debug] [MainThread]: Command end result
 [0m15:55:27.494113 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m15:55:27.495987 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m15:55:27.502208 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m15:55:27.502885 [info ] [MainThread]: 
+[0m15:55:27.502885 [info ] [MainThread]:
 [0m15:55:27.503529 [info ] [MainThread]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
-[0m15:55:27.504130 [info ] [MainThread]: 
+[0m15:55:27.504130 [info ] [MainThread]:
 [0m15:55:27.504866 [error] [MainThread]:   Database Error in model stg_customer_targets (models/src/stg_customer_targets.sql)
   syntax error at or near ","
   LINE 15:  ontime_targets%,
                            ^
   compiled code at target/run/nexabrands_dbt/models/src/stg_customer_targets.sql
-[0m15:55:27.505408 [info ] [MainThread]: 
+[0m15:55:27.505408 [info ] [MainThread]:
 [0m15:55:27.506063 [info ] [MainThread]: Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
 [0m15:55:27.507350 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 1.121935, "process_in_blocks": "0", "process_kernel_time": 0.219842, "process_mem_max_rss": "115208", "process_out_blocks": "2592", "process_user_time": 2.284896}
 [0m15:55:27.507975 [debug] [MainThread]: Command `dbt run` failed at 15:55:27.507810 after 1.12 seconds
@@ -1410,16 +1410,16 @@ LINE 15:  ontime_targets%,
 [0m15:56:03.547657 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '305afb2e-512e-4b97-902a-9cb1a40ef8e3', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7b935a7f6a50>]}
 [0m15:56:03.548313 [info ] [MainThread]: Found 6 models, 431 macros
 [0m15:56:03.548956 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '305afb2e-512e-4b97-902a-9cb1a40ef8e3', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7b935abe0e60>]}
-[0m15:56:03.550839 [info ] [MainThread]: 
+[0m15:56:03.550839 [info ] [MainThread]:
 [0m15:56:03.551476 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m15:56:03.552051 [info ] [MainThread]: 
+[0m15:56:03.552051 [info ] [MainThread]:
 [0m15:56:03.552817 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m15:56:03.553971 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m15:56:03.590340 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m15:56:03.591005 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m15:56:03.591551 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m15:56:03.596065 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.005 seconds
 [0m15:56:03.597494 [debug] [ThreadPool]: On list_raw: Close
@@ -1453,7 +1453,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m15:56:03.618522 [debug] [ThreadPool]: SQL status: SELECT 7 in 0.002 seconds
 [0m15:56:03.620293 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m15:56:03.621222 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -1551,8 +1551,8 @@ with relation as (
 [0m15:56:03.712565 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
  SELECT
@@ -1598,21 +1598,21 @@ LINE 15:  ontime_targets%,
 [0m15:56:03.769124 [debug] [MainThread]: On master: Close
 [0m15:56:03.769823 [debug] [MainThread]: Connection 'master' was properly closed.
 [0m15:56:03.770586 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer_targets' was properly closed.
-[0m15:56:03.771267 [info ] [MainThread]: 
+[0m15:56:03.771267 [info ] [MainThread]:
 [0m15:56:03.772096 [info ] [MainThread]: Finished running 1 view model in 0 hours 0 minutes and 0.22 seconds (0.22s).
 [0m15:56:03.773198 [debug] [MainThread]: Command end result
 [0m15:56:03.803207 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m15:56:03.805940 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m15:56:03.816002 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m15:56:03.816813 [info ] [MainThread]: 
+[0m15:56:03.816813 [info ] [MainThread]:
 [0m15:56:03.817894 [info ] [MainThread]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
-[0m15:56:03.818819 [info ] [MainThread]: 
+[0m15:56:03.818819 [info ] [MainThread]:
 [0m15:56:03.819794 [error] [MainThread]:   Database Error in model stg_customer_targets (models/src/stg_customer_targets.sql)
   syntax error at or near ","
   LINE 15:  ontime_targets%,
                            ^
   compiled code at target/run/nexabrands_dbt/models/src/stg_customer_targets.sql
-[0m15:56:03.820833 [info ] [MainThread]: 
+[0m15:56:03.820833 [info ] [MainThread]:
 [0m15:56:03.821704 [info ] [MainThread]: Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
 [0m15:56:03.823854 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 1.1488023, "process_in_blocks": "0", "process_kernel_time": 0.300202, "process_mem_max_rss": "116284", "process_out_blocks": "2584", "process_user_time": 2.330518}
 [0m15:56:03.827056 [debug] [MainThread]: Command `dbt run` failed at 15:56:03.826885 after 1.15 seconds
@@ -1637,16 +1637,16 @@ LINE 15:  ontime_targets%,
 [0m15:57:08.608795 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '82a8605f-079b-4335-9915-c2c0b354c876', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7cc040ff74d0>]}
 [0m15:57:08.609684 [info ] [MainThread]: Found 6 models, 431 macros
 [0m15:57:08.610335 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '82a8605f-079b-4335-9915-c2c0b354c876', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7cc040b260c0>]}
-[0m15:57:08.612544 [info ] [MainThread]: 
+[0m15:57:08.612544 [info ] [MainThread]:
 [0m15:57:08.613181 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m15:57:08.613769 [info ] [MainThread]: 
+[0m15:57:08.613769 [info ] [MainThread]:
 [0m15:57:08.614609 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m15:57:08.615792 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m15:57:08.651149 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m15:57:08.651749 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m15:57:08.652290 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m15:57:08.656625 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m15:57:08.658011 [debug] [ThreadPool]: On list_raw: Close
@@ -1680,7 +1680,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m15:57:08.680451 [debug] [ThreadPool]: SQL status: SELECT 7 in 0.003 seconds
 [0m15:57:08.683947 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m15:57:08.684804 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -1778,11 +1778,11 @@ with relation as (
 [0m15:57:08.796685 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer_targets
 )
 
@@ -1826,22 +1826,22 @@ HINT:  Perhaps you meant to reference the column "customer_targets.ontime_target
 [0m15:57:08.842014 [debug] [MainThread]: On master: Close
 [0m15:57:08.842857 [debug] [MainThread]: Connection 'master' was properly closed.
 [0m15:57:08.843639 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer_targets' was properly closed.
-[0m15:57:08.844435 [info ] [MainThread]: 
+[0m15:57:08.844435 [info ] [MainThread]:
 [0m15:57:08.845263 [info ] [MainThread]: Finished running 1 view model in 0 hours 0 minutes and 0.23 seconds (0.23s).
 [0m15:57:08.847138 [debug] [MainThread]: Command end result
 [0m15:57:08.872050 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m15:57:08.874057 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m15:57:08.880452 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m15:57:08.880992 [info ] [MainThread]: 
+[0m15:57:08.880992 [info ] [MainThread]:
 [0m15:57:08.881729 [info ] [MainThread]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
-[0m15:57:08.883020 [info ] [MainThread]: 
+[0m15:57:08.883020 [info ] [MainThread]:
 [0m15:57:08.883741 [error] [MainThread]:   Database Error in model stg_customer_targets (models/src/stg_customer_targets.sql)
   column "ontime_targets%" does not exist
   LINE 14:     "ontime_targets%" as ontime_target,
                ^
   HINT:  Perhaps you meant to reference the column "customer_targets.ontime_target%".
   compiled code at target/run/nexabrands_dbt/models/src/stg_customer_targets.sql
-[0m15:57:08.884361 [info ] [MainThread]: 
+[0m15:57:08.884361 [info ] [MainThread]:
 [0m15:57:08.885356 [info ] [MainThread]: Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
 [0m15:57:08.886872 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 1.1222277, "process_in_blocks": "0", "process_kernel_time": 0.288041, "process_mem_max_rss": "114816", "process_out_blocks": "2584", "process_user_time": 2.246097}
 [0m15:57:08.887679 [debug] [MainThread]: Command `dbt run` failed at 15:57:08.887559 after 1.12 seconds
@@ -1866,16 +1866,16 @@ HINT:  Perhaps you meant to reference the column "customer_targets.ontime_target
 [0m15:58:57.414755 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '091ebfe0-6e02-4ef6-a90a-9da670c80434', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x709849fd3620>]}
 [0m15:58:57.415423 [info ] [MainThread]: Found 6 models, 431 macros
 [0m15:58:57.416039 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '091ebfe0-6e02-4ef6-a90a-9da670c80434', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x709849faa0c0>]}
-[0m15:58:57.417901 [info ] [MainThread]: 
+[0m15:58:57.417901 [info ] [MainThread]:
 [0m15:58:57.418513 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m15:58:57.419088 [info ] [MainThread]: 
+[0m15:58:57.419088 [info ] [MainThread]:
 [0m15:58:57.419867 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m15:58:57.421019 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m15:58:57.458294 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m15:58:57.458885 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m15:58:57.459419 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m15:58:57.463770 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m15:58:57.465829 [debug] [ThreadPool]: On list_raw: Close
@@ -1909,7 +1909,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m15:58:57.499575 [debug] [ThreadPool]: SQL status: SELECT 7 in 0.004 seconds
 [0m15:58:57.502390 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m15:58:57.503371 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -2007,11 +2007,11 @@ with relation as (
 [0m15:58:57.697910 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer_targets
 )
 
@@ -2052,15 +2052,15 @@ drop view if exists "raw"."raw"."stg_customer_targets__dbt_backup" cascade
 [0m15:58:57.796514 [debug] [MainThread]: Connection 'master' was properly closed.
 [0m15:58:57.797303 [debug] [MainThread]: Connection 'list_raw' was properly closed.
 [0m15:58:57.798067 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer_targets' was properly closed.
-[0m15:58:57.798879 [info ] [MainThread]: 
+[0m15:58:57.798879 [info ] [MainThread]:
 [0m15:58:57.799574 [info ] [MainThread]: Finished running 1 view model in 0 hours 0 minutes and 0.38 seconds (0.38s).
 [0m15:58:57.801162 [debug] [MainThread]: Command end result
 [0m15:58:57.825789 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m15:58:57.827635 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m15:58:57.833738 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m15:58:57.834289 [info ] [MainThread]: 
+[0m15:58:57.834289 [info ] [MainThread]:
 [0m15:58:57.835007 [info ] [MainThread]: [32mCompleted successfully[0m
-[0m15:58:57.835544 [info ] [MainThread]: 
+[0m15:58:57.835544 [info ] [MainThread]:
 [0m15:58:57.836156 [info ] [MainThread]: Done. PASS=1 WARN=0 ERROR=0 SKIP=0 TOTAL=1
 [0m15:58:57.837384 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 1.2656394, "process_in_blocks": "0", "process_kernel_time": 0.348449, "process_mem_max_rss": "115404", "process_out_blocks": "2584", "process_user_time": 2.363914}
 [0m15:58:57.838003 [debug] [MainThread]: Command `dbt run` succeeded at 15:58:57.837853 after 1.27 seconds
@@ -2085,16 +2085,16 @@ drop view if exists "raw"."raw"."stg_customer_targets__dbt_backup" cascade
 [0m16:02:04.564045 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': 'd346167c-8486-47b0-83e0-161d84e6e34c', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7864db3f3a70>]}
 [0m16:02:04.565070 [info ] [MainThread]: Found 6 models, 431 macros
 [0m16:02:04.565920 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': 'd346167c-8486-47b0-83e0-161d84e6e34c', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7864db352ab0>]}
-[0m16:02:04.568711 [info ] [MainThread]: 
+[0m16:02:04.568711 [info ] [MainThread]:
 [0m16:02:04.569572 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m16:02:04.570402 [info ] [MainThread]: 
+[0m16:02:04.570402 [info ] [MainThread]:
 [0m16:02:04.571658 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m16:02:04.578225 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m16:02:04.633262 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m16:02:04.634296 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m16:02:04.635137 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m16:02:04.640985 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.006 seconds
 [0m16:02:04.643296 [debug] [ThreadPool]: On list_raw: Close
@@ -2128,7 +2128,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m16:02:04.690361 [debug] [ThreadPool]: SQL status: SELECT 8 in 0.008 seconds
 [0m16:02:04.693619 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m16:02:04.699771 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -2236,11 +2236,11 @@ with relation as (
 [0m16:02:04.927246 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer"} */
 
   create view "raw"."raw"."stg_customer__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer
 )
 
@@ -2248,7 +2248,7 @@ SELECT
     customer_id,
     customer_name,
     city
-   
+
 FROM customer
   );
 [0m16:02:04.930233 [debug] [Thread-1 (]: Postgres adapter: Postgres error: relation "raw.customer" does not exist
@@ -2262,11 +2262,11 @@ LINE 9:     FROM raw.raw.customer
 [0m16:02:04.941574 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer_targets
 )
 
@@ -2324,21 +2324,21 @@ drop view if exists "raw"."raw"."stg_customer_targets__dbt_backup" cascade
 [0m16:02:05.107390 [debug] [MainThread]: Connection 'master' was properly closed.
 [0m16:02:05.108128 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer_targets' was properly closed.
 [0m16:02:05.108871 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer' was properly closed.
-[0m16:02:05.109793 [info ] [MainThread]: 
+[0m16:02:05.109793 [info ] [MainThread]:
 [0m16:02:05.110659 [info ] [MainThread]: Finished running 2 view models in 0 hours 0 minutes and 0.54 seconds (0.54s).
 [0m16:02:05.112181 [debug] [MainThread]: Command end result
 [0m16:02:05.145279 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m16:02:05.147924 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m16:02:05.159047 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m16:02:05.159896 [info ] [MainThread]: 
+[0m16:02:05.159896 [info ] [MainThread]:
 [0m16:02:05.160855 [info ] [MainThread]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
-[0m16:02:05.161745 [info ] [MainThread]: 
+[0m16:02:05.161745 [info ] [MainThread]:
 [0m16:02:05.162785 [error] [MainThread]:   Database Error in model stg_customer (models/src/stg_customer.sql)
   relation "raw.customer" does not exist
   LINE 9:     FROM raw.raw.customer
                    ^
   compiled code at target/run/nexabrands_dbt/models/src/stg_customer.sql
-[0m16:02:05.163654 [info ] [MainThread]: 
+[0m16:02:05.163654 [info ] [MainThread]:
 [0m16:02:05.164562 [info ] [MainThread]: Done. PASS=1 WARN=0 ERROR=1 SKIP=0 TOTAL=2
 [0m16:02:05.166340 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 1.5891997, "process_in_blocks": "0", "process_kernel_time": 0.278457, "process_mem_max_rss": "117700", "process_out_blocks": "2608", "process_user_time": 2.526009}
 [0m16:02:05.167237 [debug] [MainThread]: Command `dbt run` failed at 16:02:05.167092 after 1.59 seconds
@@ -2363,16 +2363,16 @@ drop view if exists "raw"."raw"."stg_customer_targets__dbt_backup" cascade
 [0m16:02:44.403458 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': 'b8205d89-cf47-4ae9-8e3b-3eb297591a02', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f8efc7231a0>]}
 [0m16:02:44.404117 [info ] [MainThread]: Found 6 models, 431 macros
 [0m16:02:44.404728 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': 'b8205d89-cf47-4ae9-8e3b-3eb297591a02', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f8efc7260c0>]}
-[0m16:02:44.406722 [info ] [MainThread]: 
+[0m16:02:44.406722 [info ] [MainThread]:
 [0m16:02:44.407318 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m16:02:44.407882 [info ] [MainThread]: 
+[0m16:02:44.407882 [info ] [MainThread]:
 [0m16:02:44.408671 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m16:02:44.413664 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m16:02:44.450085 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m16:02:44.450821 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m16:02:44.451386 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m16:02:44.455758 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m16:02:44.457223 [debug] [ThreadPool]: On list_raw: Close
@@ -2406,7 +2406,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m16:02:44.476132 [debug] [ThreadPool]: SQL status: SELECT 8 in 0.002 seconds
 [0m16:02:44.478544 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m16:02:44.479346 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -2514,11 +2514,11 @@ with relation as (
 [0m16:02:44.609539 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer"} */
 
   create view "raw"."raw"."stg_customer__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customers
 )
 
@@ -2526,7 +2526,7 @@ SELECT
     customer_id,
     customer_name,
     city
-   
+
 FROM customer
   );
 [0m16:02:44.610865 [debug] [Thread-2 (]: SQL status: BEGIN in 0.006 seconds
@@ -2534,11 +2534,11 @@ FROM customer
 [0m16:02:44.612930 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer_targets
 )
 
@@ -2601,15 +2601,15 @@ drop view if exists "raw"."raw"."stg_customer_targets__dbt_backup" cascade
 [0m16:02:44.713384 [debug] [MainThread]: Connection 'master' was properly closed.
 [0m16:02:44.714620 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer_targets' was properly closed.
 [0m16:02:44.715419 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer' was properly closed.
-[0m16:02:44.716342 [info ] [MainThread]: 
+[0m16:02:44.716342 [info ] [MainThread]:
 [0m16:02:44.717002 [info ] [MainThread]: Finished running 2 view models in 0 hours 0 minutes and 0.31 seconds (0.31s).
 [0m16:02:44.718108 [debug] [MainThread]: Command end result
 [0m16:02:44.744780 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m16:02:44.746779 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m16:02:44.752938 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m16:02:44.753492 [info ] [MainThread]: 
+[0m16:02:44.753492 [info ] [MainThread]:
 [0m16:02:44.754210 [info ] [MainThread]: [32mCompleted successfully[0m
-[0m16:02:44.754830 [info ] [MainThread]: 
+[0m16:02:44.754830 [info ] [MainThread]:
 [0m16:02:44.755455 [info ] [MainThread]: Done. PASS=2 WARN=0 ERROR=0 SKIP=0 TOTAL=2
 [0m16:02:44.756665 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 1.2409681, "process_in_blocks": "0", "process_kernel_time": 0.293346, "process_mem_max_rss": "116960", "process_out_blocks": "2616", "process_user_time": 2.437945}
 [0m16:02:44.757310 [debug] [MainThread]: Command `dbt run` succeeded at 16:02:44.757189 after 1.24 seconds
@@ -2634,16 +2634,16 @@ drop view if exists "raw"."raw"."stg_customer_targets__dbt_backup" cascade
 [0m16:04:20.666687 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '5a449210-ffa8-4360-b4c0-64176af018c5', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x72103dbdf410>]}
 [0m16:04:20.667361 [info ] [MainThread]: Found 6 models, 431 macros
 [0m16:04:20.667957 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '5a449210-ffa8-4360-b4c0-64176af018c5', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x72103dbfb320>]}
-[0m16:04:20.669915 [info ] [MainThread]: 
+[0m16:04:20.669915 [info ] [MainThread]:
 [0m16:04:20.670517 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m16:04:20.671086 [info ] [MainThread]: 
+[0m16:04:20.671086 [info ] [MainThread]:
 [0m16:04:20.671883 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m16:04:20.677047 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m16:04:20.736775 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m16:04:20.738396 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m16:04:20.741382 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m16:04:20.746888 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.006 seconds
 [0m16:04:20.748900 [debug] [ThreadPool]: On list_raw: Close
@@ -2677,7 +2677,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m16:04:20.792475 [debug] [ThreadPool]: SQL status: SELECT 9 in 0.003 seconds
 [0m16:04:20.794886 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m16:04:20.795748 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -2796,11 +2796,11 @@ with relation as (
 [0m16:04:20.945974 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer"} */
 
   create view "raw"."raw"."stg_customer__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customers
 )
 
@@ -2808,7 +2808,7 @@ SELECT
     customer_id,
     customer_name,
     city
-   
+
 FROM customer
   );
 [0m16:04:20.946487 [debug] [Thread-2 (]: SQL status: BEGIN in 0.012 seconds
@@ -2817,11 +2817,11 @@ FROM customer
 [0m16:04:20.950118 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer_targets
 )
 
@@ -2836,11 +2836,11 @@ FROM customer_targets
 [0m16:04:20.951415 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_date: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_date"} */
 
   create view "raw"."raw"."stg_date__dbt_tmp"
-    
-    
+
+
   as (
     WITH dates AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.dates
 )
 
@@ -2848,7 +2848,7 @@ SELECT
     date,
    mmm_yy,
     week_no
-   
+
 FROM dates
   );
 [0m16:04:20.959492 [debug] [Thread-2 (]: SQL status: CREATE VIEW in 0.007 seconds
@@ -2925,15 +2925,15 @@ drop view if exists "raw"."raw"."stg_customer_targets__dbt_backup" cascade
 [0m16:04:21.121994 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer_targets' was properly closed.
 [0m16:04:21.122946 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer' was properly closed.
 [0m16:04:21.123788 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_date' was properly closed.
-[0m16:04:21.124777 [info ] [MainThread]: 
+[0m16:04:21.124777 [info ] [MainThread]:
 [0m16:04:21.125730 [info ] [MainThread]: Finished running 3 view models in 0 hours 0 minutes and 0.45 seconds (0.45s).
 [0m16:04:21.127915 [debug] [MainThread]: Command end result
 [0m16:04:21.160717 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m16:04:21.162751 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m16:04:21.169003 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m16:04:21.169561 [info ] [MainThread]: 
+[0m16:04:21.169561 [info ] [MainThread]:
 [0m16:04:21.170259 [info ] [MainThread]: [32mCompleted successfully[0m
-[0m16:04:21.170862 [info ] [MainThread]: 
+[0m16:04:21.170862 [info ] [MainThread]:
 [0m16:04:21.171485 [info ] [MainThread]: Done. PASS=3 WARN=0 ERROR=0 SKIP=0 TOTAL=3
 [0m16:04:21.172753 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 1.3876889, "process_in_blocks": "0", "process_kernel_time": 0.298368, "process_mem_max_rss": "116300", "process_out_blocks": "2648", "process_user_time": 2.470488}
 [0m16:04:21.173454 [debug] [MainThread]: Command `dbt run` succeeded at 16:04:21.173334 after 1.39 seconds
@@ -2958,16 +2958,16 @@ drop view if exists "raw"."raw"."stg_customer_targets__dbt_backup" cascade
 [0m16:06:04.197414 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': 'f0cec43f-acbb-45c4-b1a7-01a2be876995', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7b74e8dfb830>]}
 [0m16:06:04.198074 [info ] [MainThread]: Found 6 models, 431 macros
 [0m16:06:04.198693 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': 'f0cec43f-acbb-45c4-b1a7-01a2be876995', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7b74e91fdfa0>]}
-[0m16:06:04.200710 [info ] [MainThread]: 
+[0m16:06:04.200710 [info ] [MainThread]:
 [0m16:06:04.201285 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m16:06:04.201842 [info ] [MainThread]: 
+[0m16:06:04.201842 [info ] [MainThread]:
 [0m16:06:04.202673 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m16:06:04.207839 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m16:06:04.242309 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m16:06:04.243046 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m16:06:04.243786 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m16:06:04.256062 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.012 seconds
 [0m16:06:04.258517 [debug] [ThreadPool]: On list_raw: Close
@@ -3001,7 +3001,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m16:06:04.284140 [debug] [ThreadPool]: SQL status: SELECT 10 in 0.002 seconds
 [0m16:06:04.285847 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m16:06:04.286489 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -3131,11 +3131,11 @@ with relation as (
 [0m16:06:04.464033 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer_targets
 )
 
@@ -3151,11 +3151,11 @@ FROM customer_targets
 [0m16:06:04.468286 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_date: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_date"} */
 
   create view "raw"."raw"."stg_date__dbt_tmp"
-    
-    
+
+
   as (
     WITH dates AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.dates
 )
 
@@ -3163,17 +3163,17 @@ SELECT
     date,
    mmm_yy,
     week_no
-   
+
 FROM dates
   );
 [0m16:06:04.460879 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer"} */
 
   create view "raw"."raw"."stg_customer__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customers
 )
 
@@ -3181,7 +3181,7 @@ SELECT
     customer_id,
     customer_name,
     city
-   
+
 FROM customer
   );
 [0m16:06:04.470689 [debug] [Thread-2 (]: SQL status: CREATE VIEW in 0.006 seconds
@@ -3190,11 +3190,11 @@ FROM customer
 [0m16:06:04.489888 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_order_fulfillment: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_fulfillment"} */
 
   create view "raw"."raw"."stg_order_fulfillment__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_fullfillment AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.order_fullfillment
 )
 
@@ -3203,7 +3203,7 @@ SELECT
     on_time,
     in_full,
     otif
-   
+
 FROM order_fullfillment
   );
 [0m16:06:04.486941 [debug] [Thread-1 (]: SQL status: CREATE VIEW in 0.017 seconds
@@ -3304,21 +3304,21 @@ drop view if exists "raw"."raw"."stg_customer__dbt_backup" cascade
 [0m16:06:04.680022 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer' was properly closed.
 [0m16:06:04.680762 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_date' was properly closed.
 [0m16:06:04.681288 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_order_fulfillment' was properly closed.
-[0m16:06:04.682347 [info ] [MainThread]: 
+[0m16:06:04.682347 [info ] [MainThread]:
 [0m16:06:04.683062 [info ] [MainThread]: Finished running 4 view models in 0 hours 0 minutes and 0.48 seconds (0.48s).
 [0m16:06:04.684431 [debug] [MainThread]: Command end result
 [0m16:06:04.707892 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m16:06:04.709528 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m16:06:04.715672 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m16:06:04.716194 [info ] [MainThread]: 
+[0m16:06:04.716194 [info ] [MainThread]:
 [0m16:06:04.716924 [info ] [MainThread]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
-[0m16:06:04.717553 [info ] [MainThread]: 
+[0m16:06:04.717553 [info ] [MainThread]:
 [0m16:06:04.718513 [error] [MainThread]:   Database Error in model stg_order_fulfillment (models/src/stg_order_fulfillment.sql)
   relation "raw.order_fullfillment" does not exist
   LINE 9:     FROM raw.raw.order_fullfillment
                    ^
   compiled code at target/run/nexabrands_dbt/models/src/stg_order_fulfillment.sql
-[0m16:06:04.719435 [info ] [MainThread]: 
+[0m16:06:04.719435 [info ] [MainThread]:
 [0m16:06:04.720315 [info ] [MainThread]: Done. PASS=3 WARN=0 ERROR=1 SKIP=0 TOTAL=4
 [0m16:06:04.721846 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 1.607676, "process_in_blocks": "0", "process_kernel_time": 0.328396, "process_mem_max_rss": "117392", "process_out_blocks": "2672", "process_user_time": 2.571101}
 [0m16:06:04.722793 [debug] [MainThread]: Command `dbt run` failed at 16:06:04.722657 after 1.61 seconds
@@ -3343,16 +3343,16 @@ drop view if exists "raw"."raw"."stg_customer__dbt_backup" cascade
 [0m16:07:01.683914 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '3ca61363-b7fa-455a-a3bf-92e3bb18fbb6', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x77eee71faea0>]}
 [0m16:07:01.684548 [info ] [MainThread]: Found 6 models, 431 macros
 [0m16:07:01.685119 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '3ca61363-b7fa-455a-a3bf-92e3bb18fbb6', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x77eee7125580>]}
-[0m16:07:01.687148 [info ] [MainThread]: 
+[0m16:07:01.687148 [info ] [MainThread]:
 [0m16:07:01.687721 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m16:07:01.688262 [info ] [MainThread]: 
+[0m16:07:01.688262 [info ] [MainThread]:
 [0m16:07:01.689042 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m16:07:01.694561 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m16:07:01.730473 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m16:07:01.731152 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m16:07:01.731709 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m16:07:01.736183 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m16:07:01.737680 [debug] [ThreadPool]: On list_raw: Close
@@ -3386,7 +3386,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m16:07:01.756632 [debug] [ThreadPool]: SQL status: SELECT 10 in 0.003 seconds
 [0m16:07:01.759263 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m16:07:01.759920 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -3514,11 +3514,11 @@ with relation as (
 [0m16:07:01.930477 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer_targets
 )
 
@@ -3536,11 +3536,11 @@ FROM customer_targets
 [0m16:07:01.949011 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer"} */
 
   create view "raw"."raw"."stg_customer__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customers
 )
 
@@ -3548,7 +3548,7 @@ SELECT
     customer_id,
     customer_name,
     city
-   
+
 FROM customer
   );
 [0m16:07:01.945757 [debug] [Thread-4 (]: SQL status: BEGIN in 0.025 seconds
@@ -3560,11 +3560,11 @@ alter table "raw"."raw"."stg_customer_targets" rename to "stg_customer_targets__
 [0m16:07:01.952328 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_date: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_date"} */
 
   create view "raw"."raw"."stg_date__dbt_tmp"
-    
-    
+
+
   as (
     WITH dates AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.dates
 )
 
@@ -3572,18 +3572,18 @@ SELECT
     date,
    mmm_yy,
     week_no
-   
+
 FROM dates
   );
 [0m16:07:01.953029 [debug] [Thread-1 (]: SQL status: CREATE VIEW in 0.003 seconds
 [0m16:07:01.954127 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_order_fulfillment: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_fulfillment"} */
 
   create view "raw"."raw"."stg_order_fulfillment__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_fulfillment AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.order_fulfillment
 )
 
@@ -3592,7 +3592,7 @@ SELECT
     on_time,
     in_full,
     otif
-   
+
 FROM order_fulfillment
   );
 [0m16:07:01.954880 [debug] [Thread-2 (]: SQL status: ALTER TABLE in 0.001 seconds
@@ -3688,15 +3688,15 @@ drop view if exists "raw"."raw"."stg_date__dbt_backup" cascade
 [0m16:07:02.106997 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer' was properly closed.
 [0m16:07:02.107648 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_date' was properly closed.
 [0m16:07:02.108407 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_order_fulfillment' was properly closed.
-[0m16:07:02.109266 [info ] [MainThread]: 
+[0m16:07:02.109266 [info ] [MainThread]:
 [0m16:07:02.110093 [info ] [MainThread]: Finished running 4 view models in 0 hours 0 minutes and 0.42 seconds (0.42s).
 [0m16:07:02.111477 [debug] [MainThread]: Command end result
 [0m16:07:02.137320 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m16:07:02.139287 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m16:07:02.148317 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m16:07:02.149036 [info ] [MainThread]: 
+[0m16:07:02.149036 [info ] [MainThread]:
 [0m16:07:02.149901 [info ] [MainThread]: [32mCompleted successfully[0m
-[0m16:07:02.150703 [info ] [MainThread]: 
+[0m16:07:02.150703 [info ] [MainThread]:
 [0m16:07:02.152075 [info ] [MainThread]: Done. PASS=4 WARN=0 ERROR=0 SKIP=0 TOTAL=4
 [0m16:07:02.155005 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 1.5582829, "process_in_blocks": "0", "process_kernel_time": 0.310969, "process_mem_max_rss": "118576", "process_out_blocks": "2672", "process_user_time": 2.680635}
 [0m16:07:02.156026 [debug] [MainThread]: Command `dbt run` succeeded at 16:07:02.155772 after 1.56 seconds
@@ -3721,16 +3721,16 @@ drop view if exists "raw"."raw"."stg_date__dbt_backup" cascade
 [0m16:09:41.049056 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '274adb39-6205-40f0-be2b-9197a7295896', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x739752be2720>]}
 [0m16:09:41.049719 [info ] [MainThread]: Found 6 models, 431 macros
 [0m16:09:41.050508 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '274adb39-6205-40f0-be2b-9197a7295896', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x739752b04350>]}
-[0m16:09:41.053227 [info ] [MainThread]: 
+[0m16:09:41.053227 [info ] [MainThread]:
 [0m16:09:41.054119 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m16:09:41.055003 [info ] [MainThread]: 
+[0m16:09:41.055003 [info ] [MainThread]:
 [0m16:09:41.056130 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m16:09:41.063382 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m16:09:41.113561 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m16:09:41.115032 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m16:09:41.115926 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m16:09:41.122077 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.006 seconds
 [0m16:09:41.124512 [debug] [ThreadPool]: On list_raw: Close
@@ -3764,7 +3764,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m16:09:41.161134 [debug] [ThreadPool]: SQL status: SELECT 11 in 0.003 seconds
 [0m16:09:41.164118 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m16:09:41.165119 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -3897,11 +3897,11 @@ with relation as (
 [0m16:09:41.398853 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer"} */
 
   create view "raw"."raw"."stg_customer__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customers
 )
 
@@ -3909,17 +3909,17 @@ SELECT
     customer_id,
     customer_name,
     city
-   
+
 FROM customer
   );
 [0m16:09:41.396909 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer_targets
 )
 
@@ -3934,11 +3934,11 @@ FROM customer_targets
 [0m16:09:41.396177 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_order_fulfillment: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_fulfillment"} */
 
   create view "raw"."raw"."stg_order_fulfillment__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_fulfillment AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.order_fulfillment
 )
 
@@ -3947,18 +3947,18 @@ SELECT
     on_time,
     in_full,
     otif
-   
+
 FROM order_fulfillment
   );
 [0m16:09:41.401611 [debug] [Thread-1 (]: SQL status: CREATE VIEW in 0.002 seconds
 [0m16:09:41.402098 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_date: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_date"} */
 
   create view "raw"."raw"."stg_date__dbt_tmp"
-    
-    
+
+
   as (
     WITH dates AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.dates
 )
 
@@ -3966,7 +3966,7 @@ SELECT
     date,
    mmm_yy,
     week_no
-   
+
 FROM dates
   );
 [0m16:09:41.402618 [debug] [Thread-2 (]: SQL status: CREATE VIEW in 0.003 seconds
@@ -4071,11 +4071,11 @@ drop view if exists "raw"."raw"."stg_order_fulfillment__dbt_backup" cascade
 [0m16:09:41.617768 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_order_lines: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_lines"} */
 
   create view "raw"."raw"."stg_order_lines__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_lines AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.order_lines
 )
 
@@ -4085,8 +4085,8 @@ SELECT
     order_qty,
     agreed_delivery_date,
     actual_delivery_date,
-    delivery_qty 
-   
+    delivery_qty
+
 FROM order_lines
   );
 [0m16:09:41.620156 [debug] [Thread-1 (]: SQL status: CREATE VIEW in 0.002 seconds
@@ -4121,15 +4121,15 @@ drop view if exists "raw"."raw"."stg_order_lines__dbt_backup" cascade
 [0m16:09:41.654941 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_order_lines' was properly closed.
 [0m16:09:41.655419 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_date' was properly closed.
 [0m16:09:41.655878 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_order_fulfillment' was properly closed.
-[0m16:09:41.656464 [info ] [MainThread]: 
+[0m16:09:41.656464 [info ] [MainThread]:
 [0m16:09:41.657106 [info ] [MainThread]: Finished running 5 view models in 0 hours 0 minutes and 0.60 seconds (0.60s).
 [0m16:09:41.659724 [debug] [MainThread]: Command end result
 [0m16:09:41.683651 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m16:09:41.685575 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m16:09:41.691851 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m16:09:41.692866 [info ] [MainThread]: 
+[0m16:09:41.692866 [info ] [MainThread]:
 [0m16:09:41.693619 [info ] [MainThread]: [32mCompleted successfully[0m
-[0m16:09:41.694894 [info ] [MainThread]: 
+[0m16:09:41.694894 [info ] [MainThread]:
 [0m16:09:41.695657 [info ] [MainThread]: Done. PASS=5 WARN=0 ERROR=0 SKIP=0 TOTAL=5
 [0m16:09:41.696969 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 1.5327679, "process_in_blocks": "0", "process_kernel_time": 0.268685, "process_mem_max_rss": "119424", "process_out_blocks": "2704", "process_user_time": 2.540654}
 [0m16:09:41.697607 [debug] [MainThread]: Command `dbt run` succeeded at 16:09:41.697451 after 1.53 seconds
@@ -4154,16 +4154,16 @@ drop view if exists "raw"."raw"."stg_order_lines__dbt_backup" cascade
 [0m16:11:11.655949 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '88343537-fdb7-4d45-85d7-a5daf3bcf943', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7e213e32ff50>]}
 [0m16:11:11.656560 [info ] [MainThread]: Found 6 models, 431 macros
 [0m16:11:11.657139 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '88343537-fdb7-4d45-85d7-a5daf3bcf943', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7e213e7fb260>]}
-[0m16:11:11.659181 [info ] [MainThread]: 
+[0m16:11:11.659181 [info ] [MainThread]:
 [0m16:11:11.659755 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m16:11:11.660311 [info ] [MainThread]: 
+[0m16:11:11.660311 [info ] [MainThread]:
 [0m16:11:11.661095 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m16:11:11.665878 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m16:11:11.701734 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m16:11:11.702404 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m16:11:11.702952 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m16:11:11.707409 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m16:11:11.708838 [debug] [ThreadPool]: On list_raw: Close
@@ -4197,7 +4197,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m16:11:11.726391 [debug] [ThreadPool]: SQL status: SELECT 12 in 0.002 seconds
 [0m16:11:11.728454 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m16:11:11.729247 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -4325,19 +4325,19 @@ with relation as (
 [0m16:11:11.862665 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_order: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order"} */
 
   create view "raw"."raw"."stg_order__dbt_tmp"
-    
-    
+
+
   as (
     WITH orders AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.orders
 )
 
 SELECT
     order_id,
     order_id ,
-    order_placement_date 
-   
+    order_placement_date
+
 FROM orders
   );
 [0m16:11:11.864192 [debug] [Thread-4 (]: Postgres adapter: Postgres error: column "order_id" specified more than once
@@ -4356,11 +4356,11 @@ FROM orders
 [0m16:11:11.886648 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_date: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_date"} */
 
   create view "raw"."raw"."stg_date__dbt_tmp"
-    
-    
+
+
   as (
     WITH dates AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.dates
 )
 
@@ -4368,17 +4368,17 @@ SELECT
     date,
    mmm_yy,
     week_no
-   
+
 FROM dates
   );
 [0m16:11:11.882826 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer"} */
 
   create view "raw"."raw"."stg_customer__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customers
 )
 
@@ -4386,7 +4386,7 @@ SELECT
     customer_id,
     customer_name,
     city
-   
+
 FROM customer
   );
 [0m16:11:11.881366 [debug] [Thread-4 (]: Finished running node model.nexabrands_dbt.stg_order
@@ -4403,11 +4403,11 @@ FROM customer
 [0m16:11:11.941452 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer_targets
 )
 
@@ -4454,11 +4454,11 @@ alter table "raw"."raw"."stg_customer_targets__dbt_tmp" rename to "stg_customer_
 [0m16:11:12.012806 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_order_fulfillment: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_fulfillment"} */
 
   create view "raw"."raw"."stg_order_fulfillment__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_fulfillment AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.order_fulfillment
 )
 
@@ -4467,7 +4467,7 @@ SELECT
     on_time,
     in_full,
     otif
-   
+
 FROM order_fulfillment
   );
 [0m16:11:12.013267 [debug] [Thread-2 (]: SQL status: ALTER TABLE in 0.003 seconds
@@ -4547,11 +4547,11 @@ drop view if exists "raw"."raw"."stg_order_fulfillment__dbt_backup" cascade
 [0m16:11:12.160568 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_order_lines: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_lines"} */
 
   create view "raw"."raw"."stg_order_lines__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_lines AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.order_lines
 )
 
@@ -4561,8 +4561,8 @@ SELECT
     order_qty,
     agreed_delivery_date,
     actual_delivery_date,
-    delivery_qty 
-   
+    delivery_qty
+
 FROM order_lines
   );
 [0m16:11:12.162804 [debug] [Thread-1 (]: SQL status: CREATE VIEW in 0.001 seconds
@@ -4601,19 +4601,19 @@ drop view if exists "raw"."raw"."stg_order_lines__dbt_backup" cascade
 [0m16:11:12.207143 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_order_lines' was properly closed.
 [0m16:11:12.207626 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_date' was properly closed.
 [0m16:11:12.208100 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_order_fulfillment' was properly closed.
-[0m16:11:12.208717 [info ] [MainThread]: 
+[0m16:11:12.208717 [info ] [MainThread]:
 [0m16:11:12.209417 [info ] [MainThread]: Finished running 6 view models in 0 hours 0 minutes and 0.55 seconds (0.55s).
 [0m16:11:12.211152 [debug] [MainThread]: Command end result
 [0m16:11:12.235365 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m16:11:12.237222 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m16:11:12.243631 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m16:11:12.244183 [info ] [MainThread]: 
+[0m16:11:12.244183 [info ] [MainThread]:
 [0m16:11:12.244847 [info ] [MainThread]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
-[0m16:11:12.245439 [info ] [MainThread]: 
+[0m16:11:12.245439 [info ] [MainThread]:
 [0m16:11:12.246100 [error] [MainThread]:   Database Error in model stg_order (models/src/stg_order.sql)
   column "order_id" specified more than once
   compiled code at target/run/nexabrands_dbt/models/src/stg_order.sql
-[0m16:11:12.246706 [info ] [MainThread]: 
+[0m16:11:12.246706 [info ] [MainThread]:
 [0m16:11:12.247327 [info ] [MainThread]: Done. PASS=5 WARN=0 ERROR=1 SKIP=0 TOTAL=6
 [0m16:11:12.248573 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 1.501816, "process_in_blocks": "0", "process_kernel_time": 0.362497, "process_mem_max_rss": "118720", "process_out_blocks": "2728", "process_user_time": 2.525531}
 [0m16:11:12.249225 [debug] [MainThread]: Command `dbt run` failed at 16:11:12.249103 after 1.50 seconds
@@ -4638,16 +4638,16 @@ drop view if exists "raw"."raw"."stg_order_lines__dbt_backup" cascade
 [0m16:11:34.357714 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '5c387e8b-27bf-4755-bf9f-68d79b80a695', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7b023fdd33e0>]}
 [0m16:11:34.358388 [info ] [MainThread]: Found 6 models, 431 macros
 [0m16:11:34.359071 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '5c387e8b-27bf-4755-bf9f-68d79b80a695', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7b02401fa5d0>]}
-[0m16:11:34.361102 [info ] [MainThread]: 
+[0m16:11:34.361102 [info ] [MainThread]:
 [0m16:11:34.361778 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m16:11:34.362422 [info ] [MainThread]: 
+[0m16:11:34.362422 [info ] [MainThread]:
 [0m16:11:34.363224 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m16:11:34.368855 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m16:11:34.404231 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m16:11:34.404811 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m16:11:34.405339 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m16:11:34.409712 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m16:11:34.411153 [debug] [ThreadPool]: On list_raw: Close
@@ -4681,7 +4681,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m16:11:34.429415 [debug] [ThreadPool]: SQL status: SELECT 12 in 0.002 seconds
 [0m16:11:34.432074 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m16:11:34.432946 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -4810,11 +4810,11 @@ with relation as (
 [0m16:11:34.572850 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer"} */
 
   create view "raw"."raw"."stg_customer__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customers
 )
 
@@ -4822,26 +4822,26 @@ SELECT
     customer_id,
     customer_name,
     city
-   
+
 FROM customer
   );
 [0m16:11:34.570890 [debug] [Thread-4 (]: Using postgres connection "model.nexabrands_dbt.stg_order"
 [0m16:11:34.575456 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_order: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order"} */
 
   create view "raw"."raw"."stg_order__dbt_tmp"
-    
-    
+
+
   as (
     WITH orders AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.orders
 )
 
 SELECT
     order_id,
     customer_id ,
-    order_placement_date 
-   
+    order_placement_date
+
 FROM orders
   );
 [0m16:11:34.576470 [debug] [Thread-1 (]: SQL status: CREATE VIEW in 0.002 seconds
@@ -4859,11 +4859,11 @@ alter table "raw"."raw"."stg_order__dbt_tmp" rename to "stg_order"
 [0m16:11:34.594772 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_date: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_date"} */
 
   create view "raw"."raw"."stg_date__dbt_tmp"
-    
-    
+
+
   as (
     WITH dates AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.dates
 )
 
@@ -4871,18 +4871,18 @@ SELECT
     date,
    mmm_yy,
     week_no
-   
+
 FROM dates
   );
 [0m16:11:34.595311 [debug] [Thread-1 (]: SQL status: ALTER TABLE in 0.001 seconds
 [0m16:11:34.595922 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer_targets
 )
 
@@ -4993,11 +4993,11 @@ drop view if exists "raw"."raw"."stg_date__dbt_backup" cascade
 [0m16:11:34.781656 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_order_fulfillment: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_fulfillment"} */
 
   create view "raw"."raw"."stg_order_fulfillment__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_fulfillment AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.order_fulfillment
 )
 
@@ -5006,7 +5006,7 @@ SELECT
     on_time,
     in_full,
     otif
-   
+
 FROM order_fulfillment
   );
 [0m16:11:34.782612 [debug] [Thread-1 (]: SQL status: BEGIN in 0.005 seconds
@@ -5014,11 +5014,11 @@ FROM order_fulfillment
 [0m16:11:34.784827 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_order_lines: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_lines"} */
 
   create view "raw"."raw"."stg_order_lines__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_lines AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.order_lines
 )
 
@@ -5028,8 +5028,8 @@ SELECT
     order_qty,
     agreed_delivery_date,
     actual_delivery_date,
-    delivery_qty 
-   
+    delivery_qty
+
 FROM order_lines
   );
 [0m16:11:34.785667 [debug] [Thread-4 (]: SQL status: CREATE VIEW in 0.003 seconds
@@ -5090,15 +5090,15 @@ drop view if exists "raw"."raw"."stg_order_lines__dbt_backup" cascade
 [0m16:11:34.851509 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_order_lines' was properly closed.
 [0m16:11:34.852237 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_date' was properly closed.
 [0m16:11:34.852676 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_order_fulfillment' was properly closed.
-[0m16:11:34.854122 [info ] [MainThread]: 
+[0m16:11:34.854122 [info ] [MainThread]:
 [0m16:11:34.854847 [info ] [MainThread]: Finished running 6 view models in 0 hours 0 minutes and 0.49 seconds (0.49s).
 [0m16:11:34.856435 [debug] [MainThread]: Command end result
 [0m16:11:34.880772 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m16:11:34.882505 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m16:11:34.891360 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m16:11:34.892040 [info ] [MainThread]: 
+[0m16:11:34.892040 [info ] [MainThread]:
 [0m16:11:34.892811 [info ] [MainThread]: [32mCompleted successfully[0m
-[0m16:11:34.893516 [info ] [MainThread]: 
+[0m16:11:34.893516 [info ] [MainThread]:
 [0m16:11:34.894286 [info ] [MainThread]: Done. PASS=6 WARN=0 ERROR=0 SKIP=0 TOTAL=6
 [0m16:11:34.895863 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 1.3741381, "process_in_blocks": "0", "process_kernel_time": 0.305072, "process_mem_max_rss": "118292", "process_out_blocks": "2720", "process_user_time": 2.571323}
 [0m16:11:34.896734 [debug] [MainThread]: Command `dbt run` succeeded at 16:11:34.896580 after 1.38 seconds
@@ -5179,16 +5179,16 @@ drop view if exists "raw"."raw"."stg_order_lines__dbt_backup" cascade
 [0m19:23:17.301239 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '08634c20-4b4b-4171-9953-9be6c179fdeb', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7cd012127a40>]}
 [0m19:23:17.301998 [info ] [MainThread]: Found 7 models, 431 macros
 [0m19:23:17.302691 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '08634c20-4b4b-4171-9953-9be6c179fdeb', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7cd01252d8e0>]}
-[0m19:23:17.304854 [info ] [MainThread]: 
+[0m19:23:17.304854 [info ] [MainThread]:
 [0m19:23:17.305503 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m19:23:17.306055 [info ] [MainThread]: 
+[0m19:23:17.306055 [info ] [MainThread]:
 [0m19:23:17.306818 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m19:23:17.312059 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m19:23:17.348782 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m19:23:17.349607 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m19:23:17.350106 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m19:23:17.395502 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.045 seconds
 [0m19:23:17.398411 [debug] [ThreadPool]: On list_raw: Close
@@ -5222,7 +5222,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m19:23:17.441361 [debug] [ThreadPool]: SQL status: SELECT 13 in 0.023 seconds
 [0m19:23:17.443243 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m19:23:17.443912 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -5355,11 +5355,11 @@ with relation as (
 [0m19:23:17.715005 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_date: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_date"} */
 
   create view "raw"."raw"."stg_date__dbt_tmp"
-    
-    
+
+
   as (
     WITH dates AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.dates
 )
 
@@ -5367,35 +5367,35 @@ SELECT
     date,
    mmm_yy,
     week_no
-   
+
 FROM dates
   );
 [0m19:23:17.715903 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_order: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order"} */
 
   create view "raw"."raw"."stg_order__dbt_tmp"
-    
-    
+
+
   as (
     WITH orders AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.orders
 )
 
 SELECT
     order_id,
     customer_id ,
-    order_placement_date 
-   
+    order_placement_date
+
 FROM orders
   );
 [0m19:23:17.716767 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer_targets
 )
 
@@ -5410,11 +5410,11 @@ FROM customer_targets
 [0m19:23:17.718936 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer"} */
 
   create view "raw"."raw"."stg_customer__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customers
 )
 
@@ -5422,7 +5422,7 @@ SELECT
     customer_id,
     customer_name,
     city
-   
+
 FROM customer
   );
 [0m19:23:17.732231 [debug] [Thread-2 (]: SQL status: CREATE VIEW in 0.014 seconds
@@ -5539,11 +5539,11 @@ drop view if exists "raw"."raw"."stg_order__dbt_backup" cascade
 [0m19:23:17.906286 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_order_fulfillment: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_fulfillment"} */
 
   create view "raw"."raw"."stg_order_fulfillment__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_fulfillment AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.order_fulfillment
 )
 
@@ -5552,18 +5552,18 @@ SELECT
     on_time,
     in_full,
     otif
-   
+
 FROM order_fulfillment
   );
 [0m19:23:17.906869 [debug] [Thread-2 (]: Using postgres connection "model.nexabrands_dbt.stg_order_lines"
 [0m19:23:17.907743 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_order_lines: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_lines"} */
 
   create view "raw"."raw"."stg_order_lines__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_lines AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.order_lines
 )
 
@@ -5573,8 +5573,8 @@ SELECT
     order_qty,
     agreed_delivery_date,
     actual_delivery_date,
-    delivery_qty 
-   
+    delivery_qty
+
 FROM order_lines
   );
 [0m19:23:17.910922 [debug] [Thread-3 (]: SQL status: CREATE VIEW in 0.003 seconds
@@ -5636,8 +5636,8 @@ drop view if exists "raw"."raw"."stg_order_fulfillment__dbt_backup" cascade
 [0m19:23:17.983670 [debug] [Thread-1 (]: On model.nexabrands_dbt.int_order_delivery_metrics: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.int_order_delivery_metrics"} */
 
   create view "raw"."raw"."int_order_delivery_metrics__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_lines AS (
     SELECT * FROM "raw"."raw"."stg_order_lines"
@@ -5652,18 +5652,18 @@ delivery_metrics AS (
         agreed_delivery_date,
         actual_delivery_date,
         -- Calculating  delivery metrics
-        CASE 
-            WHEN actual_delivery_date <= agreed_delivery_date THEN 1 
-            ELSE 0 
+        CASE
+            WHEN actual_delivery_date <= agreed_delivery_date THEN 1
+            ELSE 0
         END as is_on_time,
-        CASE 
-            WHEN delivery_qty >= order_qty THEN 1 
-            ELSE 0 
+        CASE
+            WHEN delivery_qty >= order_qty THEN 1
+            ELSE 0
         END as is_in_full,
-        CASE 
-            WHEN actual_delivery_date <= agreed_delivery_date 
-            AND delivery_qty >= order_qty THEN 1 
-            ELSE 0 
+        CASE
+            WHEN actual_delivery_date <= agreed_delivery_date
+            AND delivery_qty >= order_qty THEN 1
+            ELSE 0
         END as is_otif
     FROM order_lines
 )
@@ -5702,15 +5702,15 @@ drop view if exists "raw"."raw"."int_order_delivery_metrics__dbt_backup" cascade
 [0m19:23:18.027069 [debug] [MainThread]: Connection 'model.nexabrands_dbt.int_order_delivery_metrics' was properly closed.
 [0m19:23:18.027731 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_order_fulfillment' was properly closed.
 [0m19:23:18.028456 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_order' was properly closed.
-[0m19:23:18.029053 [info ] [MainThread]: 
+[0m19:23:18.029053 [info ] [MainThread]:
 [0m19:23:18.029666 [info ] [MainThread]: Finished running 7 view models in 0 hours 0 minutes and 0.72 seconds (0.72s).
 [0m19:23:18.031374 [debug] [MainThread]: Command end result
 [0m19:23:18.053384 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m19:23:18.055119 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m19:23:18.061249 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m19:23:18.061759 [info ] [MainThread]: 
+[0m19:23:18.061759 [info ] [MainThread]:
 [0m19:23:18.062395 [info ] [MainThread]: [32mCompleted successfully[0m
-[0m19:23:18.062932 [info ] [MainThread]: 
+[0m19:23:18.062932 [info ] [MainThread]:
 [0m19:23:18.063518 [info ] [MainThread]: Done. PASS=7 WARN=0 ERROR=0 SKIP=0 TOTAL=7
 [0m19:23:18.064702 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 1.6338075, "process_in_blocks": "3168", "process_kernel_time": 0.339147, "process_mem_max_rss": "120008", "process_out_blocks": "2768", "process_user_time": 2.815715}
 [0m19:23:18.065320 [debug] [MainThread]: Command `dbt run` succeeded at 19:23:18.065185 after 1.63 seconds
@@ -5736,16 +5736,16 @@ drop view if exists "raw"."raw"."int_order_delivery_metrics__dbt_backup" cascade
 [0m19:23:45.206346 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': 'ac7901ab-1bd2-4697-8495-d0ab1dd1f75a', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x772b69f2be60>]}
 [0m19:23:45.206980 [info ] [MainThread]: Found 7 models, 431 macros
 [0m19:23:45.207557 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': 'ac7901ab-1bd2-4697-8495-d0ab1dd1f75a', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x772b6a3f8d40>]}
-[0m19:23:45.209640 [info ] [MainThread]: 
+[0m19:23:45.209640 [info ] [MainThread]:
 [0m19:23:45.210210 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m19:23:45.210741 [info ] [MainThread]: 
+[0m19:23:45.210741 [info ] [MainThread]:
 [0m19:23:45.211493 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m19:23:45.217202 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m19:23:45.252110 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m19:23:45.252720 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m19:23:45.253375 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m19:23:45.257710 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m19:23:45.259113 [debug] [ThreadPool]: On list_raw: Close
@@ -5779,7 +5779,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m19:23:45.277383 [debug] [ThreadPool]: SQL status: SELECT 14 in 0.002 seconds
 [0m19:23:45.279249 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m19:23:45.280535 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -5907,11 +5907,11 @@ with relation as (
 [0m19:23:45.450091 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer"} */
 
   create view "raw"."raw"."stg_customer__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customers
 )
 
@@ -5919,7 +5919,7 @@ SELECT
     customer_id,
     customer_name,
     city
-   
+
 FROM customer
   );
 [0m19:23:45.449315 [debug] [Thread-4 (]: SQL status: BEGIN in 0.007 seconds
@@ -5927,19 +5927,19 @@ FROM customer
 [0m19:23:45.454024 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_order: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order"} */
 
   create view "raw"."raw"."stg_order__dbt_tmp"
-    
-    
+
+
   as (
     WITH orders AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.orders
 )
 
 SELECT
     order_id,
     customer_id ,
-    order_placement_date 
-   
+    order_placement_date
+
 FROM orders
   );
 [0m19:23:45.455089 [debug] [Thread-2 (]: SQL status: BEGIN in 0.015 seconds
@@ -5951,11 +5951,11 @@ FROM orders
 [0m19:23:45.458304 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer_targets
 )
 
@@ -5975,11 +5975,11 @@ alter table "raw"."raw"."stg_order" rename to "stg_order__dbt_backup"
 [0m19:23:45.469854 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_date: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_date"} */
 
   create view "raw"."raw"."stg_date__dbt_tmp"
-    
-    
+
+
   as (
     WITH dates AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.dates
 )
 
@@ -5987,7 +5987,7 @@ SELECT
     date,
    mmm_yy,
     week_no
-   
+
 FROM dates
   );
 [0m19:23:45.472574 [debug] [Thread-2 (]: SQL status: CREATE VIEW in 0.002 seconds
@@ -6095,11 +6095,11 @@ drop view if exists "raw"."raw"."stg_date__dbt_backup" cascade
 [0m19:23:45.634492 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_order_fulfillment: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_fulfillment"} */
 
   create view "raw"."raw"."stg_order_fulfillment__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_fulfillment AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.order_fulfillment
 )
 
@@ -6108,7 +6108,7 @@ SELECT
     on_time,
     in_full,
     otif
-   
+
 FROM order_fulfillment
   );
 [0m19:23:45.635311 [debug] [Thread-3 (]: SQL status: BEGIN in 0.010 seconds
@@ -6117,11 +6117,11 @@ FROM order_fulfillment
 [0m19:23:45.639705 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_order_lines: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_lines"} */
 
   create view "raw"."raw"."stg_order_lines__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_lines AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.order_lines
 )
 
@@ -6131,8 +6131,8 @@ SELECT
     order_qty,
     agreed_delivery_date,
     actual_delivery_date,
-    delivery_qty 
-   
+    delivery_qty
+
 FROM order_lines
   );
 [0m19:23:45.643183 [debug] [Thread-2 (]: Using postgres connection "model.nexabrands_dbt.stg_order_fulfillment"
@@ -6193,8 +6193,8 @@ drop view if exists "raw"."raw"."stg_order_lines__dbt_backup" cascade
 [0m19:23:45.706671 [debug] [Thread-4 (]: On model.nexabrands_dbt.order_delivery_metrics: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.order_delivery_metrics"} */
 
   create view "raw"."raw"."order_delivery_metrics__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_lines AS (
     SELECT * FROM "raw"."raw"."stg_order_lines"
@@ -6209,18 +6209,18 @@ delivery_metrics AS (
         agreed_delivery_date,
         actual_delivery_date,
         -- Calculating  delivery metrics
-        CASE 
-            WHEN actual_delivery_date <= agreed_delivery_date THEN 1 
-            ELSE 0 
+        CASE
+            WHEN actual_delivery_date <= agreed_delivery_date THEN 1
+            ELSE 0
         END as is_on_time,
-        CASE 
-            WHEN delivery_qty >= order_qty THEN 1 
-            ELSE 0 
+        CASE
+            WHEN delivery_qty >= order_qty THEN 1
+            ELSE 0
         END as is_in_full,
-        CASE 
-            WHEN actual_delivery_date <= agreed_delivery_date 
-            AND delivery_qty >= order_qty THEN 1 
-            ELSE 0 
+        CASE
+            WHEN actual_delivery_date <= agreed_delivery_date
+            AND delivery_qty >= order_qty THEN 1
+            ELSE 0
         END as is_otif
     FROM order_lines
 )
@@ -6259,15 +6259,15 @@ drop view if exists "raw"."raw"."order_delivery_metrics__dbt_backup" cascade
 [0m19:23:45.742902 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_customer' was properly closed.
 [0m19:23:45.743466 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_order_lines' was properly closed.
 [0m19:23:45.744177 [debug] [MainThread]: Connection 'model.nexabrands_dbt.order_delivery_metrics' was properly closed.
-[0m19:23:45.744780 [info ] [MainThread]: 
+[0m19:23:45.744780 [info ] [MainThread]:
 [0m19:23:45.745729 [info ] [MainThread]: Finished running 7 view models in 0 hours 0 minutes and 0.53 seconds (0.53s).
 [0m19:23:45.747921 [debug] [MainThread]: Command end result
 [0m19:23:45.771323 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m19:23:45.773129 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m19:23:45.780063 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m19:23:45.780612 [info ] [MainThread]: 
+[0m19:23:45.780612 [info ] [MainThread]:
 [0m19:23:45.781282 [info ] [MainThread]: [32mCompleted successfully[0m
-[0m19:23:45.781856 [info ] [MainThread]: 
+[0m19:23:45.781856 [info ] [MainThread]:
 [0m19:23:45.782458 [info ] [MainThread]: Done. PASS=7 WARN=0 ERROR=0 SKIP=0 TOTAL=7
 [0m19:23:45.783668 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 1.4538686, "process_in_blocks": "0", "process_kernel_time": 0.290872, "process_mem_max_rss": "118668", "process_out_blocks": "2776", "process_user_time": 2.566051}
 [0m19:23:45.784289 [debug] [MainThread]: Command `dbt run` succeeded at 19:23:45.784172 after 1.45 seconds
@@ -6314,16 +6314,16 @@ Compilation Error
 [0m19:30:44.183419 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '486b15b6-8ecf-45a3-a028-a94537b1784c', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7ee7f6908a70>]}
 [0m19:30:44.184030 [info ] [MainThread]: Found 8 models, 431 macros
 [0m19:30:44.184607 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '486b15b6-8ecf-45a3-a028-a94537b1784c', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7ee7f6d9ca40>]}
-[0m19:30:44.186268 [info ] [MainThread]: 
+[0m19:30:44.186268 [info ] [MainThread]:
 [0m19:30:44.186834 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m19:30:44.187364 [info ] [MainThread]: 
+[0m19:30:44.187364 [info ] [MainThread]:
 [0m19:30:44.188113 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m19:30:44.189123 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m19:30:44.223902 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m19:30:44.224458 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m19:30:44.224962 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m19:30:44.229344 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m19:30:44.230720 [debug] [ThreadPool]: On list_raw: Close
@@ -6357,7 +6357,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m19:30:44.250374 [debug] [ThreadPool]: SQL status: SELECT 14 in 0.002 seconds
 [0m19:30:44.251907 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m19:30:44.252687 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -6455,19 +6455,19 @@ with relation as (
 [0m19:30:44.352003 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_orders: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_orders"} */
 
   create view "raw"."raw"."stg_orders__dbt_tmp"
-    
-    
+
+
   as (
     WITH orders AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.orders
 )
 
 SELECT
     order_id,
     customer_id ,
-    order_placement_date 
-   
+    order_placement_date
+
 FROM orders
   );
 [0m19:30:44.353650 [debug] [Thread-1 (]: SQL status: CREATE VIEW in 0.001 seconds
@@ -6499,15 +6499,15 @@ drop view if exists "raw"."raw"."stg_orders__dbt_backup" cascade
 [0m19:30:44.421656 [debug] [MainThread]: On master: Close
 [0m19:30:44.422351 [debug] [MainThread]: Connection 'master' was properly closed.
 [0m19:30:44.423071 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_orders' was properly closed.
-[0m19:30:44.423819 [info ] [MainThread]: 
+[0m19:30:44.423819 [info ] [MainThread]:
 [0m19:30:44.424643 [info ] [MainThread]: Finished running 1 view model in 0 hours 0 minutes and 0.24 seconds (0.24s).
 [0m19:30:44.425651 [debug] [MainThread]: Command end result
 [0m19:30:44.448615 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m19:30:44.450224 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m19:30:44.456052 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m19:30:44.456546 [info ] [MainThread]: 
+[0m19:30:44.456546 [info ] [MainThread]:
 [0m19:30:44.457264 [info ] [MainThread]: [32mCompleted successfully[0m
-[0m19:30:44.457836 [info ] [MainThread]: 
+[0m19:30:44.457836 [info ] [MainThread]:
 [0m19:30:44.458418 [info ] [MainThread]: Done. PASS=1 WARN=0 ERROR=0 SKIP=0 TOTAL=1
 [0m19:30:44.459580 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 1.1560383, "process_in_blocks": "0", "process_kernel_time": 0.287607, "process_mem_max_rss": "116356", "process_out_blocks": "2632", "process_user_time": 2.276889}
 [0m19:30:44.460201 [debug] [MainThread]: Command `dbt run` succeeded at 19:30:44.460089 after 1.16 seconds
@@ -6532,16 +6532,16 @@ drop view if exists "raw"."raw"."stg_orders__dbt_backup" cascade
 [0m19:30:51.924635 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '7387ac02-f24c-480c-9ee1-9d7dccc460f1', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x71b8ce3a9970>]}
 [0m19:30:51.925372 [info ] [MainThread]: Found 8 models, 431 macros
 [0m19:30:51.925971 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '7387ac02-f24c-480c-9ee1-9d7dccc460f1', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x71b8cf3f3dd0>]}
-[0m19:30:51.928105 [info ] [MainThread]: 
+[0m19:30:51.928105 [info ] [MainThread]:
 [0m19:30:51.928679 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m19:30:51.929230 [info ] [MainThread]: 
+[0m19:30:51.929230 [info ] [MainThread]:
 [0m19:30:51.929995 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m19:30:51.935252 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m19:30:51.971123 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m19:30:51.971779 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m19:30:51.972333 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m19:30:51.976871 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.005 seconds
 [0m19:30:51.978350 [debug] [ThreadPool]: On list_raw: Close
@@ -6575,7 +6575,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m19:30:52.001992 [debug] [ThreadPool]: SQL status: SELECT 15 in 0.003 seconds
 [0m19:30:52.004508 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m19:30:52.010885 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -6703,11 +6703,11 @@ with relation as (
 [0m19:30:52.180121 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer"} */
 
   create view "raw"."raw"."stg_customer__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customers
 )
 
@@ -6715,7 +6715,7 @@ SELECT
     customer_id,
     customer_name,
     city
-   
+
 FROM customer
   );
 [0m19:30:52.182876 [debug] [Thread-1 (]: SQL status: CREATE VIEW in 0.002 seconds
@@ -6732,11 +6732,11 @@ alter table "raw"."raw"."stg_customer" rename to "stg_customer__dbt_backup"
 [0m19:30:52.200412 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_date: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_date"} */
 
   create view "raw"."raw"."stg_date__dbt_tmp"
-    
-    
+
+
   as (
     WITH dates AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.dates
 )
 
@@ -6744,17 +6744,17 @@ SELECT
     date,
    mmm_yy,
     week_no
-   
+
 FROM dates
   );
 [0m19:30:52.201001 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer_targets
 )
 
@@ -6769,11 +6769,11 @@ FROM customer_targets
 [0m19:30:52.204913 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_order_fulfillment: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_fulfillment"} */
 
   create view "raw"."raw"."stg_order_fulfillment__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_fulfillment AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.order_fulfillment
 )
 
@@ -6782,7 +6782,7 @@ SELECT
     on_time,
     in_full,
     otif
-   
+
 FROM order_fulfillment
   );
 [0m19:30:52.206032 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer"} */
@@ -6891,11 +6891,11 @@ drop view if exists "raw"."raw"."stg_order_fulfillment__dbt_backup" cascade
 [0m19:30:52.362870 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_order_lines: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_lines"} */
 
   create view "raw"."raw"."stg_order_lines__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_lines AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.order_lines
 )
 
@@ -6905,8 +6905,8 @@ SELECT
     order_qty,
     agreed_delivery_date,
     actual_delivery_date,
-    delivery_qty 
-   
+    delivery_qty
+
 FROM order_lines
   );
 [0m19:30:52.363982 [debug] [Thread-2 (]: Opening a new connection, currently in state closed
@@ -6920,19 +6920,19 @@ alter table "raw"."raw"."stg_order_lines" rename to "stg_order_lines__dbt_backup
 [0m19:30:52.375332 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_orders: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_orders"} */
 
   create view "raw"."raw"."stg_orders__dbt_tmp"
-    
-    
+
+
   as (
     WITH orders AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.orders
 )
 
 SELECT
     order_id,
     customer_id ,
-    order_placement_date 
-   
+    order_placement_date
+
 FROM orders
   );
 [0m19:30:52.378680 [debug] [Thread-1 (]: Using postgres connection "model.nexabrands_dbt.stg_order_lines"
@@ -6989,8 +6989,8 @@ drop view if exists "raw"."raw"."stg_orders__dbt_backup" cascade
 [0m19:30:52.443766 [debug] [Thread-3 (]: On model.nexabrands_dbt.order_delivery_metrics: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.order_delivery_metrics"} */
 
   create view "raw"."raw"."order_delivery_metrics__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_lines AS (
     SELECT * FROM "raw"."raw"."stg_order_lines"
@@ -7005,18 +7005,18 @@ delivery_metrics AS (
         agreed_delivery_date,
         actual_delivery_date,
         -- Calculating  delivery metrics
-        CASE 
-            WHEN actual_delivery_date <= agreed_delivery_date THEN 1 
-            ELSE 0 
+        CASE
+            WHEN actual_delivery_date <= agreed_delivery_date THEN 1
+            ELSE 0
         END as is_on_time,
-        CASE 
-            WHEN delivery_qty >= order_qty THEN 1 
-            ELSE 0 
+        CASE
+            WHEN delivery_qty >= order_qty THEN 1
+            ELSE 0
         END as is_in_full,
-        CASE 
-            WHEN actual_delivery_date <= agreed_delivery_date 
-            AND delivery_qty >= order_qty THEN 1 
-            ELSE 0 
+        CASE
+            WHEN actual_delivery_date <= agreed_delivery_date
+            AND delivery_qty >= order_qty THEN 1
+            ELSE 0
         END as is_otif
     FROM order_lines
 )
@@ -7056,8 +7056,8 @@ drop view if exists "raw"."raw"."order_delivery_metrics__dbt_backup" cascade
 [0m19:30:52.486330 [debug] [Thread-1 (]: On model.nexabrands_dbt.customer_performance: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.customer_performance"} */
 
   create view "raw"."raw"."customer_performance__dbt_tmp"
-    
-    
+
+
   as (
     WITH delivery_metrics AS (
     SELECT * FROM "raw"."raw"."order_delivery_metrics"
@@ -7113,15 +7113,15 @@ drop view if exists "raw"."raw"."customer_performance__dbt_backup" cascade
 [0m19:30:52.529397 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_orders' was properly closed.
 [0m19:30:52.530163 [debug] [MainThread]: Connection 'model.nexabrands_dbt.order_delivery_metrics' was properly closed.
 [0m19:30:52.530907 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_order_fulfillment' was properly closed.
-[0m19:30:52.531786 [info ] [MainThread]: 
+[0m19:30:52.531786 [info ] [MainThread]:
 [0m19:30:52.532620 [info ] [MainThread]: Finished running 8 view models in 0 hours 0 minutes and 0.60 seconds (0.60s).
 [0m19:30:52.535684 [debug] [MainThread]: Command end result
 [0m19:30:52.577777 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m19:30:52.580672 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m19:30:52.588937 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m19:30:52.589482 [info ] [MainThread]: 
+[0m19:30:52.589482 [info ] [MainThread]:
 [0m19:30:52.590140 [info ] [MainThread]: [32mCompleted successfully[0m
-[0m19:30:52.590674 [info ] [MainThread]: 
+[0m19:30:52.590674 [info ] [MainThread]:
 [0m19:30:52.591259 [info ] [MainThread]: Done. PASS=8 WARN=0 ERROR=0 SKIP=0 TOTAL=8
 [0m19:30:52.592458 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 1.501737, "process_in_blocks": "0", "process_kernel_time": 0.318611, "process_mem_max_rss": "112500", "process_out_blocks": "1968", "process_user_time": 2.513488}
 [0m19:30:52.593062 [debug] [MainThread]: Command `dbt run` succeeded at 19:30:52.592928 after 1.50 seconds
@@ -7158,16 +7158,16 @@ drop view if exists "raw"."raw"."customer_performance__dbt_backup" cascade
 [0m20:14:16.210395 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '37280350-7f72-44f4-a73c-d2f64d99b5c4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x79256b799280>]}
 [0m20:14:16.211013 [info ] [MainThread]: Found 9 models, 431 macros
 [0m20:14:16.211590 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '37280350-7f72-44f4-a73c-d2f64d99b5c4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x79256b79d520>]}
-[0m20:14:16.213719 [info ] [MainThread]: 
+[0m20:14:16.213719 [info ] [MainThread]:
 [0m20:14:16.214291 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m20:14:16.214833 [info ] [MainThread]: 
+[0m20:14:16.214833 [info ] [MainThread]:
 [0m20:14:16.215596 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m20:14:16.220801 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m20:14:16.254528 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m20:14:16.255070 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m20:14:16.255566 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m20:14:16.259821 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m20:14:16.261260 [debug] [ThreadPool]: On list_raw: Close
@@ -7201,7 +7201,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m20:14:16.283098 [debug] [ThreadPool]: SQL status: SELECT 16 in 0.003 seconds
 [0m20:14:16.285997 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m20:14:16.286625 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -7336,12 +7336,12 @@ with relation as (
 [0m20:14:16.457690 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     -- models/staging/stg_customer_targets.sql
 WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer_targets
 )
 
@@ -7357,8 +7357,8 @@ FROM customer_targets
 [0m20:14:16.447788 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_order_lines: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_lines"} */
 
   create view "raw"."raw"."stg_order_lines__dbt_tmp"
-    
-    
+
+
   as (
     -- models/staging/stg_order_lines.sql
 WITH order_lines AS (
@@ -7371,21 +7371,21 @@ SELECT
     order_qty,
     agreed_delivery_date,
     actual_delivery_date,
-    delivery_qty 
-   
+    delivery_qty
+
 FROM order_lines
   );
 [0m20:14:16.460309 [debug] [Thread-3 (]: Using postgres connection "model.nexabrands_dbt.stg_customers"
 [0m20:14:16.462216 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_customers: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customers"} */
 
   create view "raw"."raw"."stg_customers__dbt_tmp"
-    
-    
+
+
   as (
     -- models/staging/stg_customers.sql
 WITH customers   AS (
     SELECT *
-     FROM   raw.raw.customers    
+     FROM   raw.raw.customers
 )
 
 SELECT
@@ -7430,21 +7430,21 @@ alter table "raw"."raw"."stg_order_lines__dbt_tmp" rename to "stg_order_lines"
 [0m20:14:16.531552 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_orders: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_orders"} */
 
   create view "raw"."raw"."stg_orders__dbt_tmp"
-    
-    
+
+
   as (
     -- models/staging/stg_orders.sql
 WITH orders AS (
-    SELECT * 
-    
+    SELECT *
+
     FROM raw.raw.orders
 )
 
 SELECT
     order_id,
     customer_id ,
-    order_placement_date 
-   
+    order_placement_date
+
 FROM orders
   );
 [0m20:14:16.532112 [debug] [Thread-4 (]: SQL status: ALTER TABLE in 0.001 seconds
@@ -7530,12 +7530,12 @@ drop view if exists "raw"."raw"."stg_orders__dbt_backup" cascade
 [0m20:14:16.637344 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_products: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_products"} */
 
   create view "raw"."raw"."stg_products__dbt_tmp"
-    
-    
+
+
   as (
     -- models/staging/stg_products.sql
 WITH products AS (
-    SELECT * 
+    SELECT *
     FROM   raw.raw.products
 )
 
@@ -7554,8 +7554,8 @@ alter table "raw"."raw"."stg_products__dbt_tmp" rename to "stg_products"
 [0m20:14:16.647686 [debug] [Thread-2 (]: On model.nexabrands_dbt.order_delivery_metrics: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.order_delivery_metrics"} */
 
   create view "raw"."raw"."order_delivery_metrics__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_lines AS (
     SELECT * FROM "raw"."raw"."stg_order_lines"
@@ -7570,18 +7570,18 @@ delivery_metrics AS (
         agreed_delivery_date,
         actual_delivery_date,
         -- Calculating  delivery metrics
-        CASE 
-            WHEN actual_delivery_date <= agreed_delivery_date THEN 1 
-            ELSE 0 
+        CASE
+            WHEN actual_delivery_date <= agreed_delivery_date THEN 1
+            ELSE 0
         END as is_on_time,
-        CASE 
-            WHEN delivery_qty >= order_qty THEN 1 
-            ELSE 0 
+        CASE
+            WHEN delivery_qty >= order_qty THEN 1
+            ELSE 0
         END as is_in_full,
-        CASE 
-            WHEN actual_delivery_date <= agreed_delivery_date 
-            AND delivery_qty >= order_qty THEN 1 
-            ELSE 0 
+        CASE
+            WHEN actual_delivery_date <= agreed_delivery_date
+            AND delivery_qty >= order_qty THEN 1
+            ELSE 0
         END as is_otif
     FROM order_lines
 )
@@ -7647,8 +7647,8 @@ drop view if exists "raw"."raw"."order_delivery_metrics__dbt_backup" cascade
 [0m20:14:16.718979 [debug] [Thread-4 (]: On model.nexabrands_dbt.customer_performance: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.customer_performance"} */
 
   create view "raw"."raw"."customer_performance__dbt_tmp"
-    
-    
+
+
   as (
     WITH delivery_metrics AS (
     SELECT * FROM "raw"."raw"."order_delivery_metrics"
@@ -7675,8 +7675,8 @@ SELECT * FROM customer_metrics
 [0m20:14:16.719845 [debug] [Thread-1 (]: On model.nexabrands_dbt.fct_order_fulfillment_lines: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.fct_order_fulfillment_lines"} */
 
   create view "raw"."raw"."fct_order_fulfillment_lines__dbt_tmp"
-    
-    
+
+
   as (
     -- models/marts/fct_order_fulfillment_lines.sql
 WITH order_metrics AS (
@@ -7771,24 +7771,24 @@ drop view if exists "raw"."raw"."customer_performance__dbt_backup" cascade
 [0m20:14:16.818156 [debug] [MainThread]: Connection 'model.nexabrands_dbt.fct_order_fulfillment_lines' was properly closed.
 [0m20:14:16.818876 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_products' was properly closed.
 [0m20:14:16.819336 [debug] [MainThread]: Connection 'model.nexabrands_dbt.customer_performance' was properly closed.
-[0m20:14:16.820233 [info ] [MainThread]: 
+[0m20:14:16.820233 [info ] [MainThread]:
 [0m20:14:16.821019 [info ] [MainThread]: Finished running 9 view models in 0 hours 0 minutes and 0.60 seconds (0.60s).
 [0m20:14:16.823029 [debug] [MainThread]: Command end result
 [0m20:14:16.845476 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m20:14:16.847153 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m20:14:16.854369 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m20:14:16.855080 [info ] [MainThread]: 
+[0m20:14:16.855080 [info ] [MainThread]:
 [0m20:14:16.855877 [info ] [MainThread]: [31mCompleted with 2 errors, 0 partial successes, and 0 warnings:[0m
-[0m20:14:16.856659 [info ] [MainThread]: 
+[0m20:14:16.856659 [info ] [MainThread]:
 [0m20:14:16.857515 [error] [MainThread]:   Compilation Error in model dim_date (models/marts/dim_date.sql)
   'dbt_utils' is undefined. This can happen when calling a macro that does not exist. Check for typos and/or install package dependencies with "dbt deps".
-[0m20:14:16.858142 [info ] [MainThread]: 
+[0m20:14:16.858142 [info ] [MainThread]:
 [0m20:14:16.858787 [error] [MainThread]:   Database Error in model fct_order_fulfillment_lines (models/marts/fct_order_fulfillment_lines.sql)
   column ct.ontime_target_percentage does not exist
   LINE 37:     ct.ontime_target_percentage,
                ^
   compiled code at target/run/nexabrands_dbt/models/marts/fct_order_fulfillment_lines.sql
-[0m20:14:16.859314 [info ] [MainThread]: 
+[0m20:14:16.859314 [info ] [MainThread]:
 [0m20:14:16.859886 [info ] [MainThread]: Done. PASS=7 WARN=0 ERROR=2 SKIP=0 TOTAL=9
 [0m20:14:16.861062 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 1.506981, "process_in_blocks": "624", "process_kernel_time": 0.315684, "process_mem_max_rss": "119028", "process_out_blocks": "2880", "process_user_time": 2.638798}
 [0m20:14:16.861687 [debug] [MainThread]: Command `dbt run` failed at 20:14:16.861552 after 1.51 seconds
@@ -7813,16 +7813,16 @@ drop view if exists "raw"."raw"."customer_performance__dbt_backup" cascade
 [0m20:14:46.060942 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '9339f557-76c5-4b3b-b681-88186c928f93', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x72e86a548d40>]}
 [0m20:14:46.061573 [info ] [MainThread]: Found 9 models, 431 macros
 [0m20:14:46.062146 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '9339f557-76c5-4b3b-b681-88186c928f93', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x72e86bd76240>]}
-[0m20:14:46.064213 [info ] [MainThread]: 
+[0m20:14:46.064213 [info ] [MainThread]:
 [0m20:14:46.064771 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m20:14:46.065340 [info ] [MainThread]: 
+[0m20:14:46.065340 [info ] [MainThread]:
 [0m20:14:46.066072 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m20:14:46.071333 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m20:14:46.106435 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m20:14:46.106956 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m20:14:46.107431 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m20:14:46.111620 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m20:14:46.112976 [debug] [ThreadPool]: On list_raw: Close
@@ -7856,7 +7856,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m20:14:46.129849 [debug] [ThreadPool]: SQL status: SELECT 18 in 0.002 seconds
 [0m20:14:46.131660 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m20:14:46.132479 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -7991,13 +7991,13 @@ with relation as (
 [0m20:14:46.290654 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_customers: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customers"} */
 
   create view "raw"."raw"."stg_customers__dbt_tmp"
-    
-    
+
+
   as (
     -- models/staging/stg_customers.sql
 WITH customers   AS (
     SELECT *
-     FROM   raw.raw.customers    
+     FROM   raw.raw.customers
 )
 
 SELECT
@@ -8010,8 +8010,8 @@ FROM customers
 [0m20:14:46.293847 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_order_lines: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_lines"} */
 
   create view "raw"."raw"."stg_order_lines__dbt_tmp"
-    
-    
+
+
   as (
     -- models/staging/stg_order_lines.sql
 WITH order_lines AS (
@@ -8024,8 +8024,8 @@ SELECT
     order_qty,
     agreed_delivery_date,
     actual_delivery_date,
-    delivery_qty 
-   
+    delivery_qty
+
 FROM order_lines
   );
 [0m20:14:46.292824 [debug] [Thread-1 (]: Began executing node model.nexabrands_dbt.stg_orders
@@ -8043,12 +8043,12 @@ alter table "raw"."raw"."stg_customers" rename to "stg_customers__dbt_backup"
 [0m20:14:46.316973 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     -- models/staging/stg_customer_targets.sql
 WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer_targets
 )
 
@@ -8080,21 +8080,21 @@ alter table "raw"."raw"."stg_order_lines__dbt_tmp" rename to "stg_order_lines"
 [0m20:14:46.338677 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_orders: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_orders"} */
 
   create view "raw"."raw"."stg_orders__dbt_tmp"
-    
-    
+
+
   as (
     -- models/staging/stg_orders.sql
 WITH orders AS (
-    SELECT * 
-    
+    SELECT *
+
     FROM raw.raw.orders
 )
 
 SELECT
     order_id,
     customer_id ,
-    order_placement_date 
-   
+    order_placement_date
+
 FROM orders
   );
 [0m20:14:46.360959 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_customers: COMMIT
@@ -8189,12 +8189,12 @@ drop view if exists "raw"."raw"."stg_customer_targets__dbt_backup" cascade
 [0m20:14:46.479039 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_products: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_products"} */
 
   create view "raw"."raw"."stg_products__dbt_tmp"
-    
-    
+
+
   as (
     -- models/staging/stg_products.sql
 WITH products AS (
-    SELECT * 
+    SELECT *
     FROM   raw.raw.products
 )
 
@@ -8209,8 +8209,8 @@ FROM products
 [0m20:14:46.483154 [debug] [Thread-3 (]: On model.nexabrands_dbt.order_delivery_metrics: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.order_delivery_metrics"} */
 
   create view "raw"."raw"."order_delivery_metrics__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_lines AS (
     SELECT * FROM "raw"."raw"."stg_order_lines"
@@ -8225,18 +8225,18 @@ delivery_metrics AS (
         agreed_delivery_date,
         actual_delivery_date,
         -- Calculating  delivery metrics
-        CASE 
-            WHEN actual_delivery_date <= agreed_delivery_date THEN 1 
-            ELSE 0 
+        CASE
+            WHEN actual_delivery_date <= agreed_delivery_date THEN 1
+            ELSE 0
         END as is_on_time,
-        CASE 
-            WHEN delivery_qty >= order_qty THEN 1 
-            ELSE 0 
+        CASE
+            WHEN delivery_qty >= order_qty THEN 1
+            ELSE 0
         END as is_in_full,
-        CASE 
-            WHEN actual_delivery_date <= agreed_delivery_date 
-            AND delivery_qty >= order_qty THEN 1 
-            ELSE 0 
+        CASE
+            WHEN actual_delivery_date <= agreed_delivery_date
+            AND delivery_qty >= order_qty THEN 1
+            ELSE 0
         END as is_otif
     FROM order_lines
 )
@@ -8298,8 +8298,8 @@ drop view if exists "raw"."raw"."stg_products__dbt_backup" cascade
 [0m20:14:46.546505 [debug] [Thread-2 (]: On model.nexabrands_dbt.customer_performance: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.customer_performance"} */
 
   create view "raw"."raw"."customer_performance__dbt_tmp"
-    
-    
+
+
   as (
     WITH delivery_metrics AS (
     SELECT * FROM "raw"."raw"."order_delivery_metrics"
@@ -8355,18 +8355,18 @@ drop view if exists "raw"."raw"."customer_performance__dbt_backup" cascade
 [0m20:14:46.584249 [debug] [MainThread]: Connection 'model.nexabrands_dbt.customer_performance' was properly closed.
 [0m20:14:46.585716 [debug] [MainThread]: Connection 'model.nexabrands_dbt.order_delivery_metrics' was properly closed.
 [0m20:14:46.586721 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_products' was properly closed.
-[0m20:14:46.589638 [info ] [MainThread]: 
+[0m20:14:46.589638 [info ] [MainThread]:
 [0m20:14:46.593130 [info ] [MainThread]: Finished running 8 view models in 0 hours 0 minutes and 0.52 seconds (0.52s).
 [0m20:14:46.596648 [debug] [MainThread]: Command end result
 [0m20:14:46.636902 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m20:14:46.639468 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m20:14:46.647480 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m20:14:46.647973 [info ] [MainThread]: 
+[0m20:14:46.647973 [info ] [MainThread]:
 [0m20:14:46.648661 [info ] [MainThread]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
-[0m20:14:46.649217 [info ] [MainThread]: 
+[0m20:14:46.649217 [info ] [MainThread]:
 [0m20:14:46.650485 [error] [MainThread]:   Compilation Error in model dim_date (models/marts/dim_date.sql)
   'dbt_utils' is undefined. This can happen when calling a macro that does not exist. Check for typos and/or install package dependencies with "dbt deps".
-[0m20:14:46.651788 [info ] [MainThread]: 
+[0m20:14:46.651788 [info ] [MainThread]:
 [0m20:14:46.653064 [info ] [MainThread]: Done. PASS=7 WARN=0 ERROR=1 SKIP=0 TOTAL=8
 [0m20:14:46.656495 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 1.4874856, "process_in_blocks": "152", "process_kernel_time": 0.305016, "process_mem_max_rss": "121016", "process_out_blocks": "2816", "process_user_time": 2.47578}
 [0m20:14:46.657511 [debug] [MainThread]: Command `dbt run` failed at 20:14:46.657342 after 1.49 seconds
@@ -8391,16 +8391,16 @@ drop view if exists "raw"."raw"."customer_performance__dbt_backup" cascade
 [0m20:15:06.954653 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '0b576279-0403-403c-9792-fb96f8aceef7', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7452fcb1c170>]}
 [0m20:15:06.955257 [info ] [MainThread]: Found 9 models, 431 macros
 [0m20:15:06.955849 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '0b576279-0403-403c-9792-fb96f8aceef7', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7452fcb2f9b0>]}
-[0m20:15:06.957886 [info ] [MainThread]: 
+[0m20:15:06.957886 [info ] [MainThread]:
 [0m20:15:06.958466 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m20:15:06.959005 [info ] [MainThread]: 
+[0m20:15:06.959005 [info ] [MainThread]:
 [0m20:15:06.959739 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m20:15:06.964598 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m20:15:06.998559 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m20:15:06.999154 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m20:15:06.999644 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m20:15:07.006095 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.006 seconds
 [0m20:15:07.007452 [debug] [ThreadPool]: On list_raw: Close
@@ -8434,7 +8434,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m20:15:07.023823 [debug] [ThreadPool]: SQL status: SELECT 18 in 0.002 seconds
 [0m20:15:07.025630 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m20:15:07.026454 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -8562,8 +8562,8 @@ with relation as (
 [0m20:15:07.185577 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_order_lines: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_order_lines"} */
 
   create view "raw"."raw"."stg_order_lines__dbt_tmp"
-    
-    
+
+
   as (
     -- models/staging/stg_order_lines.sql
 WITH order_lines AS (
@@ -8576,8 +8576,8 @@ SELECT
     order_qty,
     agreed_delivery_date,
     actual_delivery_date,
-    delivery_qty 
-   
+    delivery_qty
+
 FROM order_lines
   );
 [0m20:15:07.188720 [debug] [Thread-3 (]: SQL status: CREATE VIEW in 0.002 seconds
@@ -8588,12 +8588,12 @@ FROM order_lines
 [0m20:15:07.202199 [debug] [Thread-1 (]: On model.nexabrands_dbt.stg_customer_targets: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customer_targets"} */
 
   create view "raw"."raw"."stg_customer_targets__dbt_tmp"
-    
-    
+
+
   as (
     -- models/staging/stg_customer_targets.sql
 WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM raw.raw.customer_targets
 )
 
@@ -8612,13 +8612,13 @@ alter table "raw"."raw"."stg_order_lines" rename to "stg_order_lines__dbt_backup
 [0m20:15:07.206223 [debug] [Thread-2 (]: On model.nexabrands_dbt.stg_customers: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_customers"} */
 
   create view "raw"."raw"."stg_customers__dbt_tmp"
-    
-    
+
+
   as (
     -- models/staging/stg_customers.sql
 WITH customers   AS (
     SELECT *
-     FROM   raw.raw.customers    
+     FROM   raw.raw.customers
 )
 
 SELECT
@@ -8631,21 +8631,21 @@ FROM customers
 [0m20:15:07.207565 [debug] [Thread-4 (]: On model.nexabrands_dbt.stg_orders: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_orders"} */
 
   create view "raw"."raw"."stg_orders__dbt_tmp"
-    
-    
+
+
   as (
     -- models/staging/stg_orders.sql
 WITH orders AS (
-    SELECT * 
-    
+    SELECT *
+
     FROM raw.raw.orders
 )
 
 SELECT
     order_id,
     customer_id ,
-    order_placement_date 
-   
+    order_placement_date
+
 FROM orders
   );
 [0m20:15:07.212644 [debug] [Thread-1 (]: Using postgres connection "model.nexabrands_dbt.stg_customer_targets"
@@ -8756,12 +8756,12 @@ drop view if exists "raw"."raw"."stg_orders__dbt_backup" cascade
 [0m20:15:07.368095 [debug] [Thread-3 (]: On model.nexabrands_dbt.stg_products: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.stg_products"} */
 
   create view "raw"."raw"."stg_products__dbt_tmp"
-    
-    
+
+
   as (
     -- models/staging/stg_products.sql
 WITH products AS (
-    SELECT * 
+    SELECT *
     FROM   raw.raw.products
 )
 
@@ -8777,8 +8777,8 @@ FROM products
 [0m20:15:07.373343 [debug] [Thread-2 (]: On model.nexabrands_dbt.order_delivery_metrics: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.order_delivery_metrics"} */
 
   create view "raw"."raw"."order_delivery_metrics__dbt_tmp"
-    
-    
+
+
   as (
     WITH order_lines AS (
     SELECT * FROM "raw"."raw"."stg_order_lines"
@@ -8793,18 +8793,18 @@ delivery_metrics AS (
         agreed_delivery_date,
         actual_delivery_date,
         -- Calculating  delivery metrics
-        CASE 
-            WHEN actual_delivery_date <= agreed_delivery_date THEN 1 
-            ELSE 0 
+        CASE
+            WHEN actual_delivery_date <= agreed_delivery_date THEN 1
+            ELSE 0
         END as is_on_time,
-        CASE 
-            WHEN delivery_qty >= order_qty THEN 1 
-            ELSE 0 
+        CASE
+            WHEN delivery_qty >= order_qty THEN 1
+            ELSE 0
         END as is_in_full,
-        CASE 
-            WHEN actual_delivery_date <= agreed_delivery_date 
-            AND delivery_qty >= order_qty THEN 1 
-            ELSE 0 
+        CASE
+            WHEN actual_delivery_date <= agreed_delivery_date
+            AND delivery_qty >= order_qty THEN 1
+            ELSE 0
         END as is_otif
     FROM order_lines
 )
@@ -8865,8 +8865,8 @@ drop view if exists "raw"."raw"."order_delivery_metrics__dbt_backup" cascade
 [0m20:15:07.436096 [debug] [Thread-1 (]: On model.nexabrands_dbt.customer_performance: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.customer_performance"} */
 
   create view "raw"."raw"."customer_performance__dbt_tmp"
-    
-    
+
+
   as (
     WITH delivery_metrics AS (
     SELECT * FROM "raw"."raw"."order_delivery_metrics"
@@ -8922,15 +8922,15 @@ drop view if exists "raw"."raw"."customer_performance__dbt_backup" cascade
 [0m20:15:07.468578 [debug] [MainThread]: Connection 'model.nexabrands_dbt.customer_performance' was properly closed.
 [0m20:15:07.469341 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_products' was properly closed.
 [0m20:15:07.469803 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_orders' was properly closed.
-[0m20:15:07.470399 [info ] [MainThread]: 
+[0m20:15:07.470399 [info ] [MainThread]:
 [0m20:15:07.471234 [info ] [MainThread]: Finished running 7 view models in 0 hours 0 minutes and 0.51 seconds (0.51s).
 [0m20:15:07.473347 [debug] [MainThread]: Command end result
 [0m20:15:07.496969 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m20:15:07.498679 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m20:15:07.504816 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m20:15:07.505350 [info ] [MainThread]: 
+[0m20:15:07.505350 [info ] [MainThread]:
 [0m20:15:07.505962 [info ] [MainThread]: [32mCompleted successfully[0m
-[0m20:15:07.506498 [info ] [MainThread]: 
+[0m20:15:07.506498 [info ] [MainThread]:
 [0m20:15:07.507081 [info ] [MainThread]: Done. PASS=7 WARN=0 ERROR=0 SKIP=0 TOTAL=7
 [0m20:15:07.508228 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 1.3696872, "process_in_blocks": "0", "process_kernel_time": 0.315232, "process_mem_max_rss": "117568", "process_out_blocks": "2824", "process_user_time": 2.402151}
 [0m20:15:07.508828 [debug] [MainThread]: Command `dbt run` succeeded at 20:15:07.508704 after 1.37 seconds
@@ -8977,9 +8977,9 @@ Compilation Error in model dim_date (models/marts/dim_date.sql)
 [0m06:20:20.307696 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '2307e51c-8066-4779-a12d-46d00ab75fa4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x78ed96f0c680>]}
 [0m06:20:20.308359 [info ] [MainThread]: Found 9 models, 6 sources, 431 macros
 [0m06:20:20.308942 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '2307e51c-8066-4779-a12d-46d00ab75fa4', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x78ed96b0e1b0>]}
-[0m06:20:20.311013 [info ] [MainThread]: 
+[0m06:20:20.311013 [info ] [MainThread]:
 [0m06:20:20.311571 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m06:20:20.312107 [info ] [MainThread]: 
+[0m06:20:20.312107 [info ] [MainThread]:
 [0m06:20:20.312886 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m06:20:20.317957 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw_raw'
 [0m06:20:20.357854 [debug] [ThreadPool]: Using postgres connection "list_raw_raw"
@@ -9011,7 +9011,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m06:20:20.377857 [debug] [ThreadPool]: SQL status: SELECT 18 in 0.006 seconds
 [0m06:20:20.379767 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m06:20:20.380441 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -9162,16 +9162,16 @@ with relation as (
 [0m06:20:52.595328 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '3a3d8065-86fd-44e8-94db-f3991274f649', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x77a62d10a3c0>]}
 [0m06:20:52.595964 [info ] [MainThread]: Found 9 models, 6 sources, 431 macros
 [0m06:20:52.596623 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '3a3d8065-86fd-44e8-94db-f3991274f649', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x77a62e542870>]}
-[0m06:20:52.598770 [info ] [MainThread]: 
+[0m06:20:52.598770 [info ] [MainThread]:
 [0m06:20:52.599403 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m06:20:52.599981 [info ] [MainThread]: 
+[0m06:20:52.599981 [info ] [MainThread]:
 [0m06:20:52.600762 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m06:20:52.605490 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m06:20:52.642563 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m06:20:52.643184 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m06:20:52.643669 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m06:20:52.647930 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m06:20:52.649369 [debug] [ThreadPool]: On list_raw: Close
@@ -9205,7 +9205,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m06:20:52.666936 [debug] [ThreadPool]: SQL status: SELECT 18 in 0.002 seconds
 [0m06:20:52.669345 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m06:20:52.670194 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -9328,15 +9328,15 @@ with relation as (
 [0m06:20:52.808652 [debug] [Thread-4 (]: On model.nexabrands_dbt.order_delivery_metrics: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.order_delivery_metrics"} */
 
   create view "raw"."raw"."order_delivery_metrics__dbt_tmp"
-    
-    
+
+
   as (
-    
+
 
 WITH  __dbt__cte__stg_order_lines as (
 -- models/staging/stg_order_lines.sql
 WITH order_lines AS (
-    SELECT * FROM   "raw"."raw"."order_lines" 
+    SELECT * FROM   "raw"."raw"."order_lines"
 
 )
 
@@ -9346,8 +9346,8 @@ SELECT
     order_qty,
     agreed_delivery_date,
     actual_delivery_date,
-    delivery_qty 
-   
+    delivery_qty
+
 FROM order_lines
 ), order_lines AS (
     SELECT * FROM __dbt__cte__stg_order_lines
@@ -9362,18 +9362,18 @@ delivery_metrics AS (
         agreed_delivery_date,
         actual_delivery_date,
         -- Calculating  delivery metrics
-        CASE 
-            WHEN actual_delivery_date <= agreed_delivery_date THEN 1 
-            ELSE 0 
+        CASE
+            WHEN actual_delivery_date <= agreed_delivery_date THEN 1
+            ELSE 0
         END as is_on_time,
-        CASE 
-            WHEN delivery_qty >= order_qty THEN 1 
-            ELSE 0 
+        CASE
+            WHEN delivery_qty >= order_qty THEN 1
+            ELSE 0
         END as is_in_full,
-        CASE 
-            WHEN actual_delivery_date <= agreed_delivery_date 
-            AND delivery_qty >= order_qty THEN 1 
-            ELSE 0 
+        CASE
+            WHEN actual_delivery_date <= agreed_delivery_date
+            AND delivery_qty >= order_qty THEN 1
+            ELSE 0
         END as is_otif
     FROM order_lines
 )
@@ -9423,26 +9423,26 @@ drop view if exists "raw"."raw"."order_delivery_metrics__dbt_backup" cascade
 [0m06:20:53.003075 [debug] [Thread-3 (]: On model.nexabrands_dbt.customer_performance: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.customer_performance"} */
 
   create view "raw"."raw"."customer_performance__dbt_tmp"
-    
-    
+
+
   as (
-    
+
 
 
 WITH  __dbt__cte__stg_orders as (
 -- models/staging/stg_orders.sql
 WITH orders AS (
-    SELECT * 
-    
-    FROM  "raw"."raw"."orders" 
+    SELECT *
+
+    FROM  "raw"."raw"."orders"
 
 )
 
 SELECT
     order_id,
     customer_id ,
-    order_placement_date 
-   
+    order_placement_date
+
 FROM orders
 ), delivery_metrics AS (
     SELECT * FROM "raw"."raw"."order_delivery_metrics"
@@ -9487,38 +9487,38 @@ alter table "raw"."raw"."customer_performance__dbt_tmp" rename to "customer_perf
 drop view if exists "raw"."raw"."customer_performance__dbt_backup" cascade
 [0m06:20:53.043091 [debug] [Thread-1 (]: On model.nexabrands_dbt.fct_order_fulfillment_lines: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.fct_order_fulfillment_lines"} */
 
-      
-  
-    
+
+
+
 
   create  table "raw"."raw"."fct_order_fulfillment_lines"
-  
-  
+
+
     as
-  
+
   (
-    
+
 
 WITH  __dbt__cte__stg_orders as (
 -- models/staging/stg_orders.sql
 WITH orders AS (
-    SELECT * 
-    
-    FROM  "raw"."raw"."orders" 
+    SELECT *
+
+    FROM  "raw"."raw"."orders"
 
 )
 
 SELECT
     order_id,
     customer_id ,
-    order_placement_date 
-   
+    order_placement_date
+
 FROM orders
 ),  __dbt__cte__stg_customers as (
 -- models/staging/stg_customers.sql
 WITH customers   AS (
     SELECT *
-     FROM   "raw"."raw"."customers" 
+     FROM   "raw"."raw"."customers"
 
 )
 
@@ -9530,7 +9530,7 @@ FROM customers
 ),  __dbt__cte__stg_customer_targets as (
 -- models/staging/stg_customer_targets.sql
 WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM  "raw"."raw"."customer_targets"
 
 )
@@ -9586,8 +9586,8 @@ LEFT JOIN customer_targets ct ON c.customer_id = ct.customer_id
 
 
   );
-  
-  
+
+
 [0m06:20:53.044655 [debug] [Thread-1 (]: Postgres adapter: Postgres error: syntax error at or near ")"
 LINE 93:     current_timestamp() as last_updated_at
                                ^
@@ -9626,21 +9626,21 @@ LINE 93:     current_timestamp() as last_updated_at
 [0m06:20:53.113084 [debug] [MainThread]: Connection 'model.nexabrands_dbt.fct_order_fulfillment_lines' was properly closed.
 [0m06:20:53.113751 [debug] [MainThread]: Connection 'model.nexabrands_dbt.customer_performance' was properly closed.
 [0m06:20:53.114394 [debug] [MainThread]: Connection 'model.nexabrands_dbt.order_delivery_metrics' was properly closed.
-[0m06:20:53.115518 [info ] [MainThread]: 
+[0m06:20:53.115518 [info ] [MainThread]:
 [0m06:20:53.116707 [info ] [MainThread]: Finished running 1 incremental model, 2 view models in 0 hours 0 minutes and 0.51 seconds (0.51s).
 [0m06:20:53.119148 [debug] [MainThread]: Command end result
 [0m06:20:53.211543 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m06:20:53.213593 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m06:20:53.219738 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m06:20:53.220276 [info ] [MainThread]: 
+[0m06:20:53.220276 [info ] [MainThread]:
 [0m06:20:53.220959 [info ] [MainThread]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
-[0m06:20:53.221555 [info ] [MainThread]: 
+[0m06:20:53.221555 [info ] [MainThread]:
 [0m06:20:53.222216 [error] [MainThread]:   Database Error in model fct_order_fulfillment_lines (models/marts/fct_order_fulfillment_lines.sql)
   syntax error at or near ")"
   LINE 93:     current_timestamp() as last_updated_at
                                  ^
   compiled code at target/run/nexabrands_dbt/models/marts/fct_order_fulfillment_lines.sql
-[0m06:20:53.222835 [info ] [MainThread]: 
+[0m06:20:53.222835 [info ] [MainThread]:
 [0m06:20:53.223490 [info ] [MainThread]: Done. PASS=2 WARN=0 ERROR=1 SKIP=0 TOTAL=3
 [0m06:20:53.224745 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 1.3412337, "process_in_blocks": "480", "process_kernel_time": 0.301161, "process_mem_max_rss": "112600", "process_out_blocks": "1952", "process_user_time": 2.327157}
 [0m06:20:53.225372 [debug] [MainThread]: Command `dbt run` failed at 06:20:53.225256 after 1.34 seconds
@@ -9665,16 +9665,16 @@ LINE 93:     current_timestamp() as last_updated_at
 [0m06:22:24.631216 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': '35a19970-9a3b-4100-8373-d67d1e8b8010', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7906348e8830>]}
 [0m06:22:24.631814 [info ] [MainThread]: Found 9 models, 6 sources, 431 macros
 [0m06:22:24.632432 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': '35a19970-9a3b-4100-8373-d67d1e8b8010', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x790632f3a750>]}
-[0m06:22:24.634520 [info ] [MainThread]: 
+[0m06:22:24.634520 [info ] [MainThread]:
 [0m06:22:24.635102 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m06:22:24.635644 [info ] [MainThread]: 
+[0m06:22:24.635644 [info ] [MainThread]:
 [0m06:22:24.636423 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m06:22:24.641288 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m06:22:24.676064 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m06:22:24.676744 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m06:22:24.677364 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m06:22:24.681711 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m06:22:24.683115 [debug] [ThreadPool]: On list_raw: Close
@@ -9708,7 +9708,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m06:22:24.700907 [debug] [ThreadPool]: SQL status: SELECT 18 in 0.003 seconds
 [0m06:22:24.703024 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m06:22:24.703818 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -9831,15 +9831,15 @@ with relation as (
 [0m06:22:24.839557 [debug] [Thread-4 (]: On model.nexabrands_dbt.order_delivery_metrics: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.order_delivery_metrics"} */
 
   create view "raw"."raw"."order_delivery_metrics__dbt_tmp"
-    
-    
+
+
   as (
-    
+
 
 WITH  __dbt__cte__stg_order_lines as (
 -- models/staging/stg_order_lines.sql
 WITH order_lines AS (
-    SELECT * FROM   "raw"."raw"."order_lines" 
+    SELECT * FROM   "raw"."raw"."order_lines"
 
 )
 
@@ -9849,8 +9849,8 @@ SELECT
     order_qty,
     agreed_delivery_date,
     actual_delivery_date,
-    delivery_qty 
-   
+    delivery_qty
+
 FROM order_lines
 ), order_lines AS (
     SELECT * FROM __dbt__cte__stg_order_lines
@@ -9865,18 +9865,18 @@ delivery_metrics AS (
         agreed_delivery_date,
         actual_delivery_date,
         -- Calculating  delivery metrics
-        CASE 
-            WHEN actual_delivery_date <= agreed_delivery_date THEN 1 
-            ELSE 0 
+        CASE
+            WHEN actual_delivery_date <= agreed_delivery_date THEN 1
+            ELSE 0
         END as is_on_time,
-        CASE 
-            WHEN delivery_qty >= order_qty THEN 1 
-            ELSE 0 
+        CASE
+            WHEN delivery_qty >= order_qty THEN 1
+            ELSE 0
         END as is_in_full,
-        CASE 
-            WHEN actual_delivery_date <= agreed_delivery_date 
-            AND delivery_qty >= order_qty THEN 1 
-            ELSE 0 
+        CASE
+            WHEN actual_delivery_date <= agreed_delivery_date
+            AND delivery_qty >= order_qty THEN 1
+            ELSE 0
         END as is_otif
     FROM order_lines
 )
@@ -9929,26 +9929,26 @@ drop view if exists "raw"."raw"."order_delivery_metrics__dbt_backup" cascade
 [0m06:22:24.987431 [debug] [Thread-3 (]: On model.nexabrands_dbt.customer_performance: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.customer_performance"} */
 
   create view "raw"."raw"."customer_performance__dbt_tmp"
-    
-    
+
+
   as (
-    
+
 
 
 WITH  __dbt__cte__stg_orders as (
 -- models/staging/stg_orders.sql
 WITH orders AS (
-    SELECT * 
-    
-    FROM  "raw"."raw"."orders" 
+    SELECT *
+
+    FROM  "raw"."raw"."orders"
 
 )
 
 SELECT
     order_id,
     customer_id ,
-    order_placement_date 
-   
+    order_placement_date
+
 FROM orders
 ), delivery_metrics AS (
     SELECT * FROM "raw"."raw"."order_delivery_metrics"
@@ -9981,38 +9981,38 @@ alter table "raw"."raw"."customer_performance__dbt_tmp" rename to "customer_perf
 [0m06:22:24.999031 [debug] [Thread-2 (]: Using postgres connection "model.nexabrands_dbt.fct_order_fulfillment_lines"
 [0m06:22:25.000965 [debug] [Thread-2 (]: On model.nexabrands_dbt.fct_order_fulfillment_lines: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "node_id": "model.nexabrands_dbt.fct_order_fulfillment_lines"} */
 
-      
-  
-    
+
+
+
 
   create  table "raw"."raw"."fct_order_fulfillment_lines"
-  
-  
+
+
     as
-  
+
   (
-    
+
 
 WITH  __dbt__cte__stg_orders as (
 -- models/staging/stg_orders.sql
 WITH orders AS (
-    SELECT * 
-    
-    FROM  "raw"."raw"."orders" 
+    SELECT *
+
+    FROM  "raw"."raw"."orders"
 
 )
 
 SELECT
     order_id,
     customer_id ,
-    order_placement_date 
-   
+    order_placement_date
+
 FROM orders
 ),  __dbt__cte__stg_customers as (
 -- models/staging/stg_customers.sql
 WITH customers   AS (
     SELECT *
-     FROM   "raw"."raw"."customers" 
+     FROM   "raw"."raw"."customers"
 
 )
 
@@ -10024,7 +10024,7 @@ FROM customers
 ),  __dbt__cte__stg_customer_targets as (
 -- models/staging/stg_customer_targets.sql
 WITH customer_targets AS (
-    SELECT * 
+    SELECT *
     FROM  "raw"."raw"."customer_targets"
 
 )
@@ -10080,8 +10080,8 @@ LEFT JOIN customer_targets ct ON c.customer_id = ct.customer_id
 
 
   );
-  
-  
+
+
 [0m06:22:24.999976 [debug] [Thread-3 (]: SQL status: ALTER TABLE in 0.001 seconds
 [0m06:22:25.005628 [debug] [Thread-3 (]: On model.nexabrands_dbt.customer_performance: COMMIT
 [0m06:22:25.006541 [debug] [Thread-2 (]: Postgres adapter: Postgres error: column ct.ontime_target_percentage does not exist
@@ -10129,21 +10129,21 @@ drop view if exists "raw"."raw"."customer_performance__dbt_backup" cascade
 [0m06:22:25.125881 [debug] [MainThread]: Connection 'model.nexabrands_dbt.stg_products' was properly closed.
 [0m06:22:25.126460 [debug] [MainThread]: Connection 'model.nexabrands_dbt.customer_performance' was properly closed.
 [0m06:22:25.127113 [debug] [MainThread]: Connection 'model.nexabrands_dbt.order_delivery_metrics' was properly closed.
-[0m06:22:25.127696 [info ] [MainThread]: 
+[0m06:22:25.127696 [info ] [MainThread]:
 [0m06:22:25.128345 [info ] [MainThread]: Finished running 1 incremental model, 2 view models in 0 hours 0 minutes and 0.49 seconds (0.49s).
 [0m06:22:25.129576 [debug] [MainThread]: Command end result
 [0m06:22:25.155498 [debug] [MainThread]: Wrote artifact WritableManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/manifest.json
 [0m06:22:25.157247 [debug] [MainThread]: Wrote artifact SemanticManifest to /workspaces/pyspark_practice-/nexabrands_dbt/target/semantic_manifest.json
 [0m06:22:25.163927 [debug] [MainThread]: Wrote artifact RunExecutionResult to /workspaces/pyspark_practice-/nexabrands_dbt/target/run_results.json
-[0m06:22:25.164460 [info ] [MainThread]: 
+[0m06:22:25.164460 [info ] [MainThread]:
 [0m06:22:25.165087 [info ] [MainThread]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
-[0m06:22:25.165646 [info ] [MainThread]: 
+[0m06:22:25.165646 [info ] [MainThread]:
 [0m06:22:25.166292 [error] [MainThread]:   Database Error in model fct_order_fulfillment_lines (models/marts/fct_order_fulfillment_lines.sql)
   column ct.ontime_target_percentage does not exist
   LINE 86:     ct.ontime_target_percentage,
                ^
   compiled code at target/run/nexabrands_dbt/models/marts/fct_order_fulfillment_lines.sql
-[0m06:22:25.166845 [info ] [MainThread]: 
+[0m06:22:25.166845 [info ] [MainThread]:
 [0m06:22:25.167456 [info ] [MainThread]: Done. PASS=2 WARN=0 ERROR=1 SKIP=0 TOTAL=3
 [0m06:22:25.168668 [debug] [MainThread]: Resource report: {"command_name": "run", "command_success": false, "command_wall_clock_time": 1.5685071, "process_in_blocks": "0", "process_kernel_time": 0.302345, "process_mem_max_rss": "115788", "process_out_blocks": "2832", "process_user_time": 2.571899}
 [0m06:22:25.169292 [debug] [MainThread]: Command `dbt run` failed at 06:22:25.169157 after 1.57 seconds
@@ -10168,16 +10168,16 @@ drop view if exists "raw"."raw"."customer_performance__dbt_backup" cascade
 [0m06:26:08.743028 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'resource_counts', 'label': 'a59f1c10-612b-4383-989c-83e9115156cb', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x775e84541a00>]}
 [0m06:26:08.743631 [info ] [MainThread]: Found 9 models, 6 sources, 431 macros
 [0m06:26:08.744206 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'runnable_timing', 'label': 'a59f1c10-612b-4383-989c-83e9115156cb', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x775e84550fb0>]}
-[0m06:26:08.746331 [info ] [MainThread]: 
+[0m06:26:08.746331 [info ] [MainThread]:
 [0m06:26:08.746893 [info ] [MainThread]: Concurrency: 4 threads (target='dev')
-[0m06:26:08.747439 [info ] [MainThread]: 
+[0m06:26:08.747439 [info ] [MainThread]:
 [0m06:26:08.748189 [debug] [MainThread]: Acquiring new postgres connection 'master'
 [0m06:26:08.753001 [debug] [ThreadPool]: Acquiring new postgres connection 'list_raw'
 [0m06:26:08.787450 [debug] [ThreadPool]: Using postgres connection "list_raw"
 [0m06:26:08.788008 [debug] [ThreadPool]: On list_raw: /* {"app": "dbt", "dbt_version": "1.9.1", "profile_name": "nexabrands_dbt", "target_name": "dev", "connection_name": "list_raw"} */
 
     select distinct nspname from pg_namespace
-  
+
 [0m06:26:08.788570 [debug] [ThreadPool]: Opening a new connection, currently in state init
 [0m06:26:08.792877 [debug] [ThreadPool]: SQL status: SELECT 5 in 0.004 seconds
 [0m06:26:08.794234 [debug] [ThreadPool]: On list_raw: Close
@@ -10211,7 +10211,7 @@ select
       'materialized_view' as type
     from pg_matviews
     where schemaname ilike 'raw'
-  
+
 [0m06:26:08.811723 [debug] [ThreadPool]: SQL status: SELECT 18 in 0.003 seconds
 [0m06:26:08.813846 [debug] [ThreadPool]: On list_raw_raw: ROLLBACK
 [0m06:26:08.814783 [debug] [ThreadPool]: On list_raw_raw: Close
@@ -10236,4 +10236,3 @@ with relation as (
         from pg_class
     ),
     dependency as (
-      

@@ -28,7 +28,7 @@ x-airflow-common:
     AIRFLOW__SCHEDULER__STATSD_PREFIX: airflow
     AIRFLOW__SMTP__SMTP_HOST: "smtp.gmail.com"
     AIRFLOW__SMTP__SMTP_USER: "junioralexio607@gmail.com"
-    AIRFLOW__SMTP__SMTP_PASSWORD: "gcxw mida maly gavc"    
+    AIRFLOW__SMTP__SMTP_PASSWORD: "gcxw mida maly gavc"
     AIRFLOW__SMTP__SMTP_PORT: 587
     # Cosmos dbt docs configuration
     AIRFLOW__COSMOS__DBT_DOCS_DIR: "s3://nexabrands-prod-target/dbt-docs"
@@ -90,7 +90,7 @@ services:
     expose:
       - 9125/udp
     restart: always
-  
+
   prometheus:
     image: prom/prometheus:v2.37.9
     container_name: prometheus
@@ -141,21 +141,21 @@ services:
       - /sys:/host/sys:ro
       - /:/rootfs:ro
       - /:/host
-    command: 
+    command:
       - '--path.rootfs=/host'
-      - '--path.procfs=/host/proc' 
+      - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
       - --collector.filesystem.ignored-mount-points
       - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
     ports:
       - 9100:9100
     restart: always
- 
+
   metabase:
     image: metabase/metabase:latest
     container_name: metabase_bi
     ports:
-      - "3001:3000"  
+      - "3001:3000"
     volumes:
       - metabase_data:/metabase
     environment:
@@ -179,7 +179,7 @@ services:
     volumes:
       - postgres_dw_data:/var/lib/postgresql/data
     ports:
-      - "5433:5432" 
+      - "5433:5432"
     restart: unless-stopped
 
   airflow-webserver:

@@ -6,11 +6,11 @@ models:
     tests:
       # Table-level tests
       - dbt_expectations.expect_table_row_count_to_be_between:
-          min_value: 1 
+          min_value: 1
           max_value: 100
       - dbt_expectations.expect_table_columns_to_match_set:
           column_list: ["customer_id", "customer_name", "city"]
-  
+
 
     columns:
       - name: customer_id
@@ -19,7 +19,7 @@ models:
           # Generic dbt tests
           - unique
           - not_null
-   
+
       - name: customer_name
         description: "Name of the customer"
         tests:
@@ -46,4 +46,3 @@ models:
           - dbt_expectations.expect_column_value_lengths_to_be_between:
               min_value: 2
               max_value: 50
-         

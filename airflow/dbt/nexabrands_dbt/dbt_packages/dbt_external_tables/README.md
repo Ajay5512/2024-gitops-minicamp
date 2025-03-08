@@ -70,12 +70,12 @@ sources:
             This source table is actually a set of files in external storage.
             The dbt-external-tables package provides handy macros for getting
             those files queryable, just in time for modeling.
-                            
+
         external:
           location:         # required: S3 file path, GCS file path, Snowflake stage, Synapse data source
-          
+
           ...               # database-specific properties of external table
-          
+
           partitions:       # optional
             - name: collector_date
               data_type: date
@@ -95,7 +95,7 @@ sources:
           ...
 ```
 
-The `stage_external_sources` macro will use this YAML config to compile and 
+The `stage_external_sources` macro will use this YAML config to compile and
 execute the appropriate `create`, `refresh`, and/or `drop` commands:
 
 ```

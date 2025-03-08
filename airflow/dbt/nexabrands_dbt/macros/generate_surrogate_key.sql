@@ -3,7 +3,7 @@
     {% if varargs|length >= 1 %}
         {{ exceptions.raise_compiler_error("generate_surrogate_key takes a single list argument, instead of multiple arguments") }}
     {% endif %}
-    
+
     {%- set fields = [] -%}
 
     {%- for field in field_list -%}

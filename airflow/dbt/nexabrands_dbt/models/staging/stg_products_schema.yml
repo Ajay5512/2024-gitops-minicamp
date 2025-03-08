@@ -16,7 +16,7 @@ models:
               min_value: 1
               row_condition: "product_id IS NOT NULL"
               strictly: true
-      
+
       - name: product_name
         description: "{{ doc('product_name') }}"
         data_type: text
@@ -27,7 +27,7 @@ models:
               max_value: 100
           - dbt_expectations.expect_column_values_to_not_match_regex:
               regex: '^\\s*$'  # Test for empty strings or only whitespace
-      
+
       - name: category
         description: "{{ doc('category') }}"
         data_type: text
@@ -35,10 +35,10 @@ models:
           - not_null:
               severity: error
           - accepted_values:
-              values: ['Dairy', 'beverages', 'Food']  
+              values: ['Dairy', 'beverages', 'Food']
               severity: error
           - dbt_expectations.expect_column_values_to_be_in_set:
-              value_set: ['Dairy', 'beverages', 'Food'] 
+              value_set: ['Dairy', 'beverages', 'Food']
           - dbt_expectations.expect_column_value_lengths_to_be_between:
               min_value: 2
               max_value: 50
@@ -48,9 +48,9 @@ models:
       - dbt_expectations.expect_table_row_count_to_be_between:
           min_value: 1
           max_value: 100
-      
+
       - dbt_expectations.expect_table_columns_to_match_ordered_list:
           column_list: ['product_id', 'product_name', 'category']
-      
+
       - dbt_expectations.expect_compound_columns_to_be_unique:
           column_list: ['product_name', 'category']

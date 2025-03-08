@@ -29,7 +29,7 @@ jobs:
           git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
           git diff --name-only --diff-filter=d origin/main | grep .md$ | xargs -I {} find {} -not -path "./**/docsblocks/**" -print0 | xargs -0 markdownlint --config .markdownlint.yml
 
-     
+
       - name: Lint all Markdown files on Manual Trigger
         if: github.event_name == 'workflow_dispatch'
         run: |

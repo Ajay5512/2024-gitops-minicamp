@@ -122,7 +122,7 @@ Asserts the equality of two relations. Optionally specify a subset of columns to
 version: 2
 
 models:
-  # compare the entire table 
+  # compare the entire table
   - name: model_name
     tests:
       - dbt_utils.equality:
@@ -260,7 +260,7 @@ models:
 This test supports the `group_by_columns` parameter; see [Grouping in tests](#grouping-in-tests) for details.
 
 ### not_empty_string ([source](macros/generic_tests/not_empty_string.sql))
-Asserts that a column does not have any values equal to `''`. 
+Asserts that a column does not have any values equal to `''`.
 
 **Usage:**
 ```yaml
@@ -274,7 +274,7 @@ models:
           - dbt_utils.not_empty_string
 ```
 
-The macro accepts an optional argument `trim_whitespace` that controls whether whitespace should be trimmed from the column when evaluating. The default is `true`. 
+The macro accepts an optional argument `trim_whitespace` that controls whether whitespace should be trimmed from the column when evaluating. The default is `true`.
 
 **Usage:**
 ```yaml
@@ -287,7 +287,7 @@ models:
         tests:
           - dbt_utils.not_empty_string:
               trim_whitespace: false
-              
+
 ```
 
 ### cardinality_equality ([source](macros/generic_tests/cardinality_equality.sql))
@@ -1059,7 +1059,7 @@ This macro implements a cross-database way to generate a hashed surrogate key us
 {{ dbt_utils.generate_surrogate_key(['field_a', 'field_b'[,...]]) }}
 ```
 
-A precursor to this macro, `surrogate_key()`, treated nulls and blanks strings the same. If you need to enable this incorrect behaviour for backward compatibility reasons, add the following variable to your `dbt_project.yml`: 
+A precursor to this macro, `surrogate_key()`, treated nulls and blanks strings the same. If you need to enable this incorrect behaviour for backward compatibility reasons, add the following variable to your `dbt_project.yml`:
 
 ```yaml
 #dbt_project.yml
@@ -1079,7 +1079,7 @@ This macro implements a cross-database way to sum nullable fields using the fiel
 
 ### safe_divide ([source](macros/sql/safe_divide.sql))
 
-This macro performs division but returns null if the denominator is 0. 
+This macro performs division but returns null if the denominator is 0.
 
 **Args:**
 
@@ -1377,8 +1377,8 @@ sum(case when payment_method = '1337pay' then amount end)
 ---
 ## Materializations
 
-### insert_by_period 
-In dbt_utils v1.0, this materialization moved to the [experimental features repository](https://github.com/dbt-labs/dbt-labs-experimental-features/tree/main/insert_by_period). 
+### insert_by_period
+In dbt_utils v1.0, this materialization moved to the [experimental features repository](https://github.com/dbt-labs/dbt-labs-experimental-features/tree/main/insert_by_period).
 
 ----
 

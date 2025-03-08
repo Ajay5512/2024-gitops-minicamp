@@ -58,4 +58,3 @@
     {% endif %}
     {{ return(0) }}
 {% endmacro %}
-

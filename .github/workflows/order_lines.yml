@@ -20,53 +20,53 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-      
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pyspark pytest pytest-cov allure-pytest pre-commit boto3 awscli
-      
+
       - name: Install and run pre-commit hooks
         run: |
           pre-commit install
           pre-commit run --all-files
-      
+
       - name: Run PySpark tests
         run: |
           export PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE/terraform/modules/scripts
           cd terraform/modules/tests
           pytest test_order_lines.py -v --cov=../scripts --cov-report=xml:coverage.xml --cov-report=html:coverage_html --alluredir=allure-results
-      
+
       - name: Upload Coverage Report (HTML)
         uses: actions/upload-artifact@v4
         with:
           name: coverage_html
           path: terraform/modules/tests/coverage_html
-      
+
       - name: Upload Allure Results
         uses: actions/upload-artifact@v4
         with:
           name: allure-results
           path: terraform/modules/tests/allure-results
-      
+
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@master
         if: always()
         with:
           allure_results: terraform/modules/tests/allure-results
           allure_report: allure-report
-      
+
       - name: Upload Allure Report
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: allure-report
-      
+
       - name: Deploy to GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v3
@@ -74,7 +74,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: allure-report
           keep_files: false
-      
+
       - name: Add Coverage Comment to PR
         if: github.event_name == 'pull_request'
         uses: MishaKav/pytest-coverage-comment@main

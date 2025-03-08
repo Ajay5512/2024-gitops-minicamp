@@ -65,7 +65,7 @@ groups:
     annotations:
       summary: Host out of inodes (instance {{ $labels.instance }})
       description: Disk is almost running out of available inodes (< 10% left)\n  VALUE = {{ $value }}
-  
+
   - alert: HostUnusualDiskReadLatency
     expr: rate(node_disk_read_time_seconds_total[1m]) / rate(node_disk_reads_completed_total[1m]) > 0.1 and rate(node_disk_reads_completed_total[1m]) > 0
     for: 2m
@@ -101,7 +101,7 @@ groups:
     annotations:
       summary: Host CPU steal noisy neighbor (instance {{ $labels.instance }})
       description: CPU steal is > 10%. A noisy neighbor is killing VM performances or a spot instance may be out of credit.\n  VALUE = {{ $value }}
-  
+
   - alert: HostUnusualDiskIo
     expr: '(rate(node_disk_io_time_seconds_total[1m]) > 0.5) * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}'
     for: 5m
@@ -110,7 +110,7 @@ groups:
     annotations:
       summary: Host unusual disk IO (instance {{ $labels.instance }})
       description: "Time spent in IO is too high on {{ $labels.instance }}. Check storage for issues.\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
-  
+
   - alert: HostCpuHighIowait
     expr: '(avg by (instance) (rate(node_cpu_seconds_total{mode="iowait"}[5m])) * 100 > 10) * on(instance) group_left (nodename) node_uname_info{nodename=~".+"}'
     for: 0m
