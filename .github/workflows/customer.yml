@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 env:
-  TEST_EXECUTION_ENV: dev
+  TEST_EXECUTION_ENV: prod
 
 jobs:
   test:
@@ -40,6 +40,7 @@ jobs:
           SKIP=no-commit-to-branch pre-commit run --all-files
         
       - name: Run PySpark tests
+        id: run_tests
         continue-on-error: true
         run: |
           export PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE/terraform/modules/scripts
@@ -56,12 +57,14 @@ jobs:
       
       - name: Upload Coverage Report (HTML)
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: coverage_html
           path: terraform/modules/tests/coverage_html
       
       - name: Upload Allure Results
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: allure-results
           path: terraform/modules/tests/allure-results
@@ -75,6 +78,7 @@ jobs:
       
       - name: Upload Allure Report
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: allure-report
           path: allure-report
@@ -88,6 +92,7 @@ jobs:
           keep_files: false
       
       - name: Set current date as env variable
+        if: always()
         run: |
           echo "event_name=$GITHUB_EVENT_NAME" >> $GITHUB_OUTPUT
           echo "workflow=$GITHUB_WORKFLOW" >> $GITHUB_OUTPUT
@@ -96,13 +101,25 @@ jobs:
         id: version
       
       - name: Add Coverage Comment to PR
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && always()
         uses: MishaKav/pytest-coverage-comment@main
         with:
           pytest-xml-coverage-path: terraform/modules/tests/coverage.xml
           title: PySpark Test Coverage Report
           create-new-comment: true
           report-only-changed-files: true
+          
+      - name: Check test status and set job output
+        if: always()
+        id: check_status
+        run: |
+          if [ "${{ steps.run_tests.outcome }}" == "failure" ]; then
+            echo "tests_failed=true" >> $GITHUB_OUTPUT
+          else
+            echo "tests_failed=false" >> $GITHUB_OUTPUT
+          fi
+    outputs:
+      tests_failed: ${{ steps.check_status.outputs.tests_failed }}
 
   deploy-glue:
     name: 'Deploy ETL Glue Job Script'
@@ -148,9 +165,7 @@ jobs:
           GLUE_SERVICE_ROLE: ${{ secrets.GLUE_SERVICE_ROLE }}
 
       - name: Fail if tests failed
-        if: always()
+        if: needs.test.outputs.tests_failed == 'true'
         run: |
-            if [ "${{ steps.run_tests.outcome }}" = "failure" ]; then
-              echo "Test step failed, marking workflow as failed."
-              exit 1
-            fi
+          echo "Tests failed in the previous job. Marking workflow as failed."
+          exit 1
