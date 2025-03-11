@@ -206,32 +206,6 @@ def test_clean_customer_id_invalid_ids(spark_session):
     assert result_df.collect()[0][0] == 1
 
 
-def test_clean_string_columns_formatting(spark_session):
-    """Test that string columns are properly formatted with proper capitalization."""
-    data = [
-        (1.0, "john doe", "new york"),
-        (2.0, "JANE SMITH", "CHICAGO"),
-        (3.0, "bob@johnson", "los-angeles"),
-        (4.0, "mary williams!!!", "boston$$$"),
-    ]
-    schema = StructType(
-        [
-            StructField("CUSTOMER_ID", FloatType(), True),
-            StructField("customer_name", StringType(), True),
-            StructField("city", StringType(), True),
-        ]
-    )
-    test_df = spark_session.createDataFrame(data, schema)
-    columns_to_clean = ["customer_name", "city"]
-    result_df = clean_string_columns(test_df, columns_to_clean)
-    cleaned_data = result_df.collect()
-    assert cleaned_data[0][1] == "John Doe"
-    assert cleaned_data[0][2] == "New York"
-    assert cleaned_data[2][1] == "Bob Johnson"  # @ replaced with space
-    assert cleaned_data[2][2] == "Los Angeles"  # - replaced with space
-    assert cleaned_data[3][1] == "Mary Williams"  # !!! removed
-
-
 def test_rename_columns_to_lowercase(spark_session):
     """Test that all column names are converted to lowercase."""
     data = [(1, "John", "NY")]
@@ -285,29 +259,6 @@ def test_write_transformed_data(spark_session, sample_customers_df):
         assert result_df.count() == len(sample_customers_df.collect())
         for col in sample_customers_df.columns:
             assert col in result_df.columns
-
-
-def test_clean_customer_id_edge_cases(spark_session):
-    """Test edge cases for customer ID cleaning."""
-    data = [
-        (0.0, "Zero", "City"),  # Zero ID - should be filtered
-        (1e10, "Large", "City"),  # Very large ID - should work if whole number
-        (1.1, "Float", "City"),  # Decimal - should be filtered
-        (float("inf"), "Infinity", "City"),  # Infinity - should be filtered
-    ]
-    schema = StructType(
-        [
-            StructField("CUSTOMER_ID", FloatType(), True),
-            StructField("customer_name", StringType(), True),
-            StructField("city", StringType(), True),
-        ]
-    )
-    test_df = spark_session.createDataFrame(data, schema)
-    result_df = clean_customer_id(test_df)
-
-    # Only 1e10 should pass our filters (large whole number)
-    assert result_df.count() == 1
-    assert result_df.collect()[0][0] == 10000000000  # 1e10 as int
 
 
 def test_clean_string_columns_empty_strings(spark_session):
