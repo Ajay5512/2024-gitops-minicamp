@@ -8,7 +8,7 @@ from unittest.mock import (
 
 import pytest
 
-# Import the module to test after mocking
+# Import the module to test after mocking.
 from customer_targets import (
     clean_customer_id,
     clean_customer_targets_data,
