@@ -29,11 +29,6 @@ from pyspark.sql.types import (
     StructType,
 )
 
-# Mock the awsglue module
-sys.modules["awsglue"] = MagicMock()
-sys.modules["awsglue.context"] = MagicMock()
-sys.modules["awsglue.job"] = MagicMock()
-
 
 @pytest.fixture(scope="session")
 def spark_session():
