@@ -454,7 +454,8 @@ disable=raw-checker-failed,
         wildcard-import,            # W0401: Wildcard import awsglue.transforms
         missing-function-docstring, # C0116: Missing function or method docstring
         unused-import,              # W0611: Unused import boto3
-        duplicate-code              # R0801: Similar lines in 2 files
+        duplicate-code,              # R0801: Similar lines in 2 files
+        unused-argument                           # W0613
 
 
 # Enable the message, report, category or checker with the given id(s). You can
