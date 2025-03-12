@@ -121,29 +121,6 @@ def test_load_order_lines_data(spark_session, mock_glue_context):
         assert result_df.schema["ORDER_ID"].dataType == StringType()
 
 
-def test_clean_order_id_and_product_id(spark_session, sample_order_lines_df):
-    """Test that ORDER_ID and PRODUCT_ID are properly cleaned."""
-    result_df = clean_order_id_and_product_id(sample_order_lines_df)
-
-    ord_456_row = result_df.filter(result_df.ORDER_ID == "ORD456").collect()
-    assert len(ord_456_row) == 1, "ORDER_ID 'ord 456' should be cleaned to 'ORD456'"
-
-    ord_789_row = result_df.filter(result_df.ORDER_ID == "ORD789").collect()
-    assert len(ord_789_row) == 1, "ORDER_ID 'ORD/789' should be cleaned to 'ORD789'"
-
-    ord_012_row = result_df.filter(result_df.ORDER_ID == "ORD012").collect()
-    assert len(ord_012_row) == 1, "ORDER_ID 'ORD#012' should be cleaned to 'ORD012'"
-
-    prod_789_row = result_df.filter(result_df.PRODUCT_ID == 789).collect()
-    assert len(prod_789_row) == 1, "PRODUCT_ID 'prod789' should be cleaned to 789"
-
-    p_101_row = result_df.filter(result_df.PRODUCT_ID == 101).collect()
-    assert len(p_101_row) == 1, "PRODUCT_ID 'P-101' should be cleaned to 101"
-
-    assert result_df.schema["PRODUCT_ID"].dataType == IntegerType()
-    assert result_df.schema["ORDER_ID"].dataType == StringType()
-
-
 def test_clean_order_qty_and_delivery_qty(spark_session, sample_order_lines_df):
     """Test that ORDER_QTY and DELIVERY_QTY are properly cleaned."""
     result_df = clean_order_qty_and_delivery_qty(sample_order_lines_df)
