@@ -1,39 +1,53 @@
-import sys
-
-import boto3
-from awsglue.context import GlueContext
-from awsglue.transforms import *
-from awsglue.utils import getResolvedOptions
-from pyspark.context import SparkContext
-from pyspark.sql import DataFrame
-from pyspark.sql.functions import (
-    col,
-    regexp_replace,
-    trim,
-    when,
+# test_products_etl.py
+from unittest.mock import (
+    MagicMock,
+    patch,
 )
+
+import pandas as pd
+import pytest
+
+# Import the functions from your module
+from products_etl import (
+    clean_nulls_and_empty_values,
+    clean_products_data,
+    clean_special_characters,
+    convert_product_id,
+    filter_valid_products,
+    load_products_data,
+    normalize_column_names,
+    write_to_csv,
+)
+from pyspark.sql import SparkSession
 from pyspark.sql.types import (
+    IntegerType,
     StringType,
     StructField,
     StructType,
 )
 
-args = getResolvedOptions(sys.argv, ["JOB_NAME"])
-sc = SparkContext()
-glueContext = GlueContext(sc)
-spark = glueContext.spark_session
+
+@pytest.fixture(scope="session")
+def spark_session():
+    """Create a Spark session for testing."""
+    return (
+        SparkSession.builder.master("local[1]").appName("PySpark-Testing").getOrCreate()
+    )
 
 
-def load_products_data(file_path: str) -> DataFrame:
-    """
-    Load products data from a CSV file.
+@pytest.fixture
+def sample_data(spark_session):
+    """Create sample data for testing."""
+    data = [
+        ("001", "Product A", "Category 1"),
+        ("002 units", "Product B", "Category 2"),
+        ("003", "N/A", "Category 3"),
+        ("004", "Product D", "Unknown"),
+        ("005", "Product E", None),
+        ("006#", "Product F@", "Category |6"),
+        (None, "Product G", "Category 7"),
+    ]
 
-    Args:
-        file_path (str): The S3 path to the input CSV file.
-
-    Returns:
-        DataFrame: A Spark DataFrame containing the loaded products data.
-    """
     schema = StructType(
         [
             StructField("PRODUCT_ID", StringType(), True),
@@ -41,87 +55,153 @@ def load_products_data(file_path: str) -> DataFrame:
             StructField("category", StringType(), True),
         ]
     )
-    return (
-        spark.read.format("csv").option("header", True).schema(schema).load(file_path)
+
+    return spark_session.createDataFrame(data, schema)
+
+
+def test_normalize_column_names(spark_session, sample_data):
+    """Test normalizing column names."""
+    result = normalize_column_names(sample_data)
+
+    # Check if column names were normalized correctly
+    assert "product_id" in result.columns
+    assert "product_name" in result.columns
+    assert "category" in result.columns
+
+    # Check if the number of rows is preserved
+    assert result.count() == sample_data.count()
+
+
+def test_clean_nulls_and_empty_values(spark_session, sample_data):
+    """Test cleaning null and empty values."""
+    normalized_df = normalize_column_names(sample_data)
+    result = clean_nulls_and_empty_values(normalized_df)
+
+    # Convert to pandas for easier assertion
+    pandas_df = result.toPandas()
+
+    # Check that 'N/A' in product_name was converted to None
+    assert pandas_df.loc[2, "product_name"] is None
+
+    # Check that 'Unknown' in category was converted to None
+    assert pandas_df.loc[3, "category"] is None
+
+    # Check that None in category remains None
+    assert pandas_df.loc[4, "category"] is None
+
+
+def test_convert_product_id(spark_session, sample_data):
+    """Test converting product_id."""
+    normalized_df = normalize_column_names(sample_data)
+    null_cleaned_df = clean_nulls_and_empty_values(normalized_df)
+    result = convert_product_id(null_cleaned_df)
+
+    # Convert to pandas for easier assertion
+    pandas_df = result.toPandas()
+
+    # Check that rows with None product_id are dropped
+    assert len(pandas_df) < len(null_cleaned_df.toPandas())
+    assert all(pd.notna(pandas_df["product_id"]))
+
+    # Check that '002 units' was converted to integer 2
+    assert 2 in pandas_df["product_id"].values
+
+
+def test_clean_special_characters(spark_session, sample_data):
+    """Test cleaning special characters."""
+    normalized_df = normalize_column_names(sample_data)
+    null_cleaned_df = clean_nulls_and_empty_values(normalized_df)
+    id_cleaned_df = convert_product_id(null_cleaned_df)
+    result = clean_special_characters(id_cleaned_df)
+
+    # Convert to pandas for easier assertion
+    pandas_df = result.toPandas()
+
+    # Find row with product_id = 6 (after conversion from '006#')
+    row_with_special_chars = pandas_df[pandas_df["product_id"] == 6]
+
+    if not row_with_special_chars.empty:
+        # Check that special characters were removed
+        assert "#" not in str(row_with_special_chars["product_id"].iloc[0])
+        assert "@" not in row_with_special_chars["product_name"].iloc[0]
+        assert "|" not in row_with_special_chars["category"].iloc[0]
+
+
+def test_filter_valid_products(spark_session, sample_data):
+    """Test filtering valid products."""
+    normalized_df = normalize_column_names(sample_data)
+    null_cleaned_df = clean_nulls_and_empty_values(normalized_df)
+    id_cleaned_df = convert_product_id(null_cleaned_df)
+    special_char_cleaned_df = clean_special_characters(id_cleaned_df)
+    result = filter_valid_products(special_char_cleaned_df)
+
+    # Convert to pandas for easier assertion
+    pandas_df = result.toPandas()
+
+    # Check that all remaining records have non-null values for required fields
+    assert pandas_df["product_id"].notna().all()
+    assert pandas_df["product_name"].notna().all()
+    assert pandas_df["category"].notna().all()
+
+
+def test_clean_products_data(spark_session, sample_data):
+    """Test the complete cleaning process."""
+    result = clean_products_data(sample_data)
+
+    # Check that result has the expected columns
+    assert set(result.columns) == {"product_id", "product_name", "category"}
+
+    # Check that all records have valid data
+    pandas_df = result.toPandas()
+    assert pandas_df["product_id"].notna().all()
+    assert pandas_df["product_name"].notna().all()
+    assert pandas_df["category"].notna().all()
+
+
+@patch("products_etl.DataFrame.coalesce")
+def test_write_to_csv(mock_coalesce, spark_session):
+    """Test writing to CSV."""
+    # Create a small DataFrame for testing
+    test_df = spark_session.createDataFrame(
+        [(1, "Product A", "Category 1")], ["product_id", "product_name", "category"]
     )
 
+    # Setup mock for coalesce method
+    mock_write = MagicMock()
+    mock_mode = MagicMock()
+    mock_option1 = MagicMock()
+    mock_option2 = MagicMock()
 
-def clean_products_data(df: DataFrame) -> DataFrame:
-    """
-    Clean and transform products data.
+    mock_coalesce.return_value.write = mock_write
+    mock_write.mode.return_value = mock_mode
+    mock_mode.option.return_value = mock_option1
+    mock_option1.option.return_value = mock_option2
 
-    Args:
-        df (DataFrame): A Spark DataFrame containing raw products data.
+    # Call function
+    write_to_csv(test_df, "test/path")
 
-    Returns:
-        DataFrame: A cleaned and transformed Spark DataFrame.
-    """
-    # First rename columns
-    products_df = df.selectExpr(
-        "PRODUCT_ID as product_id", "product.name as product_name", "category"
-    )
-
-    # Clean and trim all columns first
-    for column in ["product_id", "product_name", "category"]:
-        products_df = products_df.withColumn(
-            column, trim(regexp_replace(col(column), r"[|#@$]", ""))
-        )
-
-    # Handle nulls and empty values in category and product_name
-    products_df = products_df.withColumn(
-        "category",
-        when(
-            (col("category").isNull())
-            | (trim(col("category")).isin("", "NULL", "Unknown", "N/A")),
-            None,
-        ).otherwise(col("category")),
-    ).withColumn(
-        "product_name",
-        when(
-            (col("product_name").isNull())
-            | (trim(col("product_name")).isin("N/A", "NULL", "Unknown")),
-            None,
-        ).otherwise(col("product_name")),
-    )
-
-    # Remove "units" from product_id WITHOUT casting to integer yet
-    products_df = products_df.withColumn(
-        "product_id", regexp_replace(col("product_id"), " units", "")
-    )
-
-    # Filter out rows with null values in required fields
-    products_df = products_df.filter(
-        (col("product_id").isNotNull())
-        & (col("product_name").isNotNull())
-        & (col("category").isNotNull())
-    )
-
-    # Try to cast product_id to integer only if needed
-    # For the tests, we'll keep it as string to avoid unnecessary failures
-    # Uncomment this if you need integer product IDs in the final output
-    # products_df = products_df.withColumn("product_id", col("product_id").cast("int"))
-    # products_df = products_df.filter(col("product_id").isNotNull())
-
-    return products_df
+    # Verify the calls
+    mock_coalesce.assert_called_once_with(1)
+    mock_write.mode.assert_called_once_with("overwrite")
+    mock_mode.option.assert_called_once_with("header", "true")
+    mock_option1.option.assert_called_once_with("quote", '"')
 
 
-def main():
-    input_path = "s3a://nexabrands-prod-source/data/products.csv"
-    output_bucket = "nexabrands-prod-target"
-    output_path = f"s3a://{output_bucket}/products/products.csv"
+def test_load_products_data(spark_session):
+    """Test loading products data with mocked Spark session."""
+    # Mock the read methods
+    mock_reader = MagicMock()
+    spark_session.read = MagicMock()
+    spark_session.read.format = MagicMock(return_value=mock_reader)
+    mock_reader.option = MagicMock(return_value=mock_reader)
+    mock_reader.schema = MagicMock(return_value=mock_reader)
+    mock_reader.load = MagicMock(return_value="DataFrame Result")
 
-    products_df = load_products_data(input_path)
-    cleaned_products = clean_products_data(products_df)
+    # Call the function
+    result = load_products_data(spark_session, "test/path")
 
-    # Write as single CSV file
-    cleaned_products.coalesce(1).write.mode("overwrite").option(
-        "header", "true"
-    ).option("quote", '"').option("escape", '"').csv(output_path)
-
-    print(
-        f"Products ETL job completed successfully. CSV output saved to: {output_path}"
-    )
-
-
-if __name__ == "__main__":
-    main()
+    # Assertions
+    spark_session.read.format.assert_called_once_with("csv")
+    mock_reader.option.assert_called_once_with("header", True)
+    mock_reader.load.assert_called_once_with("test/path")
+    assert result == "DataFrame Result"
