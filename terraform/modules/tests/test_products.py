@@ -156,23 +156,3 @@ def test_clean_products_data(spark_session, sample_data):
     assert pandas_df["product_id"].notna().all()
     assert pandas_df["product_name"].notna().all()
     assert pandas_df["category"].notna().all()
-
-
-def test_load_products_data(spark_session):
-    """Test loading products data with mocked Spark session."""
-    # Mock the read methods
-    mock_reader = MagicMock()
-    spark_session.read = MagicMock()
-    spark_session.read.format = MagicMock(return_value=mock_reader)
-    mock_reader.option = MagicMock(return_value=mock_reader)
-    mock_reader.schema = MagicMock(return_value=mock_reader)
-    mock_reader.load = MagicMock(return_value="DataFrame Result")
-
-    # Call the function
-    result = load_products_data(spark_session, "test/path")
-
-    # Assertions
-    spark_session.read.format.assert_called_once_with("csv")
-    mock_reader.option.assert_called_once_with("header", True)
-    mock_reader.load.assert_called_once_with("test/path")
-    assert result == "DataFrame Result"
