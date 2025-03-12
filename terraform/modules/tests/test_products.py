@@ -8,7 +8,7 @@ import pandas as pd
 import pytest
 
 # Import the functions from your module
-from products_etl import (
+from products import (
     clean_nulls_and_empty_values,
     clean_products_data,
     clean_special_characters,
