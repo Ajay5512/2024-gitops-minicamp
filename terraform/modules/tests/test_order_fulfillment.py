@@ -9,9 +9,6 @@ import pandas as pd
 import pyspark
 import pytest
 from moto import mock_aws
-
-# Import the functions to test
-# Note: Assuming these are in a module named order_fulfillment_processor
 from order_fulfillment import (
     clean_order_fulfillment_data,
     clean_order_id,
