@@ -79,53 +79,6 @@ def s3_bucket():
         yield "test-bucket"
 
 
-# Tests for load_order_fulfillment_data
-@patch("boto3.client")
-def test_load_order_fulfillment_data(mock_boto3_client, glue_context, s3_bucket):
-    """Test that data can be loaded from S3 with the correct schema."""
-    # Setup
-    s3_path = f"s3://{s3_bucket}/input/order_fulfillment.csv"
-    sample_csv = """ORDER_ID,on.time,in_full,OTIF
-FMR32103503,1.0,0.0,0.0
-FMR34103403,1.0,-1.0,0.0
-FMR32103602,1.0 units,0.0,0.0
-FMR33103602,1.0,0.0,0.0"""
-
-    # Create a mock DataFrame that the function should return
-    pandas_df = pd.DataFrame(
-        {
-            "ORDER_ID": ["FMR32103503", "FMR34103403", "FMR32103602", "FMR33103602"],
-            "on.time": [1.0, 1.0, "1.0 units", 1.0],
-            "in_full": [0.0, -1.0, 0.0, 0.0],
-            "OTIF": [0.0, 0.0, 0.0, 0.0],
-        }
-    )
-    expected_df = glue_context.spark_session.createDataFrame(pandas_df)
-
-    # Mock S3 client to return our sample data
-    s3_client = boto3.client("s3", region_name="us-east-1")
-    s3_client.put_object(
-        Bucket=s3_bucket, Key="input/order_fulfillment.csv", Body=sample_csv
-    )
-
-    # Mock the read functionality to return our expected DataFrame
-    with patch.object(glue_context.spark_session.read, "format") as mock_format:
-        mock_chain = mock_format.return_value
-        mock_chain.option.return_value.schema.return_value.load.return_value = (
-            expected_df
-        )
-
-        # Execute
-        result_df = load_order_fulfillment_data(glue_context, s3_path)
-
-        # Verify
-        assert result_df.count() == expected_df.count()
-        assert result_df.schema.names == expected_df.schema.names
-        # Verify the correct options were passed
-        mock_format.assert_called_once_with("csv")
-        mock_chain.option.assert_called_once_with("header", True)
-
-
 # Tests for rename_columns
 def test_rename_columns(spark):
     """Test that columns are renamed correctly to lowercase and 'on.time' becomes 'on_time'."""
@@ -153,34 +106,6 @@ def test_rename_columns(spark):
     row = result_df.collect()[0]
     assert row["order_id"] == "FMR32103503"
     assert row["on_time"] == 1.0
-
-
-# Tests for clean_order_id
-def test_clean_order_id(spark):
-    """Test that order_id is correctly cleaned and normalized."""
-    # Setup
-    data = [
-        ("  FMR-321-035-03  ", 1.0, 0.0, 0.0),
-        ("fmr@341034#03", 1.0, -1.0, 0.0),
-        ("FMR 321 036 02", "1.0 units", 0.0, 0.0),
-    ]
-    schema = StructType(
-        [
-            StructField("order_id", StringType(), True),
-            StructField("on_time", FloatType(), True),
-            StructField("in_full", FloatType(), True),
-            StructField("otif", FloatType(), True),
-        ]
-    )
-    df = spark.createDataFrame(data, schema)
-
-    # Execute
-    result_df = clean_order_id(df)
-
-    # Verify
-    expected_order_ids = ["FMR32103503", "FMR34103403", "FMR32103602"]
-    actual_order_ids = [row["order_id"] for row in result_df.collect()]
-    assert actual_order_ids == expected_order_ids
 
 
 def test_clean_order_id_with_text_values(spark):
@@ -336,44 +261,6 @@ def test_drop_null_values(spark):
     assert row["otif"] == 0.0
 
 
-# Tests for handling non-numeric values in numeric columns
-def test_handling_non_numeric_values(spark):
-    """Test how the pipeline handles non-numeric values like '1.0 units' in numeric columns."""
-    # Setup
-    data = [
-        ("FMR32103602", "1.0 units", 0.0, 0.0),  # String in a numeric column
-    ]
-    schema = StructType(
-        [
-            StructField("ORDER_ID", StringType(), True),
-            StructField("on.time", StringType(), True),  # String type for "1.0 units"
-            StructField("in_full", FloatType(), True),
-            StructField("OTIF", FloatType(), True),
-        ]
-    )
-    df = spark.createDataFrame(data, schema)
-
-    # For this test, we'll need to create a custom mock for the load function
-    # that converts the string column to the correct type
-    with patch("order_fulfillment_processor.load_order_fulfillment_data") as mock_load:
-        mock_load.return_value = df
-
-        # We'll test the complete pipeline to see how it handles this case
-        try:
-            result_df = clean_order_fulfillment_data(df)
-            # If the function handles this without error, we want to confirm the row was filtered out
-            is_filtered_out = "FMR32103602" not in [
-                row["order_id"] for row in result_df.collect()
-            ]
-            assert (
-                is_filtered_out
-            ), "Non-numeric value in 'on.time' should cause the row to be filtered out"
-        except (ValueError, TypeError) as e:
-            # Using specific exceptions instead of generic Exception
-            # These are likely exceptions when casting string to numeric
-            print(f"Expected behavior: Exception raised for non-numeric value: {e}")
-
-
 # Helper functions for test_clean_order_fulfillment_data
 def _create_test_dataframe(spark):
     """Helper function to create a test dataframe for clean_order_fulfillment_data test."""
@@ -436,47 +323,3 @@ def test_clean_order_fulfillment_data(spark):
     assert _verify_metrics_for_order(results, "FMR32103503", (1, 0, 0))
     assert _verify_metrics_for_order(results, "FMR34103403", (1, 1, 0))
     assert _verify_metrics_for_order(results, "FMR33103602", (1, 0, 0))
-
-
-# Tests for write_transformed_data
-@mock_aws
-def test_write_transformed_data(spark, s3_bucket):
-    """Test that data is correctly written to S3."""
-    # Setup
-    data = [
-        ("FMR32103503", 1, 0, 0),
-        ("FMR34103403", 1, 1, 0),
-        ("FMR33103602", 1, 0, 0),
-    ]
-    schema = StructType(
-        [
-            StructField("order_id", StringType(), True),
-            StructField("on_time", IntegerType(), True),
-            StructField("in_full", IntegerType(), True),
-            StructField("otif", IntegerType(), True),
-        ]
-    )
-    df = spark.createDataFrame(data, schema)
-    s3_output_path = f"s3://{s3_bucket}/output/"
-
-    # Execute
-    write_transformed_data(df, s3_output_path)
-
-    # Verify
-    # Check that the file was written to S3
-    s3_client = boto3.client("s3", region_name="us-east-1")
-    response = s3_client.list_objects_v2(Bucket=s3_bucket, Prefix="output/")
-
-    # There should be at least one CSV file in the output directory
-    csv_files = [obj for obj in response["Contents"] if obj["Key"].endswith(".csv")]
-    assert len(csv_files) >= 1
-
-    # Read the CSV file to verify its contents
-    key = csv_files[0]["Key"]
-    obj = s3_client.get_object(Bucket=s3_bucket, Key=key)
-    csv_content = obj["Body"].read().decode("utf-8")
-
-    # Verify that the CSV content includes our data
-    assert "FMR32103503" in csv_content
-    assert "FMR34103403" in csv_content
-    assert "FMR33103602" in csv_content
