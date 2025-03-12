@@ -1,11 +1,26 @@
+from unittest.mock import (
+    MagicMock,
+    patch,
+)
+
+import pandas as pd
 import pytest
+
+# Import the functions to test
 from orders import (
     clean_orders_data,
     load_orders_data,
 )
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col
+from pyspark.sql import (
+    DataFrame,
+    SparkSession,
+)
+from pyspark.sql.functions import (
+    col,
+    lit,
+)
 from pyspark.sql.types import (
+    DateType,
     IntegerType,
     StringType,
     StructField,
@@ -13,45 +28,32 @@ from pyspark.sql.types import (
 )
 
 
-@pytest.fixture(scope="module")
-def spark():
-    spark = SparkSession.builder.appName("pytest-pyspark").getOrCreate()
+@pytest.fixture(scope="session")
+def spark_session():
+    """Create a SparkSession that can be reused across tests."""
+    spark = (
+        SparkSession.builder.master("local[*]")
+        .appName("Orders_Unit_Tests")
+        .getOrCreate()
+    )
     yield spark
     spark.stop()
 
 
-def test_load_orders_data(spark):
-    # Create a test DataFrame
-    data = [("1", "101", "01/01/2023"), ("2", "102", "02/01/2023")]
-    schema = StructType(
-        [
-            StructField("ORDER_ID", StringType(), True),
-            StructField("customer_id", StringType(), True),
-            StructField("order_placement_date", StringType(), True),
-        ]
-    )
-    test_df = spark.createDataFrame(data, schema)
-
-    # Write to a temporary CSV file
-    test_csv_path = "test_orders.csv"
-    test_df.write.mode("overwrite").option("header", True).csv(test_csv_path)
-
-    # Load the data using the function
-    loaded_df = load_orders_data(spark, test_csv_path)
-
-    # Assert that the loaded data matches the expected schema and data
-    assert loaded_df.columns == ["ORDER_ID", "customer_id", "order_placement_date"]
-    assert loaded_df.count() == 2
-
-
-def test_clean_orders_data(spark):
-    # Create a test DataFrame with some dirty data
+@pytest.fixture
+def sample_orders_df(spark_session):
+    """Create a sample DataFrame for testing."""
     data = [
-        ("1", "101", "01/01/2023"),
-        ("2", "NA", "02/01/2023"),
-        ("3", "102", "N/A"),
-        ("4", "103", "03/01/2023"),
-        ("5", "104", "04/01/2023"),
+        ("ORD123", "1001", "01/15/2024"),
+        ("ord-456", "1002", "02/20/2024"),
+        ("ORD789", "1003", "03/25/2024"),
+        ("NA", "ID_1004", "04/30/2024"),
+        ("ORD321", "1005ABC", "05/05/2024"),
+        ("ORD654", "1006", "Monday, 06/10/2023"),
+        ("ORD987", "1007", "07/15/2023"),
+        ("ORD987", "1007", "07/15/2023"),  # Duplicate for testing
+        ("", "NULL", ""),  # Empty values
+        ("Unknown", "none", "N/A"),  # Unwanted values
     ]
     schema = StructType(
         [
@@ -60,25 +62,82 @@ def test_clean_orders_data(spark):
             StructField("order_placement_date", StringType(), True),
         ]
     )
-    test_df = spark.createDataFrame(data, schema)
-
-    # Clean the data
-    cleaned_df = clean_orders_data(test_df)
-
-    # Assert that the cleaned data is as expected
-    assert cleaned_df.count() == 3  # Only 3 rows should remain after cleaning
-    assert cleaned_df.filter(col("customer_id").isNull()).count() == 0
-    assert cleaned_df.filter(col("order_placement_date").isNull()).count() == 0
+    return spark_session.createDataFrame(data=data, schema=schema)
 
 
-def test_clean_orders_data_with_unwanted_values(spark):
-    # Create a test DataFrame with unwanted values
+@pytest.fixture
+def expected_schema():
+    """Define the expected schema after cleaning."""
+    return StructType(
+        [
+            StructField("order_id", StringType(), True),
+            StructField("customer_id", IntegerType(), True),
+            StructField("order_placement_date", DateType(), True),
+        ]
+    )
+
+
+def test_load_orders_data(spark_session):
+    """Test that load_orders_data correctly loads CSV data with the specified schema."""
+    test_data = pd.DataFrame(
+        {
+            "ORDER_ID": ["ORD123", "ORD456", "ORD789"],
+            "customer_id": ["1001", "1002", "1003"],
+            "order_placement_date": ["01/15/2024", "02/20/2024", "03/25/2024"],
+        }
+    )
+    csv_path = "/tmp/test_orders.csv"
+    test_data.to_csv(csv_path, index=False)
+
+    result_df = load_orders_data(spark_session, csv_path)
+
+    # Check schema
+    assert len(result_df.schema) == 3
+    assert "ORDER_ID" in result_df.columns
+    assert "customer_id" in result_df.columns
+    assert "order_placement_date" in result_df.columns
+
+    # Check data
+    assert result_df.count() == 3
+    assert result_df.filter(result_df.ORDER_ID == "ORD123").count() == 1
+
+
+def test_clean_orders_data_integration(sample_orders_df, expected_schema):
+    """Integration test for the entire data cleaning pipeline."""
+    result_df = clean_orders_data(sample_orders_df)
+
+    # Check schema
+    for field in expected_schema:
+        assert field.name in result_df.columns
+    assert result_df.schema["order_id"].dataType == StringType()
+    assert result_df.schema["customer_id"].dataType == IntegerType()
+    assert result_df.schema["order_placement_date"].dataType == DateType()
+
+    # Check data filtering and cleaning
+    assert result_df.count() == 3  # Only 3 valid records after cleaning
+
+    # Check specific transformations
+    ord123_row = result_df.filter(result_df.order_id == "ORD123").collect()[0]
+    assert ord123_row.customer_id == 1001
+
+    # Check date standardization
+    assert all(row.order_placement_date.year == 2024 for row in result_df.collect())
+
+
+def test_clean_orders_data_column_renaming(sample_orders_df):
+    """Test that columns are properly renamed."""
+    result_df = clean_orders_data(sample_orders_df)
+    assert "order_id" in result_df.columns
+    assert "ORDER_ID" not in result_df.columns
+
+
+def test_clean_orders_data_unwanted_values(spark_session):
+    """Test filtering of unwanted values."""
     data = [
-        ("1", "101", "01/01/2023"),
-        ("2", "none", "02/01/2023"),
-        ("3", "102", "NULL"),
-        ("4", "103", "03/01/2023"),
-        ("5", "104", "04/01/2023"),
+        ("ORD123", "1001", "01/15/2024"),
+        ("NA", "1002", "02/20/2024"),
+        ("ORD456", "none", "03/25/2024"),
+        ("ORD789", "1004", "NULL"),
     ]
     schema = StructType(
         [
@@ -87,22 +146,20 @@ def test_clean_orders_data_with_unwanted_values(spark):
             StructField("order_placement_date", StringType(), True),
         ]
     )
-    test_df = spark.createDataFrame(data, schema)
+    test_df = spark_session.createDataFrame(data=data, schema=schema)
 
-    # Clean the data
-    cleaned_df = clean_orders_data(test_df)
-
-    # Assert that the cleaned data is as expected
-    assert cleaned_df.count() == 3  # Only 3 rows should remain after cleaning
+    result_df = clean_orders_data(test_df)
+    assert result_df.count() == 1  # Only one valid row
+    assert result_df.collect()[0].order_id == "ORD123"
 
 
-def test_clean_orders_data_with_invalid_dates(spark):
-    # Create a test DataFrame with invalid dates
+def test_clean_orders_data_order_id_cleaning(spark_session):
+    """Test that order_id is properly cleaned and standardized."""
     data = [
-        ("1", "101", "01/01/2023"),
-        ("2", "102", "2023-01-02"),  # Invalid format
-        ("3", "103", "03/01/2023"),
-        ("4", "104", "04/01/2023"),
+        ("ord123", "1001", "01/15/2024"),
+        ("ORD-456", "1002", "02/20/2024"),
+        ("  ORD789  ", "1003", "03/25/2024"),
+        ("Unknown", "1004", "04/30/2024"),
     ]
     schema = StructType(
         [
@@ -111,21 +168,26 @@ def test_clean_orders_data_with_invalid_dates(spark):
             StructField("order_placement_date", StringType(), True),
         ]
     )
-    test_df = spark.createDataFrame(data, schema)
+    test_df = spark_session.createDataFrame(data=data, schema=schema)
 
-    # Clean the data
-    cleaned_df = clean_orders_data(test_df)
+    result_df = clean_orders_data(test_df)
 
-    # Assert that the cleaned data is as expected
-    assert cleaned_df.count() == 3  # Only 3 rows should remain after cleaning
+    # Check that IDs are standardized (uppercase, trimmed)
+    assert result_df.filter(result_df.order_id == "ORD123").count() == 1
+    assert result_df.filter(result_df.order_id == "ORD789").count() == 1
+
+    # Check that invalid IDs are filtered
+    assert result_df.filter(result_df.order_id == "ORD-456").count() == 0
+    assert result_df.filter(result_df.order_id == "Unknown").count() == 0
 
 
-def test_clean_orders_data_with_duplicates(spark):
-    # Create a test DataFrame with duplicates
+def test_clean_orders_data_customer_id_cleaning(spark_session):
+    """Test that customer_id is properly cleaned and converted to integer."""
     data = [
-        ("1", "101", "01/01/2023"),
-        ("1", "101", "01/01/2023"),  # Duplicate
-        ("2", "102", "02/01/2023"),
+        ("ORD123", "1001", "01/15/2024"),
+        ("ORD456", "ID_1002", "02/20/2024"),
+        ("ORD789", "1003ABC", "03/25/2024"),
+        ("ORD321", "1004", "04/30/2024"),
     ]
     schema = StructType(
         [
@@ -134,10 +196,97 @@ def test_clean_orders_data_with_duplicates(spark):
             StructField("order_placement_date", StringType(), True),
         ]
     )
-    test_df = spark.createDataFrame(data, schema)
+    test_df = spark_session.createDataFrame(data=data, schema=schema)
 
-    # Clean the data
-    cleaned_df = clean_orders_data(test_df)
+    result_df = clean_orders_data(test_df)
 
-    # Assert that the cleaned data is as expected
-    assert cleaned_df.count() == 2  # Duplicates should be removed
+    # Check that valid IDs are converted to integers
+    assert result_df.filter(result_df.customer_id == 1001).count() == 1
+    assert result_df.filter(result_df.customer_id == 1004).count() == 1
+
+    # Check that invalid IDs are filtered
+    assert result_df.filter(col("customer_id").like("ID_%")).count() == 0
+    assert result_df.filter(col("customer_id").rlike("[^0-9.]")).count() == 0
+
+
+def test_clean_orders_data_date_cleaning(spark_session):
+    """Test that order_placement_date is properly cleaned and standardized."""
+    data = [
+        ("ORD123", "1001", "01/15/2024"),
+        ("ORD456", "1002", "Monday, 02/20/2023"),
+        ("ORD789", "1003", "03/25/2023"),
+        ("ORD321", "1004", "04/30/2022"),
+    ]
+    schema = StructType(
+        [
+            StructField("ORDER_ID", StringType(), True),
+            StructField("customer_id", StringType(), True),
+            StructField("order_placement_date", StringType(), True),
+        ]
+    )
+    test_df = spark_session.createDataFrame(data=data, schema=schema)
+
+    result_df = clean_orders_data(test_df)
+
+    # Check that all dates are standardized to 2024
+    assert all(row.order_placement_date.year == 2024 for row in result_df.collect())
+
+    # Check specific date conversions
+    jan_date = (
+        result_df.filter(result_df.order_id == "ORD123")
+        .collect()[0]
+        .order_placement_date
+    )
+    assert jan_date.month == 1
+    assert jan_date.day == 15
+
+    feb_date = (
+        result_df.filter(result_df.order_id == "ORD456")
+        .collect()[0]
+        .order_placement_date
+    )
+    assert feb_date.month == 2
+    assert feb_date.day == 20
+
+
+def test_clean_orders_data_drop_duplicates(spark_session):
+    """Test that duplicate rows are properly removed."""
+    data = [
+        ("ORD123", "1001", "01/15/2024"),
+        ("ORD123", "1001", "01/15/2024"),  # Duplicate
+        ("ORD456", "1002", "02/20/2024"),
+        ("ORD456", "1002", "02/20/2024"),  # Duplicate
+    ]
+    schema = StructType(
+        [
+            StructField("ORDER_ID", StringType(), True),
+            StructField("customer_id", StringType(), True),
+            StructField("order_placement_date", StringType(), True),
+        ]
+    )
+    test_df = spark_session.createDataFrame(data=data, schema=schema)
+
+    result_df = clean_orders_data(test_df)
+    assert result_df.count() == 2  # Only unique rows
+
+
+def test_clean_orders_data_drop_nulls(spark_session):
+    """Test that rows with null values are properly removed."""
+    data = [
+        ("ORD123", "1001", "01/15/2024"),
+        ("ORD456", None, "02/20/2024"),
+        ("ORD789", "1003", None),
+        (None, "1004", "04/30/2024"),
+    ]
+    schema = StructType(
+        [
+            StructField("ORDER_ID", StringType(), True),
+            StructField("customer_id", StringType(), True),
+            StructField("order_placement_date", StringType(), True),
+        ]
+    )
+    test_df = spark_session.createDataFrame(data=data, schema=schema)
+
+    result_df = clean_orders_data(test_df)
+    assert result_df.count() == 1  # Only one row without nulls
+    assert result_df.collect()[0].order_id == "ORD123"
