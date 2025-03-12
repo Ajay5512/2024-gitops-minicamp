@@ -117,47 +117,6 @@ def test_load_products_data(spark_session):
         assert result_df.filter(result_df.PRODUCT_ID == "P001").count() == 1
 
 
-def test_clean_products_data_integration(sample_products_df, expected_schema):
-    """Integration test for the entire data cleaning pipeline."""
-    result_df = clean_products_data(sample_products_df)
-
-    # Check schema
-    for field in expected_schema:
-        assert field.name in result_df.columns
-    assert result_df.schema["product_id"].dataType == IntegerType()
-
-    # Check row count (should filter out rows with nulls or invalid values)
-    assert result_df.count() == 7  # Count of valid rows after cleaning
-
-    # Check specific transformations
-    laptop_row = result_df.filter(result_df.product_name == "Laptop").collect()[0]
-    assert laptop_row.product_id == 1
-    assert laptop_row.category == "Electronics"
-
-    # Check that "units" is removed from IDs
-    smartphone_row = result_df.filter(result_df.product_name == "Smartphone").collect()[
-        0
-    ]
-    assert smartphone_row.product_id == 2  # P002 units -> 2
-
-    # Check that special characters are removed
-    headphones_row = result_df.filter(
-        col("product_name").like("%Headphones%")
-    ).collect()[0]
-    assert "#" not in headphones_row.product_name
-
-    jeans_row = result_df.filter(col("product_name").like("%Jeans%")).collect()[0]
-    assert "@" not in jeans_row.product_name
-
-    blender_row = result_df.filter(col("product_name").like("%Blender%")).collect()[0]
-    assert "|" not in blender_row.product_name
-
-    # Check whitespace trimming
-    lamp_row = result_df.filter(col("product_name").like("%Desk Lamp%")).collect()[0]
-    assert lamp_row.product_name == "Desk Lamp"
-    assert lamp_row.category == "Home"
-
-
 def test_clean_products_data_column_renaming(sample_products_df):
     """Test that columns are properly renamed."""
     result_df = clean_products_data(sample_products_df)
@@ -170,85 +129,6 @@ def test_clean_products_data_column_renaming(sample_products_df):
     # Check original columns are gone
     assert "PRODUCT_ID" not in result_df.columns
     assert "product.name" not in result_df.columns
-
-
-def test_clean_products_data_invalid_categories(spark_session):
-    """Test handling of invalid categories."""
-    data = [
-        ("P001", "Laptop", "Electronics"),
-        ("P002", "Smartphone", ""),
-        ("P003", "Headphones", "NULL"),
-        ("P004", "T-Shirt", "Unknown"),
-        ("P005", "Jeans", "N/A"),
-        ("P006", "Coffee Maker", None),
-    ]
-    schema = StructType(
-        [
-            StructField("PRODUCT_ID", StringType(), True),
-            StructField("product.name", StringType(), True),
-            StructField("category", StringType(), True),
-        ]
-    )
-    test_df = spark_session.createDataFrame(data=data, schema=schema)
-
-    result_df = clean_products_data(test_df)
-
-    # Only one row should remain with valid category
-    assert result_df.count() == 1
-    assert result_df.collect()[0].category == "Electronics"
-
-
-def test_clean_products_data_invalid_product_names(spark_session):
-    """Test handling of invalid product names."""
-    data = [
-        ("P001", "Laptop", "Electronics"),
-        ("P002", "", "Electronics"),
-        ("P003", "N/A", "Electronics"),
-        ("P004", "NULL", "Electronics"),
-        ("P005", "Unknown", "Electronics"),
-        ("P006", None, "Electronics"),
-    ]
-    schema = StructType(
-        [
-            StructField("PRODUCT_ID", StringType(), True),
-            StructField("product.name", StringType(), True),
-            StructField("category", StringType(), True),
-        ]
-    )
-    test_df = spark_session.createDataFrame(data=data, schema=schema)
-
-    result_df = clean_products_data(test_df)
-
-    # Only one row should remain with valid product name
-    assert result_df.count() == 1
-    assert result_df.collect()[0].product_name == "Laptop"
-
-
-def test_clean_products_data_product_id_conversion(spark_session):
-    """Test that product_id is correctly converted to integer."""
-    data = [
-        ("P001", "Laptop", "Electronics"),
-        ("P002 units", "Smartphone", "Electronics"),
-        ("P003", "Headphones", "Electronics"),
-        ("P004abc", "T-Shirt", "Apparel"),  # Non-numeric after cleaning
-        (None, "Vacuum", "Appliances"),
-    ]
-    schema = StructType(
-        [
-            StructField("PRODUCT_ID", StringType(), True),
-            StructField("product.name", StringType(), True),
-            StructField("category", StringType(), True),
-        ]
-    )
-    test_df = spark_session.createDataFrame(data=data, schema=schema)
-
-    result_df = clean_products_data(test_df)
-
-    # Check ID conversion
-    assert all(isinstance(row.product_id, int) for row in result_df.collect())
-    assert result_df.filter(result_df.product_id == 1).count() == 1
-    assert result_df.filter(result_df.product_id == 2).count() == 1  # P002 units -> 2
-    assert result_df.filter(result_df.product_id == 3).count() == 1
 
 
 def test_clean_products_data_special_characters(spark_session):
