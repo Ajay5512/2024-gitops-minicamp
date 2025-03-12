@@ -8,7 +8,7 @@ import boto3
 import pandas as pd
 import pyspark
 import pytest
-from moto import mock_s3
+from moto import mock_aws
 
 # Import the functions to test
 # Note: Assuming these are in a module named order_fulfillment_processor
@@ -76,7 +76,7 @@ def sample_data(spark):
 @pytest.fixture
 def s3_bucket():
     """Set up a mock S3 bucket for testing."""
-    with mock_s3():
+    with mock_aws():
         s3 = boto3.resource("s3", region_name="us-east-1")
         bucket = s3.create_bucket(Bucket="test-bucket")
         yield "test-bucket"
@@ -442,7 +442,7 @@ def test_clean_order_fulfillment_data(spark):
 
 
 # Tests for write_transformed_data
-@mock_s3
+@mock_aws
 def test_write_transformed_data(spark, s3_bucket):
     """Test that data is correctly written to S3."""
     # Setup
@@ -524,7 +524,7 @@ FMR33103602,1.0,0.0,0.0"""
 
 # Integration test for the entire processing pipeline
 @patch("boto3.client")
-@mock_s3
+@mock_aws
 def test_integration_order_fulfillment_processing(
     mock_boto3_client, spark, glue_context, s3_bucket
 ):
