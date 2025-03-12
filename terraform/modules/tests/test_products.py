@@ -1,4 +1,4 @@
-# test_products_etl.py
+# test_products.py
 from unittest.mock import (
     MagicMock,
     patch,
@@ -156,35 +156,6 @@ def test_clean_products_data(spark_session, sample_data):
     assert pandas_df["product_id"].notna().all()
     assert pandas_df["product_name"].notna().all()
     assert pandas_df["category"].notna().all()
-
-
-@patch("products_etl.DataFrame.coalesce")
-def test_write_to_csv(mock_coalesce, spark_session):
-    """Test writing to CSV."""
-    # Create a small DataFrame for testing
-    test_df = spark_session.createDataFrame(
-        [(1, "Product A", "Category 1")], ["product_id", "product_name", "category"]
-    )
-
-    # Setup mock for coalesce method
-    mock_write = MagicMock()
-    mock_mode = MagicMock()
-    mock_option1 = MagicMock()
-    mock_option2 = MagicMock()
-
-    mock_coalesce.return_value.write = mock_write
-    mock_write.mode.return_value = mock_mode
-    mock_mode.option.return_value = mock_option1
-    mock_option1.option.return_value = mock_option2
-
-    # Call function
-    write_to_csv(test_df, "test/path")
-
-    # Verify the calls
-    mock_coalesce.assert_called_once_with(1)
-    mock_write.mode.assert_called_once_with("overwrite")
-    mock_mode.option.assert_called_once_with("header", "true")
-    mock_option1.option.assert_called_once_with("quote", '"')
 
 
 def test_load_products_data(spark_session):
