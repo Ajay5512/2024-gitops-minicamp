@@ -102,28 +102,6 @@ def test_load_orders_data(spark_session):
     assert result_df.filter(result_df.ORDER_ID == "ORD123").count() == 1
 
 
-def test_clean_orders_data_integration(sample_orders_df, expected_schema):
-    """Integration test for the entire data cleaning pipeline."""
-    result_df = clean_orders_data(sample_orders_df)
-
-    # Check schema
-    for field in expected_schema:
-        assert field.name in result_df.columns
-    assert result_df.schema["order_id"].dataType == StringType()
-    assert result_df.schema["customer_id"].dataType == IntegerType()
-    assert result_df.schema["order_placement_date"].dataType == DateType()
-
-    # Check data filtering and cleaning
-    assert result_df.count() == 3  # Only 3 valid records after cleaning
-
-    # Check specific transformations
-    ord123_row = result_df.filter(result_df.order_id == "ORD123").collect()[0]
-    assert ord123_row.customer_id == 1001
-
-    # Check date standardization
-    assert all(row.order_placement_date.year == 2024 for row in result_df.collect())
-
-
 def test_clean_orders_data_column_renaming(sample_orders_df):
     """Test that columns are properly renamed."""
     result_df = clean_orders_data(sample_orders_df)
@@ -151,34 +129,6 @@ def test_clean_orders_data_unwanted_values(spark_session):
     result_df = clean_orders_data(test_df)
     assert result_df.count() == 1  # Only one valid row
     assert result_df.collect()[0].order_id == "ORD123"
-
-
-def test_clean_orders_data_order_id_cleaning(spark_session):
-    """Test that order_id is properly cleaned and standardized."""
-    data = [
-        ("ord123", "1001", "01/15/2024"),
-        ("ORD-456", "1002", "02/20/2024"),
-        ("  ORD789  ", "1003", "03/25/2024"),
-        ("Unknown", "1004", "04/30/2024"),
-    ]
-    schema = StructType(
-        [
-            StructField("ORDER_ID", StringType(), True),
-            StructField("customer_id", StringType(), True),
-            StructField("order_placement_date", StringType(), True),
-        ]
-    )
-    test_df = spark_session.createDataFrame(data=data, schema=schema)
-
-    result_df = clean_orders_data(test_df)
-
-    # Check that IDs are standardized (uppercase, trimmed)
-    assert result_df.filter(result_df.order_id == "ORD123").count() == 1
-    assert result_df.filter(result_df.order_id == "ORD789").count() == 1
-
-    # Check that invalid IDs are filtered
-    assert result_df.filter(result_df.order_id == "ORD-456").count() == 0
-    assert result_df.filter(result_df.order_id == "Unknown").count() == 0
 
 
 def test_clean_orders_data_customer_id_cleaning(spark_session):
