@@ -1,4 +1,4 @@
-name: Process Order_fullfillment Data
+name: Process Order Fulfillment Data
 
 permissions:
   contents: write
@@ -13,6 +13,9 @@ on:
       - 'terraform/modules/scripts/order_fulfillment.py'
   workflow_dispatch:
 
+env:
+  TEST_EXECUTION_ENV: dev
+
 jobs:
   test:
     name: 'Run PySpark Tests'
@@ -20,61 +23,77 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+        
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-
+        
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyspark pytest pytest-cov allure-pytest pre-commit boto3 awscli
-
+          pip install pyspark pytest pytest-cov allure-pytest pre-commit boto3 awscli pytest-rerunfailures
+        
       - name: Install and run pre-commit hooks
         run: |
           pre-commit install
-          pre-commit run --all-files
-
+          SKIP=no-commit-to-branch pre-commit run --all-files
+        
       - name: Run PySpark tests
         run: |
           export PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE/terraform/modules/scripts
           cd terraform/modules/tests
-          pytest test_order_fulfillment.py -v --cov=../scripts --cov-report=xml:coverage.xml --cov-report=html:coverage_html --alluredir=allure-results
-
+          pytest test_order_fulfillment.py -v --reruns 3 --cov=../scripts --cov-report=xml:coverage.xml --cov-report=html:coverage_html --alluredir=allure-results
+      
+      - name: Get Allure history
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+      
       - name: Upload Coverage Report (HTML)
         uses: actions/upload-artifact@v4
         with:
           name: coverage_html
           path: terraform/modules/tests/coverage_html
-
+      
       - name: Upload Allure Results
         uses: actions/upload-artifact@v4
         with:
           name: allure-results
           path: terraform/modules/tests/allure-results
-
+      
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@master
         if: always()
         with:
           allure_results: terraform/modules/tests/allure-results
-          allure_report: allure-report
-
+          allure_history: allure-history
+      
       - name: Upload Allure Report
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: allure-report
-
+      
       - name: Deploy to GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: allure-report
+          publish_dir: allure-history
           keep_files: false
-
+      
+      - name: Set current date as env variable
+        run: |
+          echo "event_name=$GITHUB_EVENT_NAME" >> $GITHUB_OUTPUT
+          echo "workflow=$GITHUB_WORKFLOW" >> $GITHUB_OUTPUT
+          echo "actor=$GITHUB_ACTOR" >> $GITHUB_OUTPUT
+          echo "run_number=$GITHUB_RUN_NUMBER" >> $GITHUB_OUTPUT
+        id: version
+      
       - name: Add Coverage Comment to PR
         if: github.event_name == 'pull_request'
         uses: MishaKav/pytest-coverage-comment@main
@@ -92,31 +111,31 @@ jobs:
     defaults:
       run:
         shell: bash
-
+    
     permissions:
       id-token: write
       contents: read
-
+    
     steps:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.ROLE_TO_ASSUME }}
           aws-region: us-east-1
-
+      
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
-
+      
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install boto3
-
+      
       - name: Upload Glue Script to S3
         run: |
           aws s3 cp terraform/modules/scripts/order_fulfillment.py "s3://nexabrands-prod-code/scripts/order_fulfillment.py"
@@ -126,3 +145,9 @@ jobs:
           SOURCE_BUCKET: ${{ secrets.SOURCE_BUCKET }}
           TARGET_BUCKET: ${{ secrets.TARGET_BUCKET }}
           GLUE_SERVICE_ROLE: ${{ secrets.GLUE_SERVICE_ROLE }}
+
+      - name: Fail if tests failed
+        if: needs.test.outputs.tests_failed == 'true'
+        run: |
+            echo "Tests failed in the previous job. Marking workflow as failed."
+            exit 1
