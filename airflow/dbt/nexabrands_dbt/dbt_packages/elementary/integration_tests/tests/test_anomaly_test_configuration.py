@@ -1,10 +1,6 @@
 import json
 from dataclasses import dataclass
-from typing import (
-    Generic,
-    Literal,
-    TypeVar,
-)
+from typing import Generic, Literal, TypeVar
 
 from dbt_project import DbtProject
 from parametrization import Parametrization

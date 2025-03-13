@@ -40,7 +40,7 @@
                                                                                                    detection_period=detection_period,
                                                                                                    training_period=training_period,
                                                                                                    exclude_final_results=exclude_final_results) %}
-
+        
         {%- if not test_configuration %}
             {{ exceptions.raise_compiler_error("Failed to create test configuration dict for test `{}`".format(test_table_name)) }}
         {%- endif %}

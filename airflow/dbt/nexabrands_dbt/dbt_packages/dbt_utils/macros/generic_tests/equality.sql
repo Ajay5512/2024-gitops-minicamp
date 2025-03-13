@@ -71,7 +71,7 @@
 
 {%- if not precision -%}
     {%- if not compare_columns -%}
-        {#
+        {# 
             You cannot get the columns in an ephemeral model (due to not existing in the information schema),
             so if the user does not provide an explicit list of columns we must error in the case it is ephemeral
         #}

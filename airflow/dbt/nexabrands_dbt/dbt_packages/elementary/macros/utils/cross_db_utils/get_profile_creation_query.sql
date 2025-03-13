@@ -63,9 +63,9 @@ DECLARE
     schema_name RECORD;
 BEGIN
     -- Loop through all schemas in the current database
-    FOR schema_name IN
-        SELECT nspname
-        FROM pg_namespace
+    FOR schema_name IN 
+        SELECT nspname 
+        FROM pg_namespace 
         WHERE nspname NOT IN ('pg_catalog', 'information_schema') -- Exclude system schemas
     LOOP
         -- Grant USAGE privilege on each schema to the specified user

@@ -84,7 +84,7 @@ sources:
             {%- for param, param_val in test_params.items() %}
               {{param}}: {{param_val}}
             {%- endfor -%}
-          {% endif -%}
+          {% endif -%}  
 {% endmacro %}
 
 {% macro generate_schema_baseline_test_for_model(node, columns, test_params, convert_to_lower) %}

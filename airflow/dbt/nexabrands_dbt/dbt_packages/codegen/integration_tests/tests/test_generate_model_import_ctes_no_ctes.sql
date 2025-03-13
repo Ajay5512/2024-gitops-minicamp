@@ -7,13 +7,13 @@
 with data__a_relation as (
 
     select * from {% raw %}{{ ref('data__a_relation') }}{% endraw %}
-
+  
 ),
 
 model_without_import_ctes as (
 
     select * from {% raw %}{{ ref('model_without_import_ctes') }}{% endraw %}
-
+  
 )
 
 select *, 2 as col2

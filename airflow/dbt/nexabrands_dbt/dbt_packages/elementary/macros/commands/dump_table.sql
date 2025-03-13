@@ -44,8 +44,8 @@
 
 {% macro dedup_by_column_query(dedup_by_column, order_by_dedup_column, column_names, relation) %}
     with indexed_relation as (
-        select
-            {{ elementary.escape_select(column_names) }},
+        select 
+            {{ elementary.escape_select(column_names) }}, 
             row_number() over (partition by {{ dedup_by_column }} order by {{ order_by_dedup_column }} desc) as row_index
         from {{ relation }}
     ),

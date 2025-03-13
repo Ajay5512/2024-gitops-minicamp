@@ -8,21 +8,21 @@ authorization
 where option is
 { [ FORMAT [ AS ] ] CSV | PARQUET
 | PARTITION BY ( column_name [, ... ] ) [ INCLUDE ]
-| MANIFEST [ VERBOSE ]
-| HEADER
-| DELIMITER [ AS ] 'delimiter-char'
-| FIXEDWIDTH [ AS ] 'fixedwidth-spec'
+| MANIFEST [ VERBOSE ] 
+| HEADER           
+| DELIMITER [ AS ] 'delimiter-char' 
+| FIXEDWIDTH [ AS ] 'fixedwidth-spec'   
 | ENCRYPTED [ AUTO ]
-| BZIP2
-| GZIP
+| BZIP2  
+| GZIP 
 | ZSTD
-| ADDQUOTES
+| ADDQUOTES 
 | NULL [ AS ] 'null-string'
 | ESCAPE
 | ALLOWOVERWRITE
 | CLEANPATH
 | PARALLEL [ { ON | TRUE } | { OFF | FALSE } ]
-| MAXFILESIZE [AS] max-size [ MB | GB ]
+| MAXFILESIZE [AS] max-size [ MB | GB ] 
 | REGION [AS] 'aws-region' }
 | EXTENSION 'extension-name'
 
@@ -99,7 +99,7 @@ where option is
   {% endif %}
   {% if cleanpath %}
   CLEANPATH
-  {% endif %}
+  {% endif %}  
   {% if not parallel %}
   PARALLEL OFF
   {% endif %}

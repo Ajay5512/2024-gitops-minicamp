@@ -8,7 +8,7 @@
     {%- set nodes = graph.nodes.values() -%}
 
     {%- set model = (nodes
-        | selectattr('name', 'equalto', model_name)
+        | selectattr('name', 'equalto', model_name) 
         | selectattr('resource_type', 'equalto', 'model')
         | list).pop() -%}
 
@@ -24,12 +24,12 @@
         # with_regex
         - matches (start of file followed by anything then whitespace
         or whitespace
-        or a comma) followed by the word with then a space
+        or a comma) followed by the word with then a space   
 
-        # from_ref
+        # from_ref 
         - matches (from or join) followed by some spaces and then {{ref(<something>)}}
 
-        # from_source
+        # from_source 
         - matches (from or join) followed by some spaces and then {{source(<something>,<something_else>)}}
 
         # from_var_1
@@ -71,11 +71,11 @@
             # second matching group
             # opening {{, 0 or more whitespace character(s), ref, 0 or more whitespace character(s), an opening parenthesis, 0 or more whitespace character(s), 1 or 0 quotation mark
             ({{\s*ref\s*\(\s*[\'\"]?)
-
+            
             # third matching group
             # at least 1 of anything except a parenthesis or quotation mark
             ([^)\'\"]+)
-
+            
             # fourth matching group
             # 1 or 0 quotation mark, 0 or more whitespace character(s)
             ([\'\"]?\s*)
@@ -83,7 +83,7 @@
             # fifth matching group
             # a closing parenthesis, 0 or more whitespace character(s), closing }}
             (\)\s*}})
-
+        
             ',
         'from_source':
             '(?ix)
@@ -147,7 +147,7 @@
             # fifth matching group
             # a closing parenthesis, 0 or more whitespace character(s), closing }}
             (\)\s*}})
-
+            
             ',
         'from_var_2':
             '(?ix)
@@ -155,15 +155,15 @@
             # first matching group
             # from or join followed by at least 1 whitespace character
             (from|join)\s+
-
+            
             # second matching group
             # opening {{, 0 or more whitespace character(s), var, 0 or more whitespace character(s), an opening parenthesis, 0 or more whitespace character(s), 1 or 0 quotation mark
             ({{\s*var\s*\(\s*[\'\"]?)
 
             # third matching group
-            # at least 1 of anything except a parenthesis or quotation mark
+            # at least 1 of anything except a parenthesis or quotation mark            
             ([^)\'\"]+)
-
+            
             # fourth matching group
             # 1 or 0 quotation mark, 0 or more whitespace character(s)
             ([\'\"]?\s*)
@@ -173,129 +173,129 @@
             (,)
 
             # sixth matching group
-            # 0 or more whitespace character(s), 1 or 0 quotation mark
+            # 0 or more whitespace character(s), 1 or 0 quotation mark            
             (\s*[\'\"]?)
 
             # seventh matching group
-            # at least 1 of anything except a parenthesis or quotation mark
+            # at least 1 of anything except a parenthesis or quotation mark            
             ([^)\'\"]+)
 
             # eighth matching group
-            # 1 or 0 quotation mark, 0 or more whitespace character(s)
+            # 1 or 0 quotation mark, 0 or more whitespace character(s)            
             ([\'\"]?\s*)
 
             # ninth matching group
-            # a closing parenthesis, 0 or more whitespace character(s), closing }}
+            # a closing parenthesis, 0 or more whitespace character(s), closing }}            
             (\)\s*}})
-
+            
             ',
         'from_table_1':
             '(?ix)
-
+            
             # first matching group
-            # from or join followed by at least 1 whitespace character
+            # from or join followed by at least 1 whitespace character            
             (from|join)\s+
-
+            
             # second matching group
             # 1 or 0 of (opening bracket, backtick, or quotation mark)
             ([\[`\"\']?)
-
+            
             # third matching group
             # at least 1 word character
             (\w+)
-
+            
             # fouth matching group
             # 1 or 0 of (closing bracket, backtick, or quotation mark)
             ([\]`\"\']?)
-
+            
             # fifth matching group
             # a period
             (\.)
-
+            
             # sixth matching group
             # 1 or 0 of (opening bracket, backtick, or quotation mark)
             ([\[`\"\']?)
-
+            
             # seventh matching group
             # at least 1 word character
             (\w+)
-
+            
             # eighth matching group
             # 1 or 0 of (closing bracket, backtick, or quotation mark) folowed by a whitespace character or end of string
             ([\]`\"\']?)(?=\s|$)
-
+            
             ',
         'from_table_2':
             '(?ix)
 
             # first matching group
-            # from or join followed by at least 1 whitespace character
+            # from or join followed by at least 1 whitespace character 
             (from|join)\s+
-
+            
             # second matching group
-            # 1 or 0 of (opening bracket, backtick, or quotation mark)
+            # 1 or 0 of (opening bracket, backtick, or quotation mark)            
             ([\[`\"\']?)
-
+            
             # third matching group
             # at least 1 word character
             (\w+)
 
             # fouth matching group
-            # 1 or 0 of (closing bracket, backtick, or quotation mark)
+            # 1 or 0 of (closing bracket, backtick, or quotation mark)            
             ([\]`\"\']?)
-
+            
             # fifth matching group
-            # a period
+            # a period            
             (\.)
-
+            
             # sixth matching group
             # 1 or 0 of (opening bracket, backtick, or quotation mark)
             ([\[`\"\']?)
 
             # seventh matching group
-            # at least 1 word character
+            # at least 1 word character            
             (\w+)
-
+            
             # eighth matching group
-            # 1 or 0 of (closing bracket, backtick, or quotation mark)
+            # 1 or 0 of (closing bracket, backtick, or quotation mark) 
             ([\]`\"\']?)
-
+            
             # ninth matching group
-            # a period
+            # a period             
             (\.)
-
+            
             # tenth matching group
-            # 1 or 0 of (closing bracket, backtick, or quotation mark)
+            # 1 or 0 of (closing bracket, backtick, or quotation mark)             
             ([\[`\"\']?)
-
+            
             # eleventh matching group
-            # at least 1 word character
+            # at least 1 word character   
             (\w+)
 
             # twelfth matching group
             # 1 or 0 of (closing bracket, backtick, or quotation mark) folowed by a whitespace character or end of string
             ([\]`\"\']?)(?=\s|$)
-
+            
             ',
         'from_table_3':
             '(?ix)
 
             # first matching group
-            # from or join followed by at least 1 whitespace character
+            # from or join followed by at least 1 whitespace character             
             (from|join)\s+
-
+            
             # second matching group
-            # 1 or 0 of (opening bracket, backtick, or quotation mark)
+            # 1 or 0 of (opening bracket, backtick, or quotation mark)            
             ([\[`\"\'])
-
+            
             # third matching group
-            # at least 1 word character or space
+            # at least 1 word character or space 
             ([\w ]+)
 
             # fourth matching group
             # 1 or 0 of (closing bracket, backtick, or quotation mark) folowed by a whitespace character or end of string
             ([\]`\"\'])(?=\s|$)
-
+            
             ',
         'config_block':'(?i)(?s)^.*{{\s*config\s*\([^)]+\)\s*}}'
     } -%}
@@ -313,21 +313,21 @@
             {%- if regex_name == 'config_block' -%}
                 {%- set match_tuple = (match|trim, regex_name) -%}
                 {%- do config_list.append(match_tuple) -%}
-            {%- elif regex_name == 'from_source' -%}
+            {%- elif regex_name == 'from_source' -%}    
                 {%- set full_from_clause = match[1:]|join|trim -%}
                 {%- set cte_name = 'source_' + match[6]|lower -%}
                 {%- set match_tuple = (cte_name, full_from_clause, regex_name) -%}
-                {%- do from_list.append(match_tuple) -%}
+                {%- do from_list.append(match_tuple) -%} 
             {%- elif regex_name == 'from_table_1' -%}
                 {%- set full_from_clause = match[1:]|join()|trim -%}
                 {%- set cte_name = match[2]|lower + '_' + match[6]|lower -%}
                 {%- set match_tuple = (cte_name, full_from_clause, regex_name) -%}
-                {%- do from_list.append(match_tuple) -%}
+                {%- do from_list.append(match_tuple) -%}   
             {%- elif regex_name == 'from_table_2' -%}
                 {%- set full_from_clause = match[1:]|join()|trim -%}
                 {%- set cte_name = match[2]|lower + '_' + match[6]|lower + '_' + match[10]|lower -%}
                 {%- set match_tuple = (cte_name, full_from_clause, regex_name) -%}
-                {%- do from_list.append(match_tuple) -%}
+                {%- do from_list.append(match_tuple) -%}                     
             {%- else -%}
                 {%- set full_from_clause = match[1:]|join|trim -%}
                 {%- set cte_name = match[2]|trim|lower -%}
@@ -339,13 +339,13 @@
 
         {%- if regex_name == 'config_block' -%}
         {%- elif regex_name == 'from_source' -%}
-            {%- set ns.model_sql = re.sub(regex_pattern, '\g<1> source_\g<7>', ns.model_sql) -%}
+            {%- set ns.model_sql = re.sub(regex_pattern, '\g<1> source_\g<7>', ns.model_sql) -%}            
         {%- elif regex_name == 'from_table_1' -%}
-            {%- set ns.model_sql = re.sub(regex_pattern, '\g<1> \g<3>_\g<7>', ns.model_sql) -%}
+            {%- set ns.model_sql = re.sub(regex_pattern, '\g<1> \g<3>_\g<7>', ns.model_sql) -%}     
         {%- elif regex_name == 'from_table_2' -%}
-            {%- set ns.model_sql = re.sub(regex_pattern, '\g<1> \g<3>_\g<7>_\g<11>', ns.model_sql) -%}
-        {%- else -%}
-            {%- set ns.model_sql = re.sub(regex_pattern, '\g<1> \g<3>', ns.model_sql) -%}
+            {%- set ns.model_sql = re.sub(regex_pattern, '\g<1> \g<3>_\g<7>_\g<11>', ns.model_sql) -%} 
+        {%- else -%}   
+            {%- set ns.model_sql = re.sub(regex_pattern, '\g<1> \g<3>', ns.model_sql) -%}         
         {% endif %}
 
     {%- endfor -%}
@@ -367,14 +367,14 @@
 {%- if loop.first -%}with {% else -%}{%- if leading_commas -%},{%- endif -%}{%- endif -%}{{ from_obj[0] }} as (
 
     select * from {{ from_obj[1] }}
-    {%- if from_obj[2] == 'from_source' and from_list|length > 1 %}
+    {%- if from_obj[2] == 'from_source' and from_list|length > 1 %} 
     -- CAUTION: It's best practice to create staging layer for raw sources
     {%- elif from_obj[2] == 'from_table_1' or from_obj[2] == 'from_table_2' or from_obj[2] == 'from_table_3' %}
     -- CAUTION: It's best practice to use the ref or source function instead of a direct reference
     {%- elif from_obj[2] == 'from_var_1' or from_obj[2] == 'from_var_2' %}
     -- CAUTION: It's best practice to use the ref or source function instead of a var
     {%- endif %}
-
+  
 ){%- if ((loop.last and does_raw_sql_contain_cte) or (not loop.last)) and not leading_commas -%},{%- endif %}
 
 {% endfor -%}

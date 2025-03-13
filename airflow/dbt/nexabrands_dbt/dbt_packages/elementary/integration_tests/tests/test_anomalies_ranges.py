@@ -1,18 +1,8 @@
 import json
-from datetime import (
-    datetime,
-    timedelta,
-)
-from typing import (
-    Any,
-    Dict,
-    List,
-)
+from datetime import datetime, timedelta
+from typing import Any, Dict, List
 
-from data_generator import (
-    DATE_FORMAT,
-    generate_dates,
-)
+from data_generator import DATE_FORMAT, generate_dates
 from dbt_project import DbtProject
 
 TIMESTAMP_COLUMN = "updated_at"

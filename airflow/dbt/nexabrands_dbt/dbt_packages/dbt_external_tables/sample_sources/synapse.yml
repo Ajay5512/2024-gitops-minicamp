@@ -16,7 +16,7 @@ sources:
           data_source: SynapseContainer # made with TYPE= 'HADOOP'
           location: /marketing/Marketo/LeadActivities/ # path on above data source
           # External File Format name (created prior)
-          file_format: CommaDelimited
+          file_format: CommaDelimited 
           reject_type: VALUE
           reject_value: 0
           ansi_nulls: true
@@ -54,7 +54,7 @@ sources:
 # SET QUOTED_IDENTIFIER ON;
 
 # CREATE EXTERNAL TABLE [source].[lead_activities]
-# (
+# ( 
 #    [id] [int]  NOT NULL,
 #    [leadId] [int]  NOT NULL,
 #    [activityDate] [varchar](255)  NOT NULL,

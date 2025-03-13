@@ -15,7 +15,7 @@ integration_tests:
       port: "{{ env_var('REDSHIFT_PORT') | as_number }}"
       schema: "{{ env_var('REDSHIFT_SCHEMA') }}"
       threads: 5
-
+      
     snowflake:
       type: "snowflake"
       account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"

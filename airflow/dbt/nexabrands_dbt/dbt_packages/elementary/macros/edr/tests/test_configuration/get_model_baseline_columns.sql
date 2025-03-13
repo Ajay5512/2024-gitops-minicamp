@@ -17,7 +17,7 @@
         {% endif %}
         {% do baseline.append(column_info) %}
     {% endfor %}
-
+    
     {% if columns_without_types %}
         {% if enforce_types %}
             {% do exceptions.raise_compiler_error("Data type not defined for columns `{}` on model `{}` for schema change from baseline test".format(columns_without_types, model)) %}

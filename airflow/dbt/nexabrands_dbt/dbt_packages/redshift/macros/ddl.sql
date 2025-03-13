@@ -1,33 +1,33 @@
 
 {#
-    CREATE [ [LOCAL ] { TEMPORARY | TEMP } ] TABLE
+    CREATE [ [LOCAL ] { TEMPORARY | TEMP } ] TABLE 
     [ IF NOT EXISTS ] table_name
-    ( { column_name data_type [column_attributes] [ column_constraints ]
+    ( { column_name data_type [column_attributes] [ column_constraints ] 
       | table_constraints
-      | LIKE parent_table [ { INCLUDING | EXCLUDING } DEFAULTS ] }
+      | LIKE parent_table [ { INCLUDING | EXCLUDING } DEFAULTS ] } 
       [, ... ]  )
     [ BACKUP { YES | NO } ]
     [table_attribute]
 
     where column_attributes are:
       [ DEFAULT default_expr ]
-      [ IDENTITY ( seed, step ) ]
-      [ ENCODE encoding ]
+      [ IDENTITY ( seed, step ) ] 
+      [ ENCODE encoding ] 
       [ DISTKEY ]
       [ SORTKEY ]
 
     and column_constraints are:
       [ { NOT NULL | NULL } ]
       [ { UNIQUE  |  PRIMARY KEY } ]
-      [ REFERENCES reftable [ ( refcolumn ) ] ]
+      [ REFERENCES reftable [ ( refcolumn ) ] ] 
 
     and table_constraints  are:
       [ UNIQUE ( column_name [, ... ] ) ]
       [ PRIMARY KEY ( column_name [, ... ] )  ]
-      [ FOREIGN KEY (column_name [, ... ] ) REFERENCES reftable [ ( refcolumn ) ]
+      [ FOREIGN KEY (column_name [, ... ] ) REFERENCES reftable [ ( refcolumn ) ] 
 
     and table_attributes are:
-      [ DISTSTYLE { EVEN | KEY | ALL } ]
+      [ DISTSTYLE { EVEN | KEY | ALL } ] 
       [ DISTKEY ( column_name ) ]
       [ [COMPOUND | INTERLEAVED ] SORTKEY ( column_name [, ...] ) ]
 #}

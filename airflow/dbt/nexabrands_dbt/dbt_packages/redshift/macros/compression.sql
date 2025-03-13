@@ -66,7 +66,7 @@
   {% if not execute %}
     {{ return(none) }}
   {% endif %}
-
+  
   {% if skip_if_incremental and is_incremental() %}
     {{ return('') }}
   {% endif %}

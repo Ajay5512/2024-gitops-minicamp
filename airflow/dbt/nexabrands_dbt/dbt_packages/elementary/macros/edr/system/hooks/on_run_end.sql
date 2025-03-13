@@ -25,7 +25,7 @@
         {% do elementary.upload_dbt_invocation() %}
       {% endif %}
 
-      {#
+      {# 
         Elementary temp tables are not really temp and should be cleaned on the end of the run.
         We want to make sure we clean the temp tables even if elementary on run end hooks are disabled.
 

@@ -1,9 +1,5 @@
 from contextlib import contextmanager
-from typing import (
-    Any,
-    Dict,
-    Iterator,
-)
+from typing import Any, Dict, Iterator
 
 from dbt_project import DbtProject
 from ruamel.yaml import YAML

@@ -16,3 +16,4 @@
         {{ return(quoted_column) }}
     {% endif %}
 {%- endmacro -%}
+

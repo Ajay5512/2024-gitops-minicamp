@@ -52,7 +52,7 @@
     {% if raw_owner is string %}
         {% set owners = raw_owner.split(',') %}
         {% for owner in owners %}
-            {% do formatted_owner.append(owner | trim) %}
+            {% do formatted_owner.append(owner | trim) %}  
         {% endfor %}
     {% elif raw_owner is iterable %}
         {% do formatted_owner.extend(raw_owner) %}

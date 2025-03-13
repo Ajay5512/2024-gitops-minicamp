@@ -39,7 +39,7 @@
     {%- set detection_period = elementary.get_test_argument('detection_period', detection_period, model_graph_node) -%}
     {%- set backfill_days = elementary.detection_period_to_backfill_days(detection_period, backfill_days, model_graph_node) -%}
     {%- set fail_on_zero = elementary.get_test_argument('fail_on_zero', fail_on_zero, model_graph_node) %}
-
+    
 
     {# timestamp_column anomaly detection tests #}
     {%- set seasonality = elementary.get_seasonality(seasonality, model_graph_node, metric_props.time_bucket, metric_props.timestamp_column) %}

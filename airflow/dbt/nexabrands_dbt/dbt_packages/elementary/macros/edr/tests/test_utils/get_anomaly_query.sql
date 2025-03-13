@@ -120,7 +120,7 @@ case when
   {% set drop_filter %}
     (metric_value < ((1 - {{ drop_failure_percent_threshold }}/100.0) * training_avg))
   {% endset %}
-
+  
   {% if spike_failure_percent_threshold and drop_failure_percent_threshold and (anomaly_direction | lower) == 'both' %}
       {{ spike_filter }} or {{ drop_filter }}
   {% else %}
@@ -143,7 +143,7 @@ case when
 
 {% macro fail_on_zero(fail_on_zero) %}
   (
-    metric_value = 0 and
+    metric_value = 0 and 
     {% if fail_on_zero %}
       1 = 1
     {% else %}
@@ -162,7 +162,7 @@ case when
           test_configuration.ignore_small_changes.spike_failure_percent_threshold,
           test_configuration.ignore_small_changes.drop_failure_percent_threshold,
           test_configuration.anomaly_direction
-        )
+        ) 
       }}
     )
   ))

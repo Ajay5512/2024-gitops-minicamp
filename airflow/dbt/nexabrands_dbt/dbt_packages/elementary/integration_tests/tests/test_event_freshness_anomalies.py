@@ -1,12 +1,6 @@
-from datetime import (
-    datetime,
-    timedelta,
-)
+from datetime import datetime, timedelta
 
-from data_generator import (
-    DATE_FORMAT,
-    generate_dates,
-)
+from data_generator import DATE_FORMAT, generate_dates
 from dbt_project import DbtProject
 
 TEST_NAME = "elementary.event_freshness_anomalies"

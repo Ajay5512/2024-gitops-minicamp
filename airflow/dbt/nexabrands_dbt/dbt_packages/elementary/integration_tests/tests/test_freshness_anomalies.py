@@ -1,16 +1,10 @@
 from copy import copy
 from dataclasses import dataclass
-from datetime import (
-    datetime,
-    timedelta,
-)
+from datetime import datetime, timedelta
 from itertools import chain
 
 import pytest
-from data_generator import (
-    DATE_FORMAT,
-    generate_dates,
-)
+from data_generator import DATE_FORMAT, generate_dates
 from dbt_project import DbtProject
 from parametrization import Parametrization
 

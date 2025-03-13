@@ -20,17 +20,17 @@
 #}
 {% macro redshift_alter_table_add_partitions(source_node, partitions) %}
 
-  {{ log("Generating ADD PARTITION statement for partition set between "
+  {{ log("Generating ADD PARTITION statement for partition set between " 
          ~ partitions[0]['path'] ~ " and " ~ (partitions|last)['path']) }}
 
   {% set ddl = [] %}
-
+  
   {% if partitions|length > 0 %}
-
+  
     {% set alter_table_add %}
-        alter table {{source(source_node.source_name, source_node.name)}} add if not exists
+        alter table {{source(source_node.source_name, source_node.name)}} add if not exists 
     {% endset %}
-
+  
     {%- set alters -%}
 
       {{ alter_table_add }}
@@ -47,9 +47,9 @@
         location '{{ source_node.external.location }}/{{ partition.path }}/'
 
     {% endfor -%}
-
+    
     {%- endset -%}
-
+    
     {% set ddl = ddl + alters.split(';') %}
 
   {% else %}
@@ -57,7 +57,7 @@
     {{ log("No partitions to be added") }}
 
   {% endif %}
-
+  
   {% do return(ddl) %}
 
 {% endmacro %}

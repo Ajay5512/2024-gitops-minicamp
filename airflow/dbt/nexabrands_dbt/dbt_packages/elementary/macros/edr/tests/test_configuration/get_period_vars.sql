@@ -45,7 +45,7 @@
 {% macro convert_period(period_dict, convert_to) %}
   {% set convert_from = elementary.get_unit_of_period(period_dict) %}
   {% set period_count = elementary.get_count_of_period(period_dict) %}
-
+  
   {% if convert_from == 'week' %}
     {% if convert_to == 'day' %}
       {% set period_count = period_count * 7 %}
@@ -54,7 +54,7 @@
     {% elif convert_to == 'month' %}
       {% set period_count = (period_count * 7) / 30 %}
     {% endif %}
-
+  
   {% elif convert_from == 'day' %}
     {% if convert_to == 'hour' %}
       {% set period_count = period_count * 24 %}

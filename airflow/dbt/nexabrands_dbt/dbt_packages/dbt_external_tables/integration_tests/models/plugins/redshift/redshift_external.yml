@@ -6,7 +6,7 @@ sources:
     loader: S3
 
     tables:
-
+      
       - name: people_csv_unpartitioned
         external: &csv-people
           location: "s3://dbt-external-tables-testing/csv/"
@@ -40,7 +40,7 @@ sources:
               path_macro: dbt_external_tables.key_value
         columns: *cols-of-the-people
         tests: *equal-to-the-people
-
+        
       # ensure that all partitions are created
       - name: people_csv_multipartitioned
         external:

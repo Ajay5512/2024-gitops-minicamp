@@ -64,7 +64,7 @@
     {% endif %}
 
     {% set stored_artifacts_query %}
-    select metadata_hash
+    select metadata_hash 
     from {{ elementary.get_elementary_relation(model_name) }}
     order by metadata_hash
     {% endset %}

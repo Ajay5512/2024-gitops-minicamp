@@ -52,3 +52,4 @@
         type='table') %}
     {% do return(tmp_relation) %}
 {% endmacro %}
+

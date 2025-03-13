@@ -1,15 +1,8 @@
 import json
-from datetime import (
-    datetime,
-    time,
-    timedelta,
-)
+from datetime import datetime, time, timedelta
 
 import dateutil.parser
-from data_generator import (
-    DATE_FORMAT,
-    generate_dates,
-)
+from data_generator import DATE_FORMAT, generate_dates
 from dbt_project import DbtProject
 
 BACKFILL_DAYS = 2

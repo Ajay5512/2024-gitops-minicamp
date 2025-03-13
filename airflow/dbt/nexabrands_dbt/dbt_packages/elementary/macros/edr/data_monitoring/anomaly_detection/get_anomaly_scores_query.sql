@@ -198,14 +198,14 @@
                 {{ elementary.edr_cast_as_timestamp('bucket_end') }} as bucket_end,
                 bucket_seasonality,
                 metric_value,
-
+                
                 {% set limit_values =  elementary.get_limit_metric_values(test_configuration) %}
                 case
                     when training_stddev is null then null
                     when {{ limit_values.min_metric_value }} > 0 or metric_name in {{ elementary.to_sql_list(elementary.get_negative_value_supported_metrics()) }} then {{ limit_values.min_metric_value }}
                     else 0
                 end as min_metric_value,
-                case
+                case 
                     when training_stddev is null then null
                     else {{ limit_values.max_metric_value }}
                 end as max_metric_value,
