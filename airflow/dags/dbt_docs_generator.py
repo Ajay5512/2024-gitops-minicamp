@@ -100,39 +100,52 @@ def verify_redshift_connection():
 
 @task
 def upload_docs_to_s3():
-    """
-    Upload all files from dbt-docs directory to S3, including the assets directory
-    """
+    import boto3
+    
     local_dir = "/opt/airflow/dbt-docs/"
     s3_bucket = "nexabrands-prod-target"
     s3_key_prefix = "dbt-docs/"
+<<<<<<< Updated upstream
 
     # Create S3Hook without specifying connection ID to use instance role
     s3_hook = S3Hook()
 
     # Make sure the directory exists
+=======
+    
+    # Create boto3 client directly
+    s3_client = boto3.client('s3')
+    
+>>>>>>> Stashed changes
     if not os.path.exists(local_dir):
         raise FileNotFoundError(f"Directory {local_dir} does not exist")
 
     files_uploaded = 0
+<<<<<<< Updated upstream
 
     # Function to recursively upload files, preserving directory structure
+=======
+    
+>>>>>>> Stashed changes
     def upload_directory(directory, base_dir):
         nonlocal files_uploaded
 
         for item in os.listdir(directory):
             local_path = os.path.join(directory, item)
+<<<<<<< Updated upstream
 
             # Get relative path for S3 key
+=======
+            
+>>>>>>> Stashed changes
             relative_path = os.path.relpath(local_path, base_dir)
             s3_key = f"{s3_key_prefix}{relative_path}"
 
             if os.path.isdir(local_path):
-                # Recursively upload subdirectories
                 upload_directory(local_path, base_dir)
             else:
-                # Upload file
                 print(f"Uploading {local_path} to s3://{s3_bucket}/{s3_key}")
+<<<<<<< Updated upstream
                 s3_hook.load_file(
                     filename=local_path,
                     key=s3_key,
@@ -142,14 +155,32 @@ def upload_docs_to_s3():
                 files_uploaded += 1
 
     # Start recursive upload
+=======
+                
+                # Using boto3 client directly with SSE-S3 encryption
+                s3_client.upload_file(
+                    Filename=local_path,
+                    Bucket=s3_bucket,
+                    Key=s3_key,
+                    ExtraArgs={
+                        'ServerSideEncryption': 'AES256'  # Use SSE-S3 instead of KMS
+                    }
+                )
+                files_uploaded += 1
+    
+>>>>>>> Stashed changes
     upload_directory(local_dir, local_dir)
 
     print(
         f"Successfully uploaded {files_uploaded} files to s3://{s3_bucket}/{s3_key_prefix}"
     )
     return files_uploaded
+<<<<<<< Updated upstream
 
 
+=======
+    
+>>>>>>> Stashed changes
 @dag(
     schedule_interval="@daily",
     start_date=datetime(2023, 1, 1),

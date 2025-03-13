@@ -11,4 +11,4 @@ receivers:
   - send_resolved: true
     text: "{{ .CommonAnnotations.description }}"
     channel: 'airflow_alerts'  # Your Slack channel name without the #
-    api_url: '#'
+    api_url: 'https://hooks.slack.com/services/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'
