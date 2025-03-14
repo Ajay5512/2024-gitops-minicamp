@@ -296,7 +296,7 @@ resource "aws_iam_role" "ec2_role" {
   }
 }
 
-# Updated EC2 Policy with Redshift Serverless Query Editor permissions
+
 # Updated EC2 Policy with KMS permissions
 resource "aws_iam_role_policy" "ec2_policy" {
   name = "topdevs-${var.environment}-ec2-policy"
@@ -312,7 +312,10 @@ resource "aws_iam_role_policy" "ec2_policy" {
           "s3:GetObject",
           "s3:PutObject",
           "s3:ListBucket",
-          "s3:DeleteObject"
+          "s3:GetBucketLocation", 
+          "s3:DeleteObject",
+          "s3:GetBucketAcl",       
+          "s3:PutObjectAcl"        
         ]
         Resource = [
           "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}",
