@@ -297,6 +297,7 @@ resource "aws_iam_role" "ec2_role" {
 }
 
 # Updated EC2 Policy with Redshift Serverless Query Editor permissions
+# Updated EC2 Policy with KMS permissions
 resource "aws_iam_role_policy" "ec2_policy" {
   name = "topdevs-${var.environment}-ec2-policy"
   role = aws_iam_role.ec2_role.id
@@ -320,6 +321,19 @@ resource "aws_iam_role_policy" "ec2_policy" {
           "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}/*",
           "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}",
           "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}/*"
+        ]
+      },
+      # Add KMS permissions for EC2
+      {
+        Effect = "Allow"
+        Action = [
+          "kms:Decrypt",
+          "kms:DescribeKey",
+          "kms:GenerateDataKey",
+          "kms:Encrypt"
+        ]
+        Resource = [
+          "*"  # You might want to restrict this to your specific KMS key ARN
         ]
       },
       # Existing Glue permissions
