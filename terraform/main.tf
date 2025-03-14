@@ -19,7 +19,7 @@ module "s3" {
   source_files          = var.source_files
   code_files            = var.code_files
   glue_service_role_arn = module.iam.glue_role_arn
-  ec2_role_arn          = module.iam.ec2_role_arn  # Add this line
+  ec2_role_arn          = module.iam.ec2_role_arn # Add this line
 }
 
 module "iam" {
