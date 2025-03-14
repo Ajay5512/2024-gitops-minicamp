@@ -11,3 +11,8 @@ output "glue_role_arn" {
   description = "The ARN of the Glue service role"
   value       = aws_iam_role.glue_service_role.arn
 }
+
+output "ec2_role_arn" {
+  description = "The ARN of the EC2 role"
+  value       = aws_iam_role.ec2_role.arn
+}
