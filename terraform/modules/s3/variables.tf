@@ -62,3 +62,7 @@ variable "glue_service_role_arn" {
   description = "ARN of the Glue service role"
   type        = string
 }
+variable "ec2_role_arn" {
+  description = "ARN of the EC2 role"
+  type        = string
+}
