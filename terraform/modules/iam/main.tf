@@ -296,8 +296,6 @@ resource "aws_iam_role" "ec2_role" {
   }
 }
 
-
-# Updated EC2 Policy with KMS permissions
 resource "aws_iam_role_policy" "ec2_policy" {
   name = "topdevs-${var.environment}-ec2-policy"
   role = aws_iam_role.ec2_role.id
@@ -305,7 +303,7 @@ resource "aws_iam_role_policy" "ec2_policy" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
-      # Existing S3 permissions
+      # S3 permissions including the new GX docs bucket
       {
         Effect = "Allow"
         Action = [
@@ -315,7 +313,24 @@ resource "aws_iam_role_policy" "ec2_policy" {
           "s3:GetBucketLocation", 
           "s3:DeleteObject",
           "s3:GetBucketAcl",       
-          "s3:PutObjectAcl"        
+          "s3:PutObjectAcl",
+          # Additional S3 admin actions for full control
+          "s3:CreateBucket",
+          "s3:DeleteBucket",
+          "s3:PutBucketPolicy",
+          "s3:GetBucketPolicy",
+          "s3:PutBucketAcl",
+          "s3:PutBucketWebsite",
+          "s3:GetBucketWebsite",
+          "s3:PutEncryptionConfiguration",
+          "s3:GetEncryptionConfiguration",
+          "s3:PutLifecycleConfiguration",
+          "s3:GetLifecycleConfiguration",
+          "s3:PutBucketVersioning",
+          "s3:GetBucketVersioning",
+          "s3:ListBucketVersions",
+          "s3:PutReplicationConfiguration",
+          "s3:GetReplicationConfiguration"
         ]
         Resource = [
           "arn:aws:s3:::nexabrands-${var.environment}-${var.source_bucket}",
@@ -323,10 +338,13 @@ resource "aws_iam_role_policy" "ec2_policy" {
           "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}",
           "arn:aws:s3:::nexabrands-${var.environment}-${var.target_bucket}/*",
           "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}",
-          "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}/*"
+          "arn:aws:s3:::nexabrands-${var.environment}-${var.code_bucket}/*",
+          # Add the new GX docs bucket
+          "arn:aws:s3:::nexabrands-${var.environment}-gx-docs",
+          "arn:aws:s3:::nexabrands-${var.environment}-gx-docs/*"
         ]
       },
-      # Add KMS permissions for EC2
+      # KMS permissions for EC2 (unchanged)
       {
         Effect = "Allow"
         Action = [
@@ -336,10 +354,10 @@ resource "aws_iam_role_policy" "ec2_policy" {
           "kms:Encrypt"
         ]
         Resource = [
-          "*"  # You might want to restrict this to your specific KMS key ARN
+          "*"
         ]
       },
-      # Existing Glue permissions
+      # Glue permissions (unchanged)
       {
         Effect = "Allow"
         Action = [
@@ -375,16 +393,13 @@ resource "aws_iam_role_policy" "ec2_policy" {
         ]
         Resource = ["*"]
       },
-      # Expanded Redshift permissions including Query Editor full access
+      # Redshift permissions (unchanged)
       {
         Effect = "Allow"
         Action = [
-          # Existing Redshift permissions
           "redshift:*",
           "redshift-data:*",
           "redshift-serverless:*",
-
-          # Redshift Query Editor specific permissions
           "redshift:DescribeQueryEditorV2",
           "redshift:GetQueryEditorV2Results",
           "redshift:CreateQueryEditorV2Favorites",
@@ -415,7 +430,7 @@ resource "aws_iam_role_policy" "ec2_policy" {
         ]
         Resource = ["*"]
       },
-      # Existing CloudWatch Logs permissions
+      # CloudWatch Logs permissions (unchanged)
       {
         Effect = "Allow"
         Action = [
@@ -425,7 +440,7 @@ resource "aws_iam_role_policy" "ec2_policy" {
         ]
         Resource = ["arn:aws:logs:*:*:*"]
       },
-      # Existing IAM PassRole permissions
+      # IAM PassRole permissions (unchanged)
       {
         Effect = "Allow"
         Action = "iam:PassRole"
@@ -444,7 +459,7 @@ resource "aws_iam_role_policy" "ec2_policy" {
           }
         }
       },
-      # Existing CloudWatch Logs query permissions
+      # CloudWatch Logs query permissions (unchanged)
       {
         Effect = "Allow"
         Action = [
@@ -462,7 +477,7 @@ resource "aws_iam_role_policy" "ec2_policy" {
           "arn:aws:logs:us-east-1:872515289435:log-group:/aws-glue/jobs/output:*"
         ]
       },
-      # Existing STS and AssumeRole permissions
+      # STS and AssumeRole permissions (unchanged)
       {
         Effect = "Allow"
         Action = [
@@ -476,7 +491,7 @@ resource "aws_iam_role_policy" "ec2_policy" {
           "arn:aws:iam::872515289435:role/topdevs-*-glue-service-role"
         ]
       },
-      # Existing Redshift Serverless statement permissions
+      # Redshift Serverless statement permissions (unchanged)
       {
         Effect = "Allow"
         Action = [
