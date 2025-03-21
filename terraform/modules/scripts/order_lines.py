@@ -1,3 +1,4 @@
+import boto3
 from awsglue.context import GlueContext
 from awsglue.job import Job
 from pyspark.sql import (
@@ -6,14 +7,20 @@ from pyspark.sql import (
 )
 from pyspark.sql.functions import (
     col,
+    concat,
     datediff,
     lit,
+    lpad,
     regexp_replace,
+    regexp_extract,
     round,
     to_date,
     trim,
     upper,
     when,
+    year,
+    month,
+    dayofmonth,
 )
 from pyspark.sql.types import (
     FloatType,
@@ -71,65 +78,57 @@ def filter_invalid_quantities(df: DataFrame) -> DataFrame:
 
 
 def clean_agreed_delivery_date(df: DataFrame) -> DataFrame:
-    """Clean and parse AGREED_DELIVERY_DATE column."""
+    """Clean and parse AGREED_DELIVERY_DATE column, setting all years to 2024."""
     return (
         df.withColumn(
             "AGREED_DELIVERY_DATE",
-            regexp_replace(
-                col("AGREED_DELIVERY_DATE"), r"[^a-zA-Z0-9/,-]", ""
-            ),  # Remove special characters
+            # Extract the month day, year part
+            regexp_extract(col("AGREED_DELIVERY_DATE"), r"([A-Za-z]+, [A-Za-z]+ \d+, \d{4})", 1)
         )
         .withColumn(
             "AGREED_DELIVERY_DATE",
-            regexp_replace(
-                col("AGREED_DELIVERY_DATE"), r"\d{4}", "2024"
-            ),  # Replace any year with 2024
+            to_date(col("AGREED_DELIVERY_DATE"), "EEEE, MMMM d, yyyy")
         )
+        # Extract month and day, then reconstruct with year 2024
         .withColumn(
             "AGREED_DELIVERY_DATE",
-            when(
-                to_date(col("AGREED_DELIVERY_DATE"), "MM/dd/yyyy").isNotNull(),
-                to_date(col("AGREED_DELIVERY_DATE"), "MM/dd/yyyy"),
+            to_date(
+                concat(
+                    lit("2024-"),
+                    lpad(month(col("AGREED_DELIVERY_DATE")).cast("string"), 2, "0"),
+                    lit("-"),
+                    lpad(dayofmonth(col("AGREED_DELIVERY_DATE")).cast("string"), 2, "0")
+                ),
+                "yyyy-MM-dd"
             )
-            .when(
-                to_date(col("AGREED_DELIVERY_DATE"), "yyyy-MM-dd").isNotNull(),
-                to_date(col("AGREED_DELIVERY_DATE"), "yyyy-MM-dd"),
-            )
-            .otherwise(
-                to_date(lit("2024-01-01"), "yyyy-MM-dd")
-            ),  # Default value for invalid dates
         )
     )
 
 
 def clean_actual_delivery_date(df: DataFrame) -> DataFrame:
-    """Clean and parse ACTUAL_DELIVERY_DATE column."""
+    """Clean and parse ACTUAL_DELIVERY_DATE column, setting all years to 2024."""
     return (
         df.withColumn(
             "ACTUAL_DELIVERY_DATE",
-            regexp_replace(
-                col("ACTUAL_DELIVERY_DATE"), r"[^a-zA-Z0-9/,-]", ""
-            ),  # Remove special characters
+            # Extract the month day, year part
+            regexp_extract(col("ACTUAL_DELIVERY_DATE"), r"([A-Za-z]+, [A-Za-z]+ \d+, \d{4})", 1)
         )
         .withColumn(
             "ACTUAL_DELIVERY_DATE",
-            regexp_replace(
-                col("ACTUAL_DELIVERY_DATE"), r"\d{4}", "2024"
-            ),  # Replace any year with 2024
+            to_date(col("ACTUAL_DELIVERY_DATE"), "EEEE, MMMM d, yyyy")
         )
+        # Extract month and day, then reconstruct with year 2024
         .withColumn(
             "ACTUAL_DELIVERY_DATE",
-            when(
-                to_date(col("ACTUAL_DELIVERY_DATE"), "MM/dd/yyyy").isNotNull(),
-                to_date(col("ACTUAL_DELIVERY_DATE"), "MM/dd/yyyy"),
+            to_date(
+                concat(
+                    lit("2024-"),
+                    lpad(month(col("ACTUAL_DELIVERY_DATE")).cast("string"), 2, "0"),
+                    lit("-"),
+                    lpad(dayofmonth(col("ACTUAL_DELIVERY_DATE")).cast("string"), 2, "0")
+                ),
+                "yyyy-MM-dd"
             )
-            .when(
-                to_date(col("ACTUAL_DELIVERY_DATE"), "yyyy-MM-dd").isNotNull(),
-                to_date(col("ACTUAL_DELIVERY_DATE"), "yyyy-MM-dd"),
-            )
-            .otherwise(
-                to_date(lit("2024-01-01"), "yyyy-MM-dd")
-            ),  # Default value for invalid dates
         )
     )
 
@@ -192,25 +191,57 @@ def clean_order_lines_data(df: DataFrame) -> DataFrame:
     return df
 
 
-if __name__ == "__main__":
+def write_transformed_data(df: DataFrame, s3_output_path: str) -> None:
+    """Write the transformed data to an S3 bucket as a single CSV file."""
+    df.coalesce(1).write.mode("overwrite").format("csv").option("header", "true").save(
+        s3_output_path
+    )
+
+
+if _name_ == "_main_":
     # Initialize Spark session and Glue context
-    spark = SparkSession.builder.appName("OrderLinesDataProcessing").getOrCreate()
+    spark = SparkSession.builder \
+        .appName("OrderLinesDataProcessing") \
+        .config("spark.sql.legacy.timeParserPolicy", "LEGACY") \
+        .getOrCreate()
     glue_context = GlueContext(spark.sparkContext)
     job = Job(glue_context)
-    job.init("order-lines-job")
+    job.init("order-lines-data-processing-job")
 
     # S3 paths
-    s3_input_path = "s3a://nexabrands-prod-source/data/order_lines.csv"
-    s3_output_path = "s3://nexabrands-prod-target/order_lines/processed_data.csv"
+    s3_input_path = "s3://nexabrands-prod-source/data/order_lines.csv"  # Input file path
+    s3_output_folder = "s3://nexabrands-prod-target/order_lines/"  # Output folder
+    s3_temp_output_path = f"{s3_output_folder}temp/"  # Temporary output path
 
     # Load and clean data
     order_lines_df = load_order_lines_data(glue_context, s3_input_path)
     cleaned_order_lines = clean_order_lines_data(order_lines_df)
 
-    # Save the cleaned data to S3 as a CSV file
-    cleaned_order_lines.write.mode("overwrite").format("csv").option(
-        "header", "true"
-    ).save(s3_output_path)
+    # Save the cleaned data to S3 as a single CSV file in a temporary folder
+    write_transformed_data(cleaned_order_lines, s3_temp_output_path)
+
+    # Use boto3 to rename the file to order_lines.csv
+    s3_client = boto3.client("s3")
+    bucket_name = "nexabrands-prod-target"  # Output bucket name
+
+    # Find the generated CSV file in the temporary folder
+    response = s3_client.list_objects_v2(Bucket=bucket_name, Prefix="order_lines/temp/")
+    if "Contents" in response:
+        for obj in response["Contents"]:
+            if obj["Key"].endswith(".csv"):
+                source_key = obj["Key"]
+                # Construct the destination key
+                destination_key = "order_lines/order_lines.csv"
+                # Copy the file to the new location
+                copy_source = {"Bucket": bucket_name, "Key": source_key}
+                s3_client.copy_object(
+                    CopySource=copy_source, Bucket=bucket_name, Key=destination_key
+                )
+                # Delete the original file
+                s3_client.delete_object(Bucket=bucket_name, Key=source_key)
+
+    # Delete the temporary folder
+    s3_client.delete_object(Bucket=bucket_name, Key="order_lines/temp/")
 
     # Commit the Glue job
     job.commit()
